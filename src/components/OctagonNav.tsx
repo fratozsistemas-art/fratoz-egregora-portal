@@ -111,22 +111,38 @@ const OctagonNav = () => {
         aria-label="Navegação principal por tipo de arte"
       >
         <defs>
-          {segments.map(({ index }) => {
+          {segments.map(({ index, midAngle }) => {
             const colors = [
               "#1a9e6e", "#2196c9", "#7b42d9", "#d94290",
               "#d94242", "#e88a1a", "#e8c71a", "#1a9e8e"
             ];
+            // Directional gradient to simulate light from top-left
+            const lightAngle = midAngle - 90;
+            const rad = (lightAngle * Math.PI) / 180;
+            const x1 = 50 - Math.cos(rad) * 50;
+            const y1 = 50 - Math.sin(rad) * 50;
+            const x2 = 50 + Math.cos(rad) * 50;
+            const y2 = 50 + Math.sin(rad) * 50;
+            const isHovered = hoveredIndex === index;
             return (
-              <linearGradient key={index} id={`seg-grad-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={colors[index]} stopOpacity={hoveredIndex === index ? 1 : 0.5} />
-                <stop offset="100%" stopColor={colors[(index + 1) % 8]} stopOpacity={hoveredIndex === index ? 1 : 0.5} />
+              <linearGradient key={index} id={`seg-grad-${index}`} x1={`${x1}%`} y1={`${y1}%`} x2={`${x2}%`} y2={`${y2}%`}>
+                <stop offset="0%" stopColor={colors[index]} stopOpacity={isHovered ? 1 : 0.6} />
+                <stop offset="50%" stopColor={colors[index]} stopOpacity={isHovered ? 0.8 : 0.35} />
+                <stop offset="100%" stopColor={colors[(index + 1) % 8]} stopOpacity={isHovered ? 0.6 : 0.2} />
               </linearGradient>
             );
           })}
-          <radialGradient id="center-grad" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="#7b42d9" stopOpacity={centerHovered ? 0.9 : 0.3} />
-            <stop offset="100%" stopColor="#d94290" stopOpacity={centerHovered ? 0.7 : 0.15} />
+          <radialGradient id="center-grad" cx="50%" cy="40%">
+            <stop offset="0%" stopColor="#a855f7" stopOpacity={centerHovered ? 0.95 : 0.35} />
+            <stop offset="60%" stopColor="#7b42d9" stopOpacity={centerHovered ? 0.7 : 0.2} />
+            <stop offset="100%" stopColor="#d94290" stopOpacity={centerHovered ? 0.5 : 0.1} />
           </radialGradient>
+          {/* 3D lighting filter */}
+          <filter id="bevel-shadow" x="-5%" y="-5%" width="110%" height="110%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+            <feOffset in="blur" dx="1" dy="2" result="offsetBlur" />
+            <feComposite in="SourceGraphic" in2="offsetBlur" operator="over" />
+          </filter>
         </defs>
 
         {/* Background octagon outline */}
