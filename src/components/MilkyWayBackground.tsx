@@ -103,53 +103,56 @@ const MilkyWayBackground = () => {
 
     // ── Nebulae ── richer, multi-layered
     const nebulae: NebulaCloud[] = [
-      // Main milky way band nebulae
-      { x: 0.15, y: 0.32, rx: 320, ry: 110, rotation: 12, hue: 280, saturation: 50, lightness: 35, opacity: 0.06, driftX: 0.008, driftY: 0.003, pulseSpeed: 0.008, pulseOffset: 0, layers: 3 },
-      { x: 0.3, y: 0.36, rx: 250, ry: 140, rotation: 8, hue: 220, saturation: 55, lightness: 30, opacity: 0.05, driftX: -0.005, driftY: 0.004, pulseSpeed: 0.006, pulseOffset: 1, layers: 3 },
-      { x: 0.5, y: 0.42, rx: 380, ry: 130, rotation: 15, hue: 260, saturation: 45, lightness: 38, opacity: 0.07, driftX: 0.006, driftY: -0.003, pulseSpeed: 0.005, pulseOffset: 2, layers: 4 },
-      { x: 0.65, y: 0.46, rx: 290, ry: 100, rotation: -8, hue: 310, saturation: 40, lightness: 32, opacity: 0.05, driftX: -0.007, driftY: 0.005, pulseSpeed: 0.007, pulseOffset: 3, layers: 3 },
-      { x: 0.8, y: 0.52, rx: 260, ry: 120, rotation: 20, hue: 340, saturation: 45, lightness: 30, opacity: 0.04, driftX: 0.004, driftY: -0.004, pulseSpeed: 0.009, pulseOffset: 4, layers: 2 },
-      { x: 0.92, y: 0.56, rx: 200, ry: 90, rotation: 5, hue: 200, saturation: 50, lightness: 28, opacity: 0.04, driftX: -0.006, driftY: 0.002, pulseSpeed: 0.004, pulseOffset: 5, layers: 2 },
-      // Accent nebulae — bright emission patches
-      { x: 0.38, y: 0.38, rx: 120, ry: 60, rotation: 30, hue: 350, saturation: 60, lightness: 45, opacity: 0.045, driftX: 0.003, driftY: -0.002, pulseSpeed: 0.01, pulseOffset: 0.5, layers: 2 },
-      { x: 0.55, y: 0.44, rx: 100, ry: 80, rotation: -15, hue: 180, saturation: 55, lightness: 40, opacity: 0.035, driftX: -0.004, driftY: 0.003, pulseSpeed: 0.012, pulseOffset: 1.5, layers: 2 },
-      // Dark nebula (absorption)
-      { x: 0.42, y: 0.40, rx: 180, ry: 50, rotation: 10, hue: 240, saturation: 10, lightness: 5, opacity: 0.08, driftX: 0.002, driftY: -0.001, pulseSpeed: 0.003, pulseOffset: 3, layers: 2 },
+      // Main milky way emission nebulae
+      { x: 0.12, y: 0.30, rx: 350, ry: 120, rotation: 14, hue: 275, saturation: 55, lightness: 35, opacity: 0.055, driftX: 0.008, driftY: 0.003, pulseSpeed: 0.008, pulseOffset: 0, layers: 3 },
+      { x: 0.28, y: 0.34, rx: 280, ry: 160, rotation: 6, hue: 230, saturation: 50, lightness: 32, opacity: 0.05, driftX: -0.005, driftY: 0.004, pulseSpeed: 0.006, pulseOffset: 1, layers: 3 },
+      { x: 0.48, y: 0.40, rx: 400, ry: 140, rotation: 12, hue: 260, saturation: 48, lightness: 36, opacity: 0.065, driftX: 0.006, driftY: -0.003, pulseSpeed: 0.005, pulseOffset: 2, layers: 4 },
+      { x: 0.62, y: 0.44, rx: 310, ry: 110, rotation: -6, hue: 305, saturation: 42, lightness: 34, opacity: 0.05, driftX: -0.007, driftY: 0.005, pulseSpeed: 0.007, pulseOffset: 3, layers: 3 },
+      { x: 0.78, y: 0.50, rx: 280, ry: 130, rotation: 18, hue: 335, saturation: 40, lightness: 30, opacity: 0.04, driftX: 0.004, driftY: -0.004, pulseSpeed: 0.009, pulseOffset: 4, layers: 3 },
+      { x: 0.9, y: 0.54, rx: 220, ry: 100, rotation: 8, hue: 210, saturation: 50, lightness: 30, opacity: 0.04, driftX: -0.006, driftY: 0.002, pulseSpeed: 0.004, pulseOffset: 5, layers: 2 },
+      // Bright emission patches (H-II regions)
+      { x: 0.35, y: 0.37, rx: 90, ry: 55, rotation: 25, hue: 350, saturation: 65, lightness: 48, opacity: 0.05, driftX: 0.003, driftY: -0.002, pulseSpeed: 0.012, pulseOffset: 0.5, layers: 2 },
+      { x: 0.55, y: 0.43, rx: 70, ry: 50, rotation: -20, hue: 190, saturation: 60, lightness: 42, opacity: 0.04, driftX: -0.004, driftY: 0.003, pulseSpeed: 0.014, pulseOffset: 1.5, layers: 2 },
+      { x: 0.22, y: 0.32, rx: 60, ry: 40, rotation: 35, hue: 15, saturation: 55, lightness: 45, opacity: 0.035, driftX: 0.002, driftY: 0.002, pulseSpeed: 0.01, pulseOffset: 2.5, layers: 2 },
+      { x: 0.72, y: 0.48, rx: 80, ry: 45, rotation: -10, hue: 250, saturation: 55, lightness: 50, opacity: 0.04, driftX: -0.003, driftY: -0.002, pulseSpeed: 0.011, pulseOffset: 3.5, layers: 2 },
+      // Soft dark nebulae (absorption — replacing the hard dust lane)
+      { x: 0.32, y: 0.38, rx: 200, ry: 60, rotation: 12, hue: 240, saturation: 8, lightness: 4, opacity: 0.05, driftX: 0.001, driftY: -0.001, pulseSpeed: 0.002, pulseOffset: 0, layers: 3 },
+      { x: 0.52, y: 0.42, rx: 160, ry: 45, rotation: 8, hue: 250, saturation: 6, lightness: 3, opacity: 0.04, driftX: -0.001, driftY: 0.001, pulseSpeed: 0.003, pulseOffset: 1, layers: 2 },
+      { x: 0.68, y: 0.46, rx: 140, ry: 50, rotation: 15, hue: 230, saturation: 8, lightness: 4, opacity: 0.04, driftX: 0.002, driftY: -0.001, pulseSpeed: 0.002, pulseOffset: 2, layers: 2 },
+      // Distant haze — edges of the galaxy
+      { x: 0.05, y: 0.28, rx: 250, ry: 180, rotation: -10, hue: 240, saturation: 20, lightness: 18, opacity: 0.02, driftX: 0.003, driftY: 0.002, pulseSpeed: 0.003, pulseOffset: 6, layers: 2 },
+      { x: 0.95, y: 0.58, rx: 250, ry: 160, rotation: 25, hue: 260, saturation: 18, lightness: 16, opacity: 0.02, driftX: -0.003, driftY: -0.002, pulseSpeed: 0.004, pulseOffset: 7, layers: 2 },
     ];
 
-    // ── Dust lane (dark rift along milky way) ──
-    const drawDustLane = (time: number, px: number, py: number) => {
-      ctx.save();
-      ctx.translate(px * 0.2, py * 0.2);
-      ctx.globalCompositeOperation = "multiply";
-      
-      const points = [
-        { x: w * 0.05, y: h * 0.38 },
-        { x: w * 0.25, y: h * 0.35 },
-        { x: w * 0.45, y: h * 0.40 },
-        { x: w * 0.65, y: h * 0.44 },
-        { x: w * 0.85, y: h * 0.50 },
-        { x: w * 1.05, y: h * 0.54 },
-      ];
+    // ── Star clusters (dense pockets) ──
+    interface StarCluster { x: number; y: number; r: number; count: number; }
+    const clusters: StarCluster[] = [
+      { x: 0.25, y: 0.34, r: 40, count: 35 },
+      { x: 0.45, y: 0.41, r: 50, count: 45 },
+      { x: 0.6, y: 0.45, r: 35, count: 30 },
+      { x: 0.75, y: 0.50, r: 30, count: 25 },
+      { x: 0.35, y: 0.36, r: 25, count: 20 },
+    ];
 
-      ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y - 30);
-      for (let i = 1; i < points.length; i++) {
-        const xc = (points[i - 1].x + points[i].x) / 2;
-        const yc = (points[i - 1].y + points[i].y) / 2;
-        ctx.quadraticCurveTo(points[i - 1].x, points[i - 1].y - 20 + Math.sin(time * 0.001 + i) * 5, xc, yc - 20);
+    // Add cluster stars
+    clusters.forEach((cl) => {
+      for (let i = 0; i < cl.count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * cl.r / (Math.max(w, h) * 0.5);
+        stars.push({
+          x: cl.x + Math.cos(angle) * dist,
+          y: cl.y + Math.sin(angle) * dist,
+          z: 0.5 + Math.random() * 0.5,
+          size: Math.random() * 0.9 + 0.3,
+          baseOpacity: 0.5 + Math.random() * 0.4,
+          twinkleSpeed: 0.01 + Math.random() * 0.02,
+          twinkleOffset: Math.random() * Math.PI * 2,
+          hue: 40 + Math.random() * 30,
+          saturation: 10 + Math.random() * 20,
+          lightness: 88 + Math.random() * 12,
+        });
       }
-      for (let i = points.length - 1; i >= 0; i--) {
-        const xc = i > 0 ? (points[i - 1].x + points[i].x) / 2 : points[0].x;
-        const yc = i > 0 ? (points[i - 1].y + points[i].y) / 2 : points[0].y;
-        ctx.quadraticCurveTo(points[i].x, points[i].y + 25 + Math.sin(time * 0.001 + i) * 3, xc, yc + 25);
-      }
-      ctx.closePath();
-      ctx.fillStyle = "hsla(240, 10%, 3%, 0.4)";
-      ctx.fill();
-      ctx.globalCompositeOperation = "source-over";
-      ctx.restore();
-    };
+    });
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current.tx = e.clientX / window.innerWidth;
@@ -183,17 +186,19 @@ const MilkyWayBackground = () => {
       // ── Milky way band diffuse glow ──
       ctx.save();
       ctx.translate(px * 0.15 + driftX * 0.5, py * 0.15 + driftY * 0.5);
-      for (let layer = 0; layer < 3; layer++) {
+      for (let layer = 0; layer < 4; layer++) {
         const bandGrad = ctx.createLinearGradient(
-          w * -0.1, h * (0.15 + layer * 0.03),
-          w * 1.1, h * (0.65 + layer * 0.03)
+          w * -0.1, h * (0.12 + layer * 0.025),
+          w * 1.1, h * (0.62 + layer * 0.025)
         );
+        const intensity = 0.025 + layer * 0.008;
         bandGrad.addColorStop(0, "hsla(220, 30%, 20%, 0)");
-        bandGrad.addColorStop(0.2, `hsla(240, 25%, 18%, ${0.03 + layer * 0.01})`);
-        bandGrad.addColorStop(0.4, `hsla(260, 30%, 22%, ${0.06 + layer * 0.015})`);
-        bandGrad.addColorStop(0.5, `hsla(270, 35%, 25%, ${0.07 + layer * 0.015})`);
-        bandGrad.addColorStop(0.6, `hsla(290, 25%, 20%, ${0.05 + layer * 0.01})`);
-        bandGrad.addColorStop(0.8, `hsla(320, 20%, 18%, ${0.03 + layer * 0.008})`);
+        bandGrad.addColorStop(0.15, `hsla(230, 28%, 18%, ${intensity * 0.6})`);
+        bandGrad.addColorStop(0.3, `hsla(250, 32%, 22%, ${intensity})`);
+        bandGrad.addColorStop(0.45, `hsla(265, 38%, 26%, ${intensity * 1.3})`);
+        bandGrad.addColorStop(0.55, `hsla(275, 35%, 24%, ${intensity * 1.2})`);
+        bandGrad.addColorStop(0.7, `hsla(300, 25%, 20%, ${intensity * 0.8})`);
+        bandGrad.addColorStop(0.85, `hsla(320, 18%, 16%, ${intensity * 0.4})`);
         bandGrad.addColorStop(1, "hsla(220, 30%, 15%, 0)");
         ctx.fillStyle = bandGrad;
         ctx.fillRect(-100, -100, w + 200, h + 200);
@@ -205,28 +210,31 @@ const MilkyWayBackground = () => {
       nebulae.forEach((neb) => {
         const nebulaX = neb.x * w + px * 0.4 + driftX * 0.6 + Math.sin(time * neb.driftX) * 20;
         const nebulaY = neb.y * h + py * 0.4 + driftY * 0.6 + Math.cos(time * neb.driftY) * 15;
-        const pulse = 1 + Math.sin(time * neb.pulseSpeed + neb.pulseOffset) * 0.08;
+        const pulse = 1 + Math.sin(time * neb.pulseSpeed + neb.pulseOffset) * 0.06;
         const isDark = neb.lightness < 10;
 
         for (let l = 0; l < neb.layers; l++) {
           ctx.save();
           ctx.translate(nebulaX, nebulaY);
-          ctx.rotate(((neb.rotation + l * 15 + time * 0.003) * Math.PI) / 180);
+          ctx.rotate(((neb.rotation + l * 12 + time * 0.002) * Math.PI) / 180);
 
-          const scaleX = (neb.rx + l * 30) * pulse / neb.rx;
-          const scaleY = (neb.ry + l * 20) * pulse / neb.rx;
+          const scaleX = (neb.rx + l * 25) * pulse / neb.rx;
+          const scaleY = (neb.ry + l * 18) * pulse / neb.rx;
           ctx.scale(scaleX, scaleY);
 
           const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, neb.rx);
           if (isDark) {
-            grad.addColorStop(0, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness}%, ${neb.opacity * 1.2})`);
-            grad.addColorStop(0.5, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness}%, ${neb.opacity * 0.8})`);
-            grad.addColorStop(1, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness}%, 0)`);
+            // Very soft dark nebulae — no hard edges
+            grad.addColorStop(0, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness}%, ${neb.opacity * 0.9})`);
+            grad.addColorStop(0.3, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness}%, ${neb.opacity * 0.6})`);
+            grad.addColorStop(0.6, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness + 1}%, ${neb.opacity * 0.3})`);
+            grad.addColorStop(1, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness + 2}%, 0)`);
           } else {
-            const layerFade = 1 - l * 0.25;
-            grad.addColorStop(0, `hsla(${neb.hue + l * 10}, ${neb.saturation}%, ${neb.lightness + 15}%, ${neb.opacity * 1.8 * layerFade})`);
-            grad.addColorStop(0.25, `hsla(${neb.hue + l * 5}, ${neb.saturation}%, ${neb.lightness + 5}%, ${neb.opacity * 1.2 * layerFade})`);
-            grad.addColorStop(0.6, `hsla(${neb.hue}, ${neb.saturation - 10}%, ${neb.lightness}%, ${neb.opacity * 0.5 * layerFade})`);
+            const layerFade = 1 - l * 0.22;
+            grad.addColorStop(0, `hsla(${neb.hue + l * 8}, ${neb.saturation}%, ${neb.lightness + 18}%, ${neb.opacity * 1.6 * layerFade})`);
+            grad.addColorStop(0.2, `hsla(${neb.hue + l * 4}, ${neb.saturation}%, ${neb.lightness + 8}%, ${neb.opacity * 1.2 * layerFade})`);
+            grad.addColorStop(0.5, `hsla(${neb.hue}, ${neb.saturation - 8}%, ${neb.lightness}%, ${neb.opacity * 0.5 * layerFade})`);
+            grad.addColorStop(0.8, `hsla(${neb.hue - 5}, ${neb.saturation - 12}%, ${neb.lightness - 3}%, ${neb.opacity * 0.15 * layerFade})`);
             grad.addColorStop(1, `hsla(${neb.hue - 10}, ${neb.saturation - 15}%, ${neb.lightness - 5}%, 0)`);
           }
 
@@ -240,9 +248,6 @@ const MilkyWayBackground = () => {
       });
       ctx.globalCompositeOperation = "source-over";
       ctx.restore();
-
-      // ── Dust lane ──
-      drawDustLane(time, px, py);
 
       // ── Stars ──
       stars.forEach((star) => {
