@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { artCategories } from "@/data/artCategories";
+import OctagonParticles from "./OctagonParticles";
+import OctagonGlowRing from "./OctagonGlowRing";
 
 const SEGMENT_COLORS = [
   "from-egregora-blue to-egregora-teal",
