@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { artCategories } from "@/data/artCategories";
 import OctagonParticles from "./OctagonParticles";
 import OctagonGlowRing from "./OctagonGlowRing";
+import ZodiacConstellations from "./ZodiacConstellations";
 
 const SEGMENT_COLORS = [
   "from-egregora-blue to-egregora-teal",
