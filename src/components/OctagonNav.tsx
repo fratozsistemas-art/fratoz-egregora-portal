@@ -249,7 +249,7 @@ const OctagonNav = () => {
           );
         })}
 
-        {/* Center - Transmídia */}
+        {/* Center - Transmídia (3D dome) */}
         <circle
           cx={cx}
           cy={cy}
@@ -260,7 +260,7 @@ const OctagonNav = () => {
           className="cursor-pointer transition-all duration-500"
           style={{
             animation: centerHovered ? "breathe 2s ease-in-out infinite" : "none",
-            filter: centerHovered ? "drop-shadow(0 0 20px rgba(123,66,217,0.5))" : "none",
+            filter: centerHovered ? "drop-shadow(0 0 24px rgba(123,66,217,0.6))" : "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
           }}
           onMouseEnter={() => setCenterHovered(true)}
           onMouseLeave={() => setCenterHovered(false)}
@@ -269,6 +269,16 @@ const OctagonNav = () => {
           tabIndex={0}
           aria-label="Explorar Transmídia"
           onKeyDown={(e) => e.key === "Enter" && navigate("/transmidia")}
+        />
+        {/* Dome highlight */}
+        <ellipse
+          cx={cx - centerR * 0.15}
+          cy={cy - centerR * 0.2}
+          rx={centerR * 0.5}
+          ry={centerR * 0.35}
+          fill="hsla(0,0%,100%,0.08)"
+          className="pointer-events-none"
+          style={{ transition: "opacity 0.3s", opacity: centerHovered ? 0.15 : 0.06 }}
         />
         <text
           x={cx}
