@@ -279,6 +279,7 @@ const Transmidia = () => {
       </AnimatePresence>
 
       <SiteFooter />
+      </div>
     </div>
   );
 };
