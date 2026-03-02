@@ -208,6 +208,8 @@ const OctagonNav = () => {
         >
           núcleo central
         </text>
+        {/* Zodiac Constellations */}
+        <ZodiacConstellations hoveredIndex={hoveredIndex} />
       </svg>
 
       {/* Hover info panel */}
