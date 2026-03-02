@@ -97,8 +97,18 @@ const OctagonNav = () => {
     return { cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle: midAngle, index: i, midAngle };
   });
 
+  // Depth layers — concentric rings between innerR and centerR to simulate tunnel
+  const depthLayers = 6;
+  const depthRings = Array.from({ length: depthLayers }, (_, d) => {
+    const t = d / depthLayers;
+    const tNext = (d + 1) / depthLayers;
+    const rOuter = innerR - t * (innerR - centerR - 4);
+    const rInner = innerR - tNext * (innerR - centerR - 4);
+    return { rOuter, rInner, depth: t, index: d };
+  });
+
   return (
-    <div className="relative flex items-center justify-center">
+    <div className="relative flex items-center justify-center" style={{ perspective: "900px" }}>
       {/* Particles layer */}
       <div className="absolute w-[380px] h-[380px] sm:w-[480px] sm:h-[480px] md:w-[580px] md:h-[580px] lg:w-[660px] lg:h-[660px]">
         <OctagonParticles active={hoveredIndex !== null || centerHovered} />
@@ -107,6 +117,7 @@ const OctagonNav = () => {
       <svg
         viewBox="-60 -60 520 520"
         className="w-[380px] h-[380px] sm:w-[480px] sm:h-[480px] md:w-[580px] md:h-[580px] lg:w-[660px] lg:h-[660px] relative z-10"
+        style={{ transformStyle: "preserve-3d", transform: "rotateX(2deg)" }}
         role="navigation"
         aria-label="Navegação principal por tipo de arte"
       >
