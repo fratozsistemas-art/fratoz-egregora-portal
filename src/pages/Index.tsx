@@ -50,6 +50,7 @@ const Index = () => {
       </section>
 
       <SiteFooter />
+      </div>
     </div>
   );
 };
