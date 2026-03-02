@@ -106,6 +106,9 @@ const OctagonNav = () => {
           strokeWidth="1"
         />
 
+        {/* Glow ring effects */}
+        <OctagonGlowRing hoveredIndex={hoveredIndex} />
+
         {/* Segments */}
         {segments.map(({ cat, pathData, labelPos, labelAngle, index }) => (
           <g
