@@ -102,8 +102,8 @@ const Transmidia = () => {
                       onClick={() => setSelectedObra(obra)}
                       className="glass-panel rounded-xl overflow-hidden cursor-pointer group hover:border-primary/40 transition-all duration-300"
                     >
-                      <div className="aspect-[4/3] bg-secondary flex items-center justify-center relative">
-                        <span className="text-muted-foreground text-xs">Imagem da obra</span>
+                      <div className="aspect-[4/3] bg-secondary relative overflow-hidden">
+                        <img src={obra.image} alt={obra.title} className="w-full h-full object-cover" />
                         <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
                           <ZoomIn className="w-6 h-6 text-foreground" />
                         </div>
