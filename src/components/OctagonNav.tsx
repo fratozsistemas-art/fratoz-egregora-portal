@@ -65,9 +65,14 @@ const OctagonNav = () => {
 
   return (
     <div className="relative flex items-center justify-center">
+      {/* Particles layer */}
+      <div className="absolute w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[560px] lg:h-[560px]">
+        <OctagonParticles active={hoveredIndex !== null || centerHovered} />
+      </div>
+
       <svg
         viewBox={`0 0 ${size} ${size}`}
-        className="w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[560px] lg:h-[560px]"
+        className="w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[560px] lg:h-[560px] relative z-10"
         role="navigation"
         aria-label="Navegação principal por tipo de arte"
       >
