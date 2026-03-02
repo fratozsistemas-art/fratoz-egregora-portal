@@ -67,7 +67,7 @@ const ArtCategoryPage = () => {
               className="flex items-center gap-2 text-sm text-muted-foreground/80 mt-3"
             >
               <Star className="w-4 h-4 text-primary fill-primary" />
-              Obra carro-chefe: <span className="text-foreground font-medium">{category.featuredWork}</span> — {category.featuredArtist}
+              <span className="text-foreground font-medium">{category.featuredWork}</span> — {category.featuredArtist}
             </motion.p>
           )}
         </div>
@@ -123,9 +123,8 @@ const ArtCategoryPage = () => {
               <div className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <Star className="w-5 h-5 text-primary fill-primary" />
-                  <h3 className="font-display text-lg text-foreground">Obra Carro-Chefe</h3>
+                  <h3 className="font-display text-lg text-foreground">{category.featuredWork}</h3>
                 </div>
-                <h4 className="font-display text-xl text-foreground">{category.featuredWork}</h4>
                 <p className="text-sm text-muted-foreground mt-1">
                   {category.featuredArtist}
                   {category.featuredWorkYear && ` · ${category.featuredWorkYear}`}
