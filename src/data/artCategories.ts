@@ -1,3 +1,31 @@
+// Hero images
+import heroCinema from "@/assets/heroes/hero-cinema.jpg";
+import heroTeatro from "@/assets/heroes/hero-teatro.jpg";
+import heroMusica from "@/assets/heroes/hero-musica.jpg";
+import heroFotografia from "@/assets/heroes/hero-fotografia.jpg";
+import heroPintura from "@/assets/heroes/hero-pintura.jpg";
+import heroDanca from "@/assets/heroes/hero-danca.jpg";
+import heroLiteratura from "@/assets/heroes/hero-literatura.jpg";
+import heroEscultura from "@/assets/heroes/hero-escultura.jpg";
+
+// Artwork images
+import obra01 from "@/assets/obras/obra-01.jpg";
+import obra02 from "@/assets/obras/obra-02.jpg";
+import obra03 from "@/assets/obras/obra-03.jpg";
+import obra04 from "@/assets/obras/obra-04.jpg";
+import obra05 from "@/assets/obras/obra-05.jpg";
+import obra06 from "@/assets/obras/obra-06.jpg";
+import obra07 from "@/assets/obras/obra-07.jpg";
+import obra08 from "@/assets/obras/obra-08.jpg";
+import obra09 from "@/assets/obras/obra-09.jpg";
+import obra10 from "@/assets/obras/obra-10.jpg";
+import obra11 from "@/assets/obras/obra-11.jpg";
+import obra12 from "@/assets/obras/obra-12.jpg";
+import obra13 from "@/assets/obras/obra-13.jpg";
+import obra14 from "@/assets/obras/obra-14.jpg";
+import obra15 from "@/assets/obras/obra-15.jpg";
+import obra16 from "@/assets/obras/obra-16.jpg";
+
 export interface ArtCategory {
   id: string;
   name: string;
@@ -5,10 +33,11 @@ export interface ArtCategory {
   tagline: string;
   description: string;
   color: string;
-  angle: number; // position in octagon (degrees)
+  angle: number;
   heroDescription: string;
   curator: string;
   status: string;
+  heroImage: string;
 }
 
 export const artCategories: ArtCategory[] = [
