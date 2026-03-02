@@ -289,7 +289,7 @@ const OctagonNav = () => {
               className="cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => navigate(`/${cat.slug}`)}
+              onClick={(e) => triggerTransition(`/${cat.slug}`, e)}
               role="button"
               tabIndex={0}
               aria-label={`Explorar ${cat.name}`}
@@ -384,7 +384,7 @@ const OctagonNav = () => {
           }}
           onMouseEnter={() => setCenterHovered(true)}
           onMouseLeave={() => setCenterHovered(false)}
-          onClick={() => navigate("/transmidia")}
+          onClick={(e) => triggerTransition("/transmidia", e)}
           role="button"
           tabIndex={0}
           aria-label="Explorar Transmídia"
@@ -458,6 +458,19 @@ const OctagonNav = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Organic page transition */}
+      {transition && (
+        <OrganicTransition
+          active={transition.active}
+          targetPath={transition.path}
+          originX={transition.originX}
+          originY={transition.originY}
+          mouseX={transition.mouseX}
+          mouseY={transition.mouseY}
+          onComplete={() => setTransition(null)}
+        />
+      )}
     </div>
   );
 };
