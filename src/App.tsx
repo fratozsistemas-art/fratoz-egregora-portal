@@ -18,8 +18,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/:slug" element={<ArtCategoryPage />} />
           <Route path="/transmidia" element={<Transmidia />} />
+          <Route path="/:slug" element={<ArtCategoryPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
