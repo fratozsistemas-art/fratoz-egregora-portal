@@ -145,6 +145,31 @@ const ArtCategoryPage = () => {
             <h2 className="font-display text-2xl text-foreground mb-4">Sobre</h2>
             <p className="text-muted-foreground leading-relaxed">{category.heroDescription}</p>
             <p className="text-muted-foreground leading-relaxed mt-4">{category.description}</p>
+
+            {/* HP Collection — Escultura */}
+            {category.slug === "escultura" && (
+              <div className="mt-12 rounded-xl border border-accent/30 bg-accent/5 p-6 space-y-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Gem className="w-5 h-5 text-primary" />
+                  <h3 className="font-display text-xl text-foreground">Coleção HP — Colecionador em Destaque</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  A Coleção HP faz parte do acervo pessoal de um professor de Relações Internacionais da UFRJ. As obras foram adquiridas de um marchand catalão que encerrava suas atividades no Rio de Janeiro para retornar à Europa.
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  No contexto do auge do dinamismo cultural e do boom imobiliário do Rio de Janeiro — impulsionado pelos megaeventos desde o início do século XXI — muitos estrangeiros e empresários bem-sucedidos se estabeleceram na cidade. Foi nesse cenário que o marchand catalão trouxe parte expressiva de suas obras de Barcelona, passando também a arrematar leilões no Brasil para compor o acervo de sua importante galeria, que funcionou até 2020.
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Com a pandemia, o marchand encerrou suas atividades comerciais no Rio. As peças mais valiosas aguardavam flexibilização logística para retornar a Barcelona — foi nessa janela rara que o professor adquiriu em lote fechado um conjunto artístico extraordinário, resultado da dupla curadoria entre seu conhecimento histórico e a seleção criteriosa do marchand.
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  O acervo reúne <strong className="text-foreground">20 peças dos continentes americano, europeu, asiático e africano</strong>, com valor artístico, etnográfico e simbólico de diferentes tradições filosóficas, religiosas e civilizacionais. Peças que causam forte impacto visual e emocional — com o estilo das grandes casas Sotheby's e Christie's.
+                </p>
+                <p className="text-sm text-muted-foreground/70 italic leading-relaxed">
+                  "A experiência estética é sempre algo que marca a memória das pessoas. Diante de uma obra, cada espectador mobiliza sua própria trajetória cultural, fazendo da fruição artística uma vivência singular marcante."
+                </p>
+              </div>
+            )}
           </motion.div>
         )}
         {activeTab === "Galeria" && (
