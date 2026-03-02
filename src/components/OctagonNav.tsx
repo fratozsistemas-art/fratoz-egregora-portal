@@ -121,6 +121,11 @@ const OctagonNav = () => {
             tabIndex={0}
             aria-label={`Explorar ${cat.name}`}
             onKeyDown={(e) => e.key === "Enter" && navigate(`/${cat.slug}`)}
+            style={{
+              transform: hoveredIndex === index ? `scale(1.03)` : "scale(1)",
+              transformOrigin: `${cx}px ${cy}px`,
+              transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
           >
             <path
               d={pathData}
