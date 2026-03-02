@@ -97,8 +97,18 @@ const OctagonNav = () => {
     return { cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle: midAngle, index: i, midAngle };
   });
 
+  // Depth layers — concentric rings between innerR and centerR to simulate tunnel
+  const depthLayers = 6;
+  const depthRings = Array.from({ length: depthLayers }, (_, d) => {
+    const t = d / depthLayers;
+    const tNext = (d + 1) / depthLayers;
+    const rOuter = innerR - t * (innerR - centerR - 4);
+    const rInner = innerR - tNext * (innerR - centerR - 4);
+    return { rOuter, rInner, depth: t, index: d };
+  });
+
   return (
-    <div className="relative flex items-center justify-center">
+    <div className="relative flex items-center justify-center" style={{ perspective: "900px" }}>
       {/* Particles layer */}
       <div className="absolute w-[380px] h-[380px] sm:w-[480px] sm:h-[480px] md:w-[580px] md:h-[580px] lg:w-[660px] lg:h-[660px]">
         <OctagonParticles active={hoveredIndex !== null || centerHovered} />
@@ -107,6 +117,7 @@ const OctagonNav = () => {
       <svg
         viewBox="-60 -60 520 520"
         className="w-[380px] h-[380px] sm:w-[480px] sm:h-[480px] md:w-[580px] md:h-[580px] lg:w-[660px] lg:h-[660px] relative z-10"
+        style={{ transformStyle: "preserve-3d", transform: "rotateX(2deg)" }}
         role="navigation"
         aria-label="Navegação principal por tipo de arte"
       >
@@ -137,6 +148,22 @@ const OctagonNav = () => {
             <stop offset="60%" stopColor="#7b42d9" stopOpacity={centerHovered ? 0.7 : 0.2} />
             <stop offset="100%" stopColor="#d94290" stopOpacity={centerHovered ? 0.5 : 0.1} />
           </radialGradient>
+          {/* Depth tunnel gradients */}
+          {depthRings.map(({ index: di, depth }) => {
+            const segColors = ["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"];
+            return segColors.map((col, si) => (
+              <radialGradient key={`depth-${di}-${si}`} id={`depth-grad-${di}-${si}`} cx="50%" cy="50%">
+                <stop offset="0%" stopColor={col} stopOpacity={Math.max(0.02, 0.12 - depth * 0.12)} />
+                <stop offset="100%" stopColor={col} stopOpacity={Math.max(0.01, 0.06 - depth * 0.06)} />
+              </radialGradient>
+            ));
+          })}
+          {/* Abyss gradient — deep center */}
+          <radialGradient id="abyss-grad" cx="50%" cy="50%">
+            <stop offset="0%" stopColor="hsl(260,20%,3%)" stopOpacity="0.9" />
+            <stop offset="40%" stopColor="hsl(250,15%,5%)" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="hsl(240,10%,8%)" stopOpacity="0" />
+          </radialGradient>
           {/* 3D lighting filter */}
           <filter id="bevel-shadow" x="-5%" y="-5%" width="110%" height="110%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
@@ -158,6 +185,61 @@ const OctagonNav = () => {
 
         {/* Glow ring effects */}
         <OctagonGlowRing hoveredIndex={hoveredIndex} />
+
+        {/* ── Depth tunnel — concentric rings creating cone-to-infinity illusion ── */}
+        {/* Abyss background — dark void in the center */}
+        <circle cx={cx} cy={cy} r={innerR + 2} fill="url(#abyss-grad)" className="pointer-events-none" />
+        
+        {/* Concentric depth rings per segment */}
+        {depthRings.map(({ rOuter, rInner, depth, index: di }) => {
+          const segColors = ["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"];
+          return (
+            <g key={`depth-ring-${di}`} className="pointer-events-none">
+              {artCategories.map((_, si) => {
+                const startAngle = si * 45 - 22.5;
+                const endAngle = startAngle + 45;
+                const steps = 6;
+                const outerPts: string[] = [];
+                const innerPts: string[] = [];
+                for (let s = 0; s <= steps; s++) {
+                  const a = startAngle + (endAngle - startAngle) * (s / steps);
+                  const po = getPoint(a, rOuter);
+                  outerPts.push(`${po.x},${po.y}`);
+                  const pi = getPoint(a, rInner);
+                  innerPts.push(`${pi.x},${pi.y}`);
+                }
+                const ringPath = `M ${outerPts[0]} ${outerPts.map(p => `L ${p}`).join(" ")} ${[...innerPts].reverse().map(p => `L ${p}`).join(" ")} Z`;
+                
+                const isSegHov = hoveredIndex === si;
+                const baseOpacity = Math.max(0.03, 0.18 - depth * 0.16);
+                const opacity = isSegHov ? baseOpacity * 2.5 : baseOpacity;
+                const lightness = Math.max(4, 16 - depth * 14);
+                
+                return (
+                  <path
+                    key={`d-${di}-${si}`}
+                    d={ringPath}
+                    fill={segColors[si]}
+                    fillOpacity={opacity}
+                    stroke={`hsla(240,6%,${lightness}%,${Math.max(0.05, 0.2 - depth * 0.18)})`}
+                    strokeWidth="0.5"
+                    className="transition-all duration-500"
+                  />
+                );
+              })}
+              {/* Ring edge highlight — concentric octagon line */}
+              <polygon
+                points={Array.from({ length: 8 }, (_, i) => {
+                  const p = getPoint(i * 45, rInner);
+                  return `${p.x},${p.y}`;
+                }).join(" ")}
+                fill="none"
+                stroke={`hsla(260,20%,30%,${Math.max(0.03, 0.15 - depth * 0.13)})`}
+                strokeWidth="0.6"
+              />
+            </g>
+          );
+        })}
 
         {/* Segments — 3D pyramid sections */}
         {segments.map(({ cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle, index }) => {
