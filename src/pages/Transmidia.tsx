@@ -1,0 +1,283 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Grid3X3, Eye, Search, X, ZoomIn, ChevronRight, Play, Map } from "lucide-react";
+import { Link } from "react-router-dom";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+import { transmidiaObras, type TransmidiaObra } from "@/data/artCategories";
+
+const themes = [...new Set(transmidiaObras.map((o) => o.theme))];
+const techniques = [...new Set(transmidiaObras.map((o) => o.technique))];
+const rooms = [1, 2, 3];
+
+const ROOM_COLORS = ["from-egregora-blue/20 to-egregora-purple/20", "from-egregora-magenta/20 to-egregora-orange/20", "from-egregora-green/20 to-egregora-teal/20"];
+const ROOM_NAMES = ["Sala Memória", "Sala Transformação", "Sala Cosmos"];
+
+const Transmidia = () => {
+  const [mode, setMode] = useState<"visita" | "colecao">("visita");
+  const [selectedObra, setSelectedObra] = useState<TransmidiaObra | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterTheme, setFilterTheme] = useState<string | null>(null);
+  const [activeRoom, setActiveRoom] = useState(1);
+
+  const filteredObras = transmidiaObras.filter((o) => {
+    const matchSearch = !searchQuery || o.title.toLowerCase().includes(searchQuery.toLowerCase()) || o.author.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchTheme = !filterTheme || o.theme === filterTheme;
+    return matchSearch && matchTheme;
+  });
+
+  const roomObras = transmidiaObras.filter((o) => o.room === activeRoom);
+  const relatedObras = selectedObra ? transmidiaObras.filter((o) => o.theme === selectedObra.theme && o.id !== selectedObra.id).slice(0, 3) : [];
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      <SiteHeader />
+
+      {/* Hero */}
+      <section className="relative w-full py-16 md:py-24 text-center px-6">
+        <div className="absolute inset-0 gradient-egregora opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+        <div className="relative z-10">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
+            <ArrowLeft className="w-4 h-4" /> Voltar à Home
+          </Link>
+          <h1 className="font-display text-4xl md:text-6xl gradient-egregora-text mb-4">Transmídia</h1>
+          <p className="text-muted-foreground max-w-lg mx-auto">
+            O núcleo central da Egrégora. Uma experiência de museu digital onde todas as linguagens se encontram.
+          </p>
+
+          {/* Mode toggle */}
+          <div className="flex justify-center gap-2 mt-8">
+            <button
+              onClick={() => setMode("visita")}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-body transition-all ${mode === "visita" ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
+            >
+              <Eye className="w-4 h-4" /> Modo Visita
+            </button>
+            <button
+              onClick={() => setMode("colecao")}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-body transition-all ${mode === "colecao" ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
+            >
+              <Grid3X3 className="w-4 h-4" /> Modo Coleção
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Content */}
+      <div className="flex-1 px-6 pb-16">
+        <AnimatePresence mode="wait">
+          {mode === "visita" ? (
+            <motion.div key="visita" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-6xl mx-auto">
+              {/* Room map */}
+              <div className="flex items-center justify-center gap-2 mb-8">
+                <Map className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground mr-2">Planta:</span>
+                {rooms.map((room) => (
+                  <button
+                    key={room}
+                    onClick={() => setActiveRoom(room)}
+                    className={`px-4 py-2 rounded-lg text-sm transition-all ${activeRoom === room ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
+                  >
+                    {ROOM_NAMES[room - 1]}
+                  </button>
+                ))}
+              </div>
+
+              {/* Gallery room */}
+              <div className={`relative rounded-2xl border border-border bg-gradient-to-br ${ROOM_COLORS[activeRoom - 1]} p-8 min-h-[500px]`}>
+                <h2 className="font-display text-2xl text-foreground mb-2">{ROOM_NAMES[activeRoom - 1]}</h2>
+                <p className="text-sm text-muted-foreground mb-8">Sala {activeRoom} · {roomObras.length} obras</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {roomObras.map((obra, i) => (
+                    <motion.div
+                      key={obra.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      onClick={() => setSelectedObra(obra)}
+                      className="glass-panel rounded-xl overflow-hidden cursor-pointer group hover:border-primary/40 transition-all duration-300"
+                    >
+                      <div className="aspect-[4/3] bg-secondary flex items-center justify-center relative">
+                        <span className="text-muted-foreground text-xs">Imagem da obra</span>
+                        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                          <ZoomIn className="w-6 h-6 text-foreground" />
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-display text-sm text-foreground">{obra.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-1">{obra.author} · {obra.year}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div key="colecao" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-6xl mx-auto">
+              {/* Filters */}
+              <div className="flex flex-wrap items-center gap-3 mb-8">
+                <div className="relative flex-1 max-w-sm">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder="Buscar obra ou artista..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <button
+                    onClick={() => setFilterTheme(null)}
+                    className={`px-3 py-1.5 rounded-md text-xs transition-colors ${!filterTheme ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
+                  >
+                    Todos
+                  </button>
+                  {themes.map((theme) => (
+                    <button
+                      key={theme}
+                      onClick={() => setFilterTheme(theme)}
+                      className={`px-3 py-1.5 rounded-md text-xs transition-colors ${filterTheme === theme ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
+                    >
+                      {theme}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {filteredObras.map((obra, i) => (
+                  <motion.div
+                    key={obra.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.05 }}
+                    onClick={() => setSelectedObra(obra)}
+                    className="glass-panel rounded-xl overflow-hidden cursor-pointer group hover:border-primary/40 transition-all duration-300"
+                  >
+                    <div className="aspect-square bg-secondary flex items-center justify-center">
+                      <span className="text-muted-foreground text-xs">Imagem</span>
+                    </div>
+                    <div className="p-3">
+                      <h3 className="font-display text-sm text-foreground truncate">{obra.title}</h3>
+                      <p className="text-xs text-muted-foreground mt-0.5">{obra.author}</p>
+                      <p className="text-xs text-muted-foreground">{obra.year} · {obra.technique}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              {filteredObras.length === 0 && (
+                <p className="text-center text-muted-foreground py-16">Nenhuma obra encontrada.</p>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Obra Modal */}
+      <AnimatePresence>
+        {selectedObra && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-background/90 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setSelectedObra(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-panel rounded-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-6 border-b border-border">
+                <h2 className="font-display text-2xl text-foreground">{selectedObra.title}</h2>
+                <button onClick={() => setSelectedObra(null)} className="p-2 rounded-lg hover:bg-secondary transition-colors">
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+                {/* Image */}
+                <div className="aspect-square bg-secondary flex items-center justify-center">
+                  <span className="text-muted-foreground">Visualização da obra</span>
+                </div>
+
+                {/* Info */}
+                <div className="p-6 space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Artista</span>
+                      <span className="text-foreground">{selectedObra.author}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Ano</span>
+                      <span className="text-foreground">{selectedObra.year}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Técnica</span>
+                      <span className="text-foreground">{selectedObra.technique}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Dimensões</span>
+                      <span className="text-foreground">{selectedObra.dimensions}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Tema</span>
+                      <span className="text-foreground">{selectedObra.theme}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Sala</span>
+                      <span className="text-foreground">{ROOM_NAMES[selectedObra.room - 1]}</span>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-border pt-4">
+                    <p className="text-sm text-muted-foreground leading-relaxed">{selectedObra.description}</p>
+                  </div>
+
+                  {/* Audio guide */}
+                  <button className="flex items-center gap-2 text-sm text-primary hover:opacity-80 transition-opacity">
+                    <Play className="w-4 h-4" /> Áudio-guia
+                  </button>
+                </div>
+              </div>
+
+              {/* Related */}
+              {relatedObras.length > 0 && (
+                <div className="p-6 border-t border-border">
+                  <h3 className="font-display text-lg text-foreground mb-4">Obras relacionadas</h3>
+                  <div className="flex gap-4 overflow-x-auto">
+                    {relatedObras.map((obra) => (
+                      <div
+                        key={obra.id}
+                        onClick={() => setSelectedObra(obra)}
+                        className="flex-shrink-0 w-40 glass-panel rounded-lg overflow-hidden cursor-pointer hover:border-primary/40 transition-colors"
+                      >
+                        <div className="aspect-square bg-secondary flex items-center justify-center">
+                          <span className="text-muted-foreground text-xs">Img</span>
+                        </div>
+                        <div className="p-2">
+                          <p className="text-xs text-foreground truncate">{obra.title}</p>
+                          <p className="text-xs text-muted-foreground">{obra.author}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <SiteFooter />
+    </div>
+  );
+};
+
+export default Transmidia;
