@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { artCategories } from "@/data/artCategories";
+import OctagonParticles from "./OctagonParticles";
+import OctagonGlowRing from "./OctagonGlowRing";
 
 const SEGMENT_COLORS = [
   "from-egregora-blue to-egregora-teal",
@@ -63,9 +65,14 @@ const OctagonNav = () => {
 
   return (
     <div className="relative flex items-center justify-center">
+      {/* Particles layer */}
+      <div className="absolute w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[560px] lg:h-[560px]">
+        <OctagonParticles active={hoveredIndex !== null || centerHovered} />
+      </div>
+
       <svg
         viewBox={`0 0 ${size} ${size}`}
-        className="w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[560px] lg:h-[560px]"
+        className="w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[560px] lg:h-[560px] relative z-10"
         role="navigation"
         aria-label="Navegação principal por tipo de arte"
       >
@@ -99,6 +106,9 @@ const OctagonNav = () => {
           strokeWidth="1"
         />
 
+        {/* Glow ring effects */}
+        <OctagonGlowRing hoveredIndex={hoveredIndex} />
+
         {/* Segments */}
         {segments.map(({ cat, pathData, labelPos, labelAngle, index }) => (
           <g
@@ -111,6 +121,11 @@ const OctagonNav = () => {
             tabIndex={0}
             aria-label={`Explorar ${cat.name}`}
             onKeyDown={(e) => e.key === "Enter" && navigate(`/${cat.slug}`)}
+            style={{
+              transform: hoveredIndex === index ? `scale(1.03)` : "scale(1)",
+              transformOrigin: `${cx}px ${cy}px`,
+              transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            }}
           >
             <path
               d={pathData}
@@ -119,7 +134,10 @@ const OctagonNav = () => {
               strokeWidth="1.5"
               className="transition-all duration-300"
               style={{
-                filter: hoveredIndex === index ? "brightness(1.4) drop-shadow(0 0 12px rgba(123,66,217,0.3))" : "none",
+                filter: hoveredIndex === index
+                  ? `brightness(1.5) drop-shadow(0 0 16px rgba(123,66,217,0.4)) drop-shadow(0 0 4px ${["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"][index]})`
+                  : "brightness(0.95)",
+                transition: "filter 0.4s ease",
               }}
             />
             <text
