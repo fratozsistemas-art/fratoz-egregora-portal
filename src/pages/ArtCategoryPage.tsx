@@ -6,6 +6,19 @@ import { Link } from "react-router-dom";
 import { artCategories } from "@/data/artCategories";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import MilkyWayBackground from "@/components/MilkyWayBackground";
+
+// Map category slugs to hue values for the milky way tint
+const CATEGORY_HUES: Record<string, number> = {
+  cinema: 220,      // blue
+  teatro: 270,      // purple
+  musica: 320,      // magenta
+  fotografia: 0,    // red
+  pintura: 30,      // orange
+  danca: 50,        // yellow
+  literatura: 140,  // green
+  escultura: 180,   // teal
+};
 
 const tabs = ["Sobre", "Galeria", "Agenda", "Acervo", "Participar"];
 
@@ -17,7 +30,9 @@ const ArtCategoryPage = () => {
   if (!category) return <Navigate to="/" replace />;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      <MilkyWayBackground tintHue={CATEGORY_HUES[category.slug] ?? 240} tintStrength={0.55} />
+      <div className="relative z-10 flex flex-col min-h-screen">
       <SiteHeader />
 
       {/* Hero */}
@@ -148,6 +163,7 @@ const ArtCategoryPage = () => {
       </div>
 
       <SiteFooter />
+      </div>
     </div>
   );
 };

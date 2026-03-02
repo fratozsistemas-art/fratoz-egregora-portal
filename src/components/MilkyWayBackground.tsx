@@ -224,6 +224,7 @@ const MilkyWayBackground = ({ tintHue, tintStrength = 0.5 }: MilkyWayProps) => {
         const nebulaY = neb.y * h + py * 0.4 + driftY * 0.6 + Math.cos(time * neb.driftY) * 15;
         const pulse = 1 + Math.sin(time * neb.pulseSpeed + neb.pulseOffset) * 0.06;
         const isDark = neb.lightness < 10;
+        const nebHue = tH(neb.hue);
 
         for (let l = 0; l < neb.layers; l++) {
           ctx.save();
@@ -236,18 +237,17 @@ const MilkyWayBackground = ({ tintHue, tintStrength = 0.5 }: MilkyWayProps) => {
 
           const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, neb.rx);
           if (isDark) {
-            // Very soft dark nebulae — no hard edges
-            grad.addColorStop(0, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness}%, ${neb.opacity * 0.9})`);
-            grad.addColorStop(0.3, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness}%, ${neb.opacity * 0.6})`);
-            grad.addColorStop(0.6, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness + 1}%, ${neb.opacity * 0.3})`);
-            grad.addColorStop(1, `hsla(${neb.hue}, ${neb.saturation}%, ${neb.lightness + 2}%, 0)`);
+            grad.addColorStop(0, `hsla(${nebHue}, ${neb.saturation}%, ${neb.lightness}%, ${neb.opacity * 0.9})`);
+            grad.addColorStop(0.3, `hsla(${nebHue}, ${neb.saturation}%, ${neb.lightness}%, ${neb.opacity * 0.6})`);
+            grad.addColorStop(0.6, `hsla(${nebHue}, ${neb.saturation}%, ${neb.lightness + 1}%, ${neb.opacity * 0.3})`);
+            grad.addColorStop(1, `hsla(${nebHue}, ${neb.saturation}%, ${neb.lightness + 2}%, 0)`);
           } else {
             const layerFade = 1 - l * 0.22;
-            grad.addColorStop(0, `hsla(${neb.hue + l * 8}, ${neb.saturation}%, ${neb.lightness + 18}%, ${neb.opacity * 1.6 * layerFade})`);
-            grad.addColorStop(0.2, `hsla(${neb.hue + l * 4}, ${neb.saturation}%, ${neb.lightness + 8}%, ${neb.opacity * 1.2 * layerFade})`);
-            grad.addColorStop(0.5, `hsla(${neb.hue}, ${neb.saturation - 8}%, ${neb.lightness}%, ${neb.opacity * 0.5 * layerFade})`);
-            grad.addColorStop(0.8, `hsla(${neb.hue - 5}, ${neb.saturation - 12}%, ${neb.lightness - 3}%, ${neb.opacity * 0.15 * layerFade})`);
-            grad.addColorStop(1, `hsla(${neb.hue - 10}, ${neb.saturation - 15}%, ${neb.lightness - 5}%, 0)`);
+            grad.addColorStop(0, `hsla(${nebHue + l * 8}, ${neb.saturation}%, ${neb.lightness + 18}%, ${neb.opacity * 1.6 * layerFade})`);
+            grad.addColorStop(0.2, `hsla(${nebHue + l * 4}, ${neb.saturation}%, ${neb.lightness + 8}%, ${neb.opacity * 1.2 * layerFade})`);
+            grad.addColorStop(0.5, `hsla(${nebHue}, ${neb.saturation - 8}%, ${neb.lightness}%, ${neb.opacity * 0.5 * layerFade})`);
+            grad.addColorStop(0.8, `hsla(${nebHue - 5}, ${neb.saturation - 12}%, ${neb.lightness - 3}%, ${neb.opacity * 0.15 * layerFade})`);
+            grad.addColorStop(1, `hsla(${nebHue - 10}, ${neb.saturation - 15}%, ${neb.lightness - 5}%, 0)`);
           }
 
           ctx.globalCompositeOperation = isDark ? "multiply" : "screen";
