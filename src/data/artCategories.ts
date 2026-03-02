@@ -38,6 +38,12 @@ export interface ArtCategory {
   curator: string;
   status: string;
   heroImage: string;
+  featuredArtist: string;
+  featuredWork: string;
+  featuredWorkYear?: number;
+  featuredWorkTechnique?: string;
+  featuredWorkDescription?: string;
+  featuredWorkImage?: string;
 }
 
 export const artCategories: ArtCategory[] = [
@@ -53,6 +59,11 @@ export const artCategories: ArtCategory[] = [
     curator: "Ana Beatriz Souza",
     status: "Convocatória aberta",
     heroImage: heroCinema,
+    featuredArtist: "Artista a definir",
+    featuredWork: "Obra a definir",
+    featuredWorkYear: 2024,
+    featuredWorkTechnique: "Longa-metragem",
+    featuredWorkDescription: "Obra carro-chefe do eixo Cinema — em definição pela curadoria.",
   },
   {
     id: "teatro",
@@ -66,6 +77,11 @@ export const artCategories: ArtCategory[] = [
     curator: "Carlos Mendes",
     status: "Em temporada",
     heroImage: heroTeatro,
+    featuredArtist: "Artista a definir",
+    featuredWork: "Obra a definir",
+    featuredWorkYear: 2024,
+    featuredWorkTechnique: "Dramaturgia contemporânea",
+    featuredWorkDescription: "Obra carro-chefe do eixo Teatro — em definição pela curadoria.",
   },
   {
     id: "musica",
@@ -79,6 +95,11 @@ export const artCategories: ArtCategory[] = [
     curator: "Mariana Costa",
     status: "Programação ativa",
     heroImage: heroMusica,
+    featuredArtist: "Artista a definir",
+    featuredWork: "Obra a definir",
+    featuredWorkYear: 2024,
+    featuredWorkTechnique: "Composição autoral",
+    featuredWorkDescription: "Obra carro-chefe do eixo Música — em definição pela curadoria.",
   },
   {
     id: "fotografia",
@@ -92,6 +113,11 @@ export const artCategories: ArtCategory[] = [
     curator: "Pedro Almeida",
     status: "Exposição em cartaz",
     heroImage: heroFotografia,
+    featuredArtist: "Artista a definir",
+    featuredWork: "Obra a definir",
+    featuredWorkYear: 2024,
+    featuredWorkTechnique: "Ensaio fotográfico",
+    featuredWorkDescription: "Obra carro-chefe do eixo Fotografia — em definição pela curadoria.",
   },
   {
     id: "pintura",
@@ -105,6 +131,11 @@ export const artCategories: ArtCategory[] = [
     curator: "Luísa Fernandes",
     status: "Acervo permanente",
     heroImage: heroPintura,
+    featuredArtist: "Siron Franco",
+    featuredWork: "Torre de Babel",
+    featuredWorkYear: 1996,
+    featuredWorkTechnique: "Pintura — técnica mista sobre tela",
+    featuredWorkDescription: "Obra monumental do artista goiano Siron Franco, Torre de Babel é uma reflexão visceral sobre a incomunicabilidade humana e a fragmentação das linguagens. Referência central do eixo de Pintura da Egrégora.",
   },
   {
     id: "danca",
@@ -118,6 +149,11 @@ export const artCategories: ArtCategory[] = [
     curator: "Rafael Torres",
     status: "Residência artística",
     heroImage: heroDanca,
+    featuredArtist: "Artista a definir",
+    featuredWork: "Obra a definir",
+    featuredWorkYear: 2024,
+    featuredWorkTechnique: "Coreografia contemporânea",
+    featuredWorkDescription: "Obra carro-chefe do eixo Dança — em definição pela curadoria.",
   },
   {
     id: "literatura",
@@ -131,6 +167,11 @@ export const artCategories: ArtCategory[] = [
     curator: "Fernanda Lima",
     status: "Publicações abertas",
     heroImage: heroLiteratura,
+    featuredArtist: "Artista a definir",
+    featuredWork: "Obra a definir",
+    featuredWorkYear: 2024,
+    featuredWorkTechnique: "Poesia / Prosa",
+    featuredWorkDescription: "Obra carro-chefe do eixo Literatura — em definição pela curadoria.",
   },
   {
     id: "escultura",
@@ -144,6 +185,11 @@ export const artCategories: ArtCategory[] = [
     curator: "Diego Nascimento",
     status: "Exposição itinerante",
     heroImage: heroEscultura,
+    featuredArtist: "Artista a definir",
+    featuredWork: "Obra a definir",
+    featuredWorkYear: 2024,
+    featuredWorkTechnique: "Escultura / Instalação",
+    featuredWorkDescription: "Obra carro-chefe do eixo Escultura — em definição pela curadoria.",
   },
 ];
 
