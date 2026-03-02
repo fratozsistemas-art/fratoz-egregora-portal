@@ -40,7 +40,12 @@ interface ShootingStar {
   size: number;
 }
 
-const MilkyWayBackground = () => {
+interface MilkyWayProps {
+  tintHue?: number; // optional hue shift (0-360) to tint the entire scene
+  tintStrength?: number; // 0-1, how much to shift towards the tint (default 0.5)
+}
+
+const MilkyWayBackground = ({ tintHue, tintStrength = 0.5 }: MilkyWayProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 });
   const animRef = useRef<number>(0);
@@ -82,11 +87,16 @@ const MilkyWayBackground = () => {
 
       const colorRoll = Math.random();
       let hue: number, sat: number, lit: number;
-      if (colorRoll < 0.15) { hue = 220 + Math.random() * 30; sat = 60 + Math.random() * 30; lit = 80; }       // blue
-      else if (colorRoll < 0.25) { hue = 30 + Math.random() * 20; sat = 70 + Math.random() * 20; lit = 85; }    // warm
-      else if (colorRoll < 0.32) { hue = 0 + Math.random() * 15; sat = 50 + Math.random() * 30; lit = 82; }     // red giants
-      else if (colorRoll < 0.36) { hue = 270 + Math.random() * 20; sat = 40 + Math.random() * 20; lit = 85; }   // violet
-      else { hue = 50; sat = 5 + Math.random() * 15; lit = 90 + Math.random() * 10; }                            // white
+      if (colorRoll < 0.15) { hue = 220 + Math.random() * 30; sat = 60 + Math.random() * 30; lit = 80; }
+      else if (colorRoll < 0.25) { hue = 30 + Math.random() * 20; sat = 70 + Math.random() * 20; lit = 85; }
+      else if (colorRoll < 0.32) { hue = 0 + Math.random() * 15; sat = 50 + Math.random() * 30; lit = 82; }
+      else if (colorRoll < 0.36) { hue = 270 + Math.random() * 20; sat = 40 + Math.random() * 20; lit = 85; }
+      else { hue = 50; sat = 5 + Math.random() * 15; lit = 90 + Math.random() * 10; }
+
+      // Apply tint shift to colored stars
+      if (tintHue !== undefined && colorRoll < 0.36) {
+        hue = hue + (tintHue - hue) * tintStrength * 0.4;
+      }
 
       stars.push({
         x: sx, y: sy,
@@ -175,31 +185,33 @@ const MilkyWayBackground = () => {
       const driftX = Math.sin(time * 0.0003) * 15;
       const driftY = Math.cos(time * 0.00025) * 10;
 
-      // Deep space background with gradient
+      // Deep space background with gradient (tinted)
+      const bgHue = tintHue !== undefined ? 240 + (tintHue - 240) * tintStrength * 0.3 : 240;
       const bgGrad = ctx.createRadialGradient(w * 0.4, h * 0.4, 0, w * 0.5, h * 0.5, w * 0.8);
-      bgGrad.addColorStop(0, "hsl(245, 15%, 6%)");
-      bgGrad.addColorStop(0.5, "hsl(240, 12%, 4%)");
-      bgGrad.addColorStop(1, "hsl(235, 10%, 2%)");
+      bgGrad.addColorStop(0, `hsl(${bgHue + 5}, 15%, 6%)`);
+      bgGrad.addColorStop(0.5, `hsl(${bgHue}, 12%, 4%)`);
+      bgGrad.addColorStop(1, `hsl(${bgHue - 5}, 10%, 2%)`);
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, w, h);
 
       // ── Milky way band diffuse glow ──
       ctx.save();
       ctx.translate(px * 0.15 + driftX * 0.5, py * 0.15 + driftY * 0.5);
+      const tH = (h0: number) => tintHue !== undefined ? h0 + (tintHue - h0) * tintStrength * 0.5 : h0;
       for (let layer = 0; layer < 4; layer++) {
         const bandGrad = ctx.createLinearGradient(
           w * -0.1, h * (0.12 + layer * 0.025),
           w * 1.1, h * (0.62 + layer * 0.025)
         );
         const intensity = 0.025 + layer * 0.008;
-        bandGrad.addColorStop(0, "hsla(220, 30%, 20%, 0)");
-        bandGrad.addColorStop(0.15, `hsla(230, 28%, 18%, ${intensity * 0.6})`);
-        bandGrad.addColorStop(0.3, `hsla(250, 32%, 22%, ${intensity})`);
-        bandGrad.addColorStop(0.45, `hsla(265, 38%, 26%, ${intensity * 1.3})`);
-        bandGrad.addColorStop(0.55, `hsla(275, 35%, 24%, ${intensity * 1.2})`);
-        bandGrad.addColorStop(0.7, `hsla(300, 25%, 20%, ${intensity * 0.8})`);
-        bandGrad.addColorStop(0.85, `hsla(320, 18%, 16%, ${intensity * 0.4})`);
-        bandGrad.addColorStop(1, "hsla(220, 30%, 15%, 0)");
+        bandGrad.addColorStop(0, `hsla(${tH(220)}, 30%, 20%, 0)`);
+        bandGrad.addColorStop(0.15, `hsla(${tH(230)}, 28%, 18%, ${intensity * 0.6})`);
+        bandGrad.addColorStop(0.3, `hsla(${tH(250)}, 32%, 22%, ${intensity})`);
+        bandGrad.addColorStop(0.45, `hsla(${tH(265)}, 38%, 26%, ${intensity * 1.3})`);
+        bandGrad.addColorStop(0.55, `hsla(${tH(275)}, 35%, 24%, ${intensity * 1.2})`);
+        bandGrad.addColorStop(0.7, `hsla(${tH(300)}, 25%, 20%, ${intensity * 0.8})`);
+        bandGrad.addColorStop(0.85, `hsla(${tH(320)}, 18%, 16%, ${intensity * 0.4})`);
+        bandGrad.addColorStop(1, `hsla(${tH(220)}, 30%, 15%, 0)`);
         ctx.fillStyle = bandGrad;
         ctx.fillRect(-100, -100, w + 200, h + 200);
       }
