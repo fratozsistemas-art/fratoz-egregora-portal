@@ -1,11 +1,10 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { artCategories } from "@/data/artCategories";
 import OctagonParticles from "./OctagonParticles";
 import OctagonGlowRing from "./OctagonGlowRing";
 import ZodiacConstellations from "./ZodiacConstellations";
-import OrganicTransition from "./OrganicTransition";
 
 const SEGMENT_COLORS = [
   "from-egregora-blue to-egregora-teal",
@@ -22,38 +21,6 @@ const OctagonNav = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [centerHovered, setCenterHovered] = useState(false);
   const navigate = useNavigate();
-  const svgRef = useRef<SVGSVGElement>(null);
-
-  // Organic transition state
-  const [transition, setTransition] = useState<{
-    active: boolean;
-    path: string;
-    originX: number;
-    originY: number;
-    mouseX: number;
-    mouseY: number;
-  } | null>(null);
-
-  const triggerTransition = (path: string, e: React.MouseEvent) => {
-    // Get the center of the SVG element on screen
-    const svgEl = svgRef.current;
-    if (!svgEl) {
-      navigate(path);
-      return;
-    }
-    const rect = svgEl.getBoundingClientRect();
-    const originX = rect.left + rect.width / 2;
-    const originY = rect.top + rect.height / 2;
-
-    setTransition({
-      active: true,
-      path,
-      originX,
-      originY,
-      mouseX: e.clientX,
-      mouseY: e.clientY,
-    });
-  };
 
   const hoveredCategory = hoveredIndex !== null ? artCategories[hoveredIndex] : null;
 
@@ -289,7 +256,7 @@ const OctagonNav = () => {
               className="cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              onClick={(e) => triggerTransition(`/${cat.slug}`, e)}
+              onClick={() => navigate(`/${cat.slug}`)}
               role="button"
               tabIndex={0}
               aria-label={`Explorar ${cat.name}`}
@@ -384,7 +351,7 @@ const OctagonNav = () => {
           }}
           onMouseEnter={() => setCenterHovered(true)}
           onMouseLeave={() => setCenterHovered(false)}
-          onClick={(e) => triggerTransition("/transmidia", e)}
+          onClick={() => navigate("/transmidia")}
           role="button"
           tabIndex={0}
           aria-label="Explorar Transmídia"
@@ -445,19 +412,6 @@ const OctagonNav = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Organic page transition */}
-      {transition && (
-        <OrganicTransition
-          active={transition.active}
-          targetPath={transition.path}
-          originX={transition.originX}
-          originY={transition.originY}
-          mouseX={transition.mouseX}
-          mouseY={transition.mouseY}
-          onComplete={() => setTransition(null)}
-        />
-      )}
     </div>
   );
 };
