@@ -1,12 +1,13 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, User, Tag, ArrowLeft } from "lucide-react";
+import { Calendar, User, Tag, ArrowLeft, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { artCategories } from "@/data/artCategories";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
+import { Badge } from "@/components/ui/badge";
 
 // Map category slugs to hue values for the milky way tint
 const CATEGORY_HUES: Record<string, number> = {
@@ -58,6 +59,17 @@ const ArtCategoryPage = () => {
           >
             {category.tagline}
           </motion.p>
+          {category.featuredWork && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex items-center gap-2 text-sm text-muted-foreground/80 mt-3"
+            >
+              <Star className="w-4 h-4 text-primary fill-primary" />
+              Obra carro-chefe: <span className="text-foreground font-medium">{category.featuredWork}</span> — {category.featuredArtist}
+            </motion.p>
+          )}
         </div>
       </section>
 
@@ -106,6 +118,24 @@ const ArtCategoryPage = () => {
       <div className="max-w-5xl mx-auto w-full px-6 py-10 flex-1">
         {activeTab === "Sobre" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl">
+            {/* Featured work card */}
+            {category.featuredWork && (
+              <div className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <Star className="w-5 h-5 text-primary fill-primary" />
+                  <h3 className="font-display text-lg text-foreground">Obra Carro-Chefe</h3>
+                </div>
+                <h4 className="font-display text-xl text-foreground">{category.featuredWork}</h4>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {category.featuredArtist}
+                  {category.featuredWorkYear && ` · ${category.featuredWorkYear}`}
+                  {category.featuredWorkTechnique && ` · ${category.featuredWorkTechnique}`}
+                </p>
+                {category.featuredWorkDescription && (
+                  <p className="text-muted-foreground leading-relaxed mt-3 text-sm">{category.featuredWorkDescription}</p>
+                )}
+              </div>
+            )}
             <h2 className="font-display text-2xl text-foreground mb-4">Sobre</h2>
             <p className="text-muted-foreground leading-relaxed">{category.heroDescription}</p>
             <p className="text-muted-foreground leading-relaxed mt-4">{category.description}</p>
@@ -115,6 +145,26 @@ const ArtCategoryPage = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <h2 className="font-display text-2xl text-foreground mb-6">Galeria</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {/* Featured work — spans 2 columns */}
+              {category.featuredWork && (
+                <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[2/1]">
+                  {category.featuredWorkImage && (
+                    <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-cover" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+                  <div className="relative z-10 p-5">
+                    <Badge className="mb-2 bg-primary/90 text-primary-foreground border-0">
+                      <Star className="w-3 h-3 mr-1 fill-current" /> Destaque
+                    </Badge>
+                    <h3 className="font-display text-lg text-foreground">{category.featuredWork}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {category.featuredArtist}
+                      {category.featuredWorkYear && ` · ${category.featuredWorkYear}`}
+                      {category.featuredWorkTechnique && ` · ${category.featuredWorkTechnique}`}
+                    </p>
+                  </div>
+                </div>
+              )}
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div key={i} className="aspect-square rounded-lg bg-secondary flex items-center justify-center">
                   <span className="text-muted-foreground text-sm">Obra {i}</span>
