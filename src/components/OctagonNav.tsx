@@ -186,6 +186,61 @@ const OctagonNav = () => {
         {/* Glow ring effects */}
         <OctagonGlowRing hoveredIndex={hoveredIndex} />
 
+        {/* ── Depth tunnel — concentric rings creating cone-to-infinity illusion ── */}
+        {/* Abyss background — dark void in the center */}
+        <circle cx={cx} cy={cy} r={innerR + 2} fill="url(#abyss-grad)" className="pointer-events-none" />
+        
+        {/* Concentric depth rings per segment */}
+        {depthRings.map(({ rOuter, rInner, depth, index: di }) => {
+          const segColors = ["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"];
+          return (
+            <g key={`depth-ring-${di}`} className="pointer-events-none">
+              {artCategories.map((_, si) => {
+                const startAngle = si * 45 - 22.5;
+                const endAngle = startAngle + 45;
+                const steps = 6;
+                const outerPts: string[] = [];
+                const innerPts: string[] = [];
+                for (let s = 0; s <= steps; s++) {
+                  const a = startAngle + (endAngle - startAngle) * (s / steps);
+                  const po = getPoint(a, rOuter);
+                  outerPts.push(`${po.x},${po.y}`);
+                  const pi = getPoint(a, rInner);
+                  innerPts.push(`${pi.x},${pi.y}`);
+                }
+                const ringPath = `M ${outerPts[0]} ${outerPts.map(p => `L ${p}`).join(" ")} ${[...innerPts].reverse().map(p => `L ${p}`).join(" ")} Z`;
+                
+                const isSegHov = hoveredIndex === si;
+                const baseOpacity = Math.max(0.03, 0.18 - depth * 0.16);
+                const opacity = isSegHov ? baseOpacity * 2.5 : baseOpacity;
+                const lightness = Math.max(4, 16 - depth * 14);
+                
+                return (
+                  <path
+                    key={`d-${di}-${si}`}
+                    d={ringPath}
+                    fill={segColors[si]}
+                    fillOpacity={opacity}
+                    stroke={`hsla(240,6%,${lightness}%,${Math.max(0.05, 0.2 - depth * 0.18)})`}
+                    strokeWidth="0.5"
+                    className="transition-all duration-500"
+                  />
+                );
+              })}
+              {/* Ring edge highlight — concentric octagon line */}
+              <polygon
+                points={Array.from({ length: 8 }, (_, i) => {
+                  const p = getPoint(i * 45, rInner);
+                  return `${p.x},${p.y}`;
+                }).join(" ")}
+                fill="none"
+                stroke={`hsla(260,20%,30%,${Math.max(0.03, 0.15 - depth * 0.13)})`}
+                strokeWidth="0.6"
+              />
+            </g>
+          );
+        })}
+
         {/* Segments — 3D pyramid sections */}
         {segments.map(({ cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle, index }) => {
           const isHov = hoveredIndex === index;
