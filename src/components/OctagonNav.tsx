@@ -148,6 +148,22 @@ const OctagonNav = () => {
             <stop offset="60%" stopColor="#7b42d9" stopOpacity={centerHovered ? 0.7 : 0.2} />
             <stop offset="100%" stopColor="#d94290" stopOpacity={centerHovered ? 0.5 : 0.1} />
           </radialGradient>
+          {/* Depth tunnel gradients */}
+          {depthRings.map(({ index: di, depth }) => {
+            const segColors = ["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"];
+            return segColors.map((col, si) => (
+              <radialGradient key={`depth-${di}-${si}`} id={`depth-grad-${di}-${si}`} cx="50%" cy="50%">
+                <stop offset="0%" stopColor={col} stopOpacity={Math.max(0.02, 0.12 - depth * 0.12)} />
+                <stop offset="100%" stopColor={col} stopOpacity={Math.max(0.01, 0.06 - depth * 0.06)} />
+              </radialGradient>
+            ));
+          })}
+          {/* Abyss gradient — deep center */}
+          <radialGradient id="abyss-grad" cx="50%" cy="50%">
+            <stop offset="0%" stopColor="hsl(260,20%,3%)" stopOpacity="0.9" />
+            <stop offset="40%" stopColor="hsl(250,15%,5%)" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="hsl(240,10%,8%)" stopOpacity="0" />
+          </radialGradient>
           {/* 3D lighting filter */}
           <filter id="bevel-shadow" x="-5%" y="-5%" width="110%" height="110%">
             <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
