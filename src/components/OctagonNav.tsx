@@ -214,6 +214,7 @@ const OctagonNav = () => {
                 const baseOpacity = Math.max(0.03, 0.18 - depth * 0.16);
                 const opacity = isSegHov ? baseOpacity * 2.5 : baseOpacity;
                 const lightness = Math.max(4, 16 - depth * 14);
+                const breatheDelay = (di * 0.4 + si * 0.15).toFixed(2);
                 
                 return (
                   <path
@@ -224,6 +225,9 @@ const OctagonNav = () => {
                     stroke={`hsla(240,6%,${lightness}%,${Math.max(0.05, 0.2 - depth * 0.18)})`}
                     strokeWidth="0.5"
                     className="transition-all duration-500"
+                    style={{
+                      animation: `tunnel-breathe ${3 + di * 0.5}s ease-in-out ${breatheDelay}s infinite`,
+                    }}
                   />
                 );
               })}
