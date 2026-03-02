@@ -37,31 +37,64 @@ const OctagonNav = () => {
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   };
 
+  // 3D pyramid: each segment has a main face, a light bevel edge, and a shadow edge
   const segments = artCategories.map((cat, i) => {
     const startAngle = i * 45 - 22.5;
     const endAngle = startAngle + 45;
+    const midAngle = startAngle + 22.5;
     const steps = 8;
+
+    // Main face path
     const outerPoints: string[] = [];
     const innerPoints: string[] = [];
-
     for (let s = 0; s <= steps; s++) {
       const a = startAngle + (endAngle - startAngle) * (s / steps);
-      const p = getPoint(a, outerR);
-      outerPoints.push(`${p.x},${p.y}`);
+      outerPoints.push((() => { const p = getPoint(a, outerR); return `${p.x},${p.y}`; })());
     }
     for (let s = steps; s >= 0; s--) {
       const a = startAngle + (endAngle - startAngle) * (s / steps);
-      const p = getPoint(a, innerR);
-      innerPoints.push(`${p.x},${p.y}`);
+      innerPoints.push((() => { const p = getPoint(a, innerR); return `${p.x},${p.y}`; })());
     }
-
     const pathData = `M ${outerPoints[0]} ${outerPoints.map((p) => `L ${p}`).join(" ")} ${innerPoints.map((p) => `L ${p}`).join(" ")} Z`;
 
-    const labelAngle = startAngle + 22.5;
-    const labelR = (outerR + innerR) / 2;
-    const labelPos = getPoint(labelAngle, labelR);
+    // Left edge (bevel highlight)
+    const oStart = getPoint(startAngle, outerR);
+    const iStart = getPoint(startAngle, innerR);
+    const oStartInset = getPoint(startAngle + 2, outerR - 6);
+    const iStartInset = getPoint(startAngle + 2, innerR + 4);
+    const leftBevel = `M ${oStart.x},${oStart.y} L ${oStartInset.x},${oStartInset.y} L ${iStartInset.x},${iStartInset.y} L ${iStart.x},${iStart.y} Z`;
 
-    return { cat, pathData, labelPos, labelAngle, index: i };
+    // Right edge (shadow)
+    const oEnd = getPoint(endAngle, outerR);
+    const iEnd = getPoint(endAngle, innerR);
+    const oEndInset = getPoint(endAngle - 2, outerR - 6);
+    const iEndInset = getPoint(endAngle - 2, innerR + 4);
+    const rightBevel = `M ${oEnd.x},${oEnd.y} L ${oEndInset.x},${oEndInset.y} L ${iEndInset.x},${iEndInset.y} L ${iEnd.x},${iEnd.y} Z`;
+
+    // Top edge (outer bevel - catches light)
+    const topBevelPoints: string[] = [];
+    const topBevelInner: string[] = [];
+    for (let s = 0; s <= steps; s++) {
+      const a = startAngle + (endAngle - startAngle) * (s / steps);
+      topBevelPoints.push((() => { const p = getPoint(a, outerR); return `${p.x},${p.y}`; })());
+      topBevelInner.push((() => { const p = getPoint(a, outerR - 8); return `${p.x},${p.y}`; })());
+    }
+    const topBevel = `M ${topBevelPoints[0]} ${topBevelPoints.map(p => `L ${p}`).join(" ")} ${[...topBevelInner].reverse().map(p => `L ${p}`).join(" ")} Z`;
+
+    // Bottom edge (inner bevel - in shadow)
+    const bottomBevelPoints: string[] = [];
+    const bottomBevelInner: string[] = [];
+    for (let s = 0; s <= steps; s++) {
+      const a = startAngle + (endAngle - startAngle) * (s / steps);
+      bottomBevelPoints.push((() => { const p = getPoint(a, innerR); return `${p.x},${p.y}`; })());
+      bottomBevelInner.push((() => { const p = getPoint(a, innerR + 6); return `${p.x},${p.y}`; })());
+    }
+    const bottomBevel = `M ${bottomBevelPoints[0]} ${bottomBevelPoints.map(p => `L ${p}`).join(" ")} ${[...bottomBevelInner].reverse().map(p => `L ${p}`).join(" ")} Z`;
+
+    const labelR = (outerR + innerR) / 2;
+    const labelPos = getPoint(midAngle, labelR);
+
+    return { cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle: midAngle, index: i, midAngle };
   });
 
   return (
@@ -78,22 +111,38 @@ const OctagonNav = () => {
         aria-label="Navegação principal por tipo de arte"
       >
         <defs>
-          {segments.map(({ index }) => {
+          {segments.map(({ index, midAngle }) => {
             const colors = [
               "#1a9e6e", "#2196c9", "#7b42d9", "#d94290",
               "#d94242", "#e88a1a", "#e8c71a", "#1a9e8e"
             ];
+            // Directional gradient to simulate light from top-left
+            const lightAngle = midAngle - 90;
+            const rad = (lightAngle * Math.PI) / 180;
+            const x1 = 50 - Math.cos(rad) * 50;
+            const y1 = 50 - Math.sin(rad) * 50;
+            const x2 = 50 + Math.cos(rad) * 50;
+            const y2 = 50 + Math.sin(rad) * 50;
+            const isHovered = hoveredIndex === index;
             return (
-              <linearGradient key={index} id={`seg-grad-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor={colors[index]} stopOpacity={hoveredIndex === index ? 1 : 0.5} />
-                <stop offset="100%" stopColor={colors[(index + 1) % 8]} stopOpacity={hoveredIndex === index ? 1 : 0.5} />
+              <linearGradient key={index} id={`seg-grad-${index}`} x1={`${x1}%`} y1={`${y1}%`} x2={`${x2}%`} y2={`${y2}%`}>
+                <stop offset="0%" stopColor={colors[index]} stopOpacity={isHovered ? 1 : 0.6} />
+                <stop offset="50%" stopColor={colors[index]} stopOpacity={isHovered ? 0.8 : 0.35} />
+                <stop offset="100%" stopColor={colors[(index + 1) % 8]} stopOpacity={isHovered ? 0.6 : 0.2} />
               </linearGradient>
             );
           })}
-          <radialGradient id="center-grad" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="#7b42d9" stopOpacity={centerHovered ? 0.9 : 0.3} />
-            <stop offset="100%" stopColor="#d94290" stopOpacity={centerHovered ? 0.7 : 0.15} />
+          <radialGradient id="center-grad" cx="50%" cy="40%">
+            <stop offset="0%" stopColor="#a855f7" stopOpacity={centerHovered ? 0.95 : 0.35} />
+            <stop offset="60%" stopColor="#7b42d9" stopOpacity={centerHovered ? 0.7 : 0.2} />
+            <stop offset="100%" stopColor="#d94290" stopOpacity={centerHovered ? 0.5 : 0.1} />
           </radialGradient>
+          {/* 3D lighting filter */}
+          <filter id="bevel-shadow" x="-5%" y="-5%" width="110%" height="110%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+            <feOffset in="blur" dx="1" dy="2" result="offsetBlur" />
+            <feComposite in="SourceGraphic" in2="offsetBlur" operator="over" />
+          </filter>
         </defs>
 
         {/* Background octagon outline */}
@@ -110,57 +159,97 @@ const OctagonNav = () => {
         {/* Glow ring effects */}
         <OctagonGlowRing hoveredIndex={hoveredIndex} />
 
-        {/* Segments */}
-        {segments.map(({ cat, pathData, labelPos, labelAngle, index }) => (
-          <g
-            key={cat.id}
-            className="cursor-pointer"
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            onClick={() => navigate(`/${cat.slug}`)}
-            role="button"
-            tabIndex={0}
-            aria-label={`Explorar ${cat.name}`}
-            onKeyDown={(e) => e.key === "Enter" && navigate(`/${cat.slug}`)}
-            style={{
-              transform: hoveredIndex === index ? `scale(1.03)` : "scale(1)",
-              transformOrigin: `${cx}px ${cy}px`,
-              transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-            }}
-          >
-            <path
-              d={pathData}
-              fill={`url(#seg-grad-${index})`}
-              stroke="hsl(240 6% 12%)"
-              strokeWidth="1.5"
-              className="transition-all duration-300"
+        {/* Segments — 3D pyramid sections */}
+        {segments.map(({ cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle, index }) => {
+          const isHov = hoveredIndex === index;
+          const segColors = ["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"];
+          return (
+            <g
+              key={cat.id}
+              className="cursor-pointer"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={() => navigate(`/${cat.slug}`)}
+              role="button"
+              tabIndex={0}
+              aria-label={`Explorar ${cat.name}`}
+              onKeyDown={(e) => e.key === "Enter" && navigate(`/${cat.slug}`)}
               style={{
-                filter: hoveredIndex === index
-                  ? `brightness(1.5) drop-shadow(0 0 16px rgba(123,66,217,0.4)) drop-shadow(0 0 4px ${["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"][index]})`
-                  : "brightness(0.95)",
-                transition: "filter 0.4s ease",
-              }}
-            />
-            <text
-              x={labelPos.x}
-              y={labelPos.y}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fill={hoveredIndex === index ? "#fff" : "hsl(40 20% 85%)"}
-              fontSize="12"
-              fontFamily="Outfit, sans-serif"
-              fontWeight={hoveredIndex === index ? "600" : "400"}
-              className="pointer-events-none select-none transition-all duration-200"
-              style={{
-                textShadow: hoveredIndex === index ? "0 0 8px rgba(0,0,0,0.5)" : "none",
+                transform: isHov ? `scale(1.04)` : "scale(1)",
+                transformOrigin: `${cx}px ${cy}px`,
+                transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
               }}
             >
-              {cat.name}
-            </text>
-          </g>
-        ))}
+              {/* Main face */}
+              <path
+                d={pathData}
+                fill={`url(#seg-grad-${index})`}
+                stroke="hsl(240 6% 10%)"
+                strokeWidth="0.8"
+                className="transition-all duration-300"
+                style={{
+                  filter: isHov
+                    ? `brightness(1.4) drop-shadow(0 0 18px rgba(123,66,217,0.4)) drop-shadow(0 0 6px ${segColors[index]}88)`
+                    : "brightness(0.9)",
+                  transition: "filter 0.4s ease",
+                }}
+              />
+              {/* Top bevel — light edge (outer rim catches light) */}
+              <path
+                d={topBevel}
+                fill={isHov ? "hsla(0,0%,100%,0.18)" : "hsla(0,0%,100%,0.08)"}
+                className="pointer-events-none transition-all duration-300"
+              />
+              {/* Bottom bevel — shadow edge (inner rim in shadow) */}
+              <path
+                d={bottomBevel}
+                fill={isHov ? "hsla(0,0%,0%,0.25)" : "hsla(0,0%,0%,0.15)"}
+                className="pointer-events-none transition-all duration-300"
+              />
+              {/* Left bevel — highlight */}
+              <path
+                d={leftBevel}
+                fill={isHov ? "hsla(0,0%,100%,0.14)" : "hsla(0,0%,100%,0.05)"}
+                className="pointer-events-none transition-all duration-300"
+              />
+              {/* Right bevel — shadow */}
+              <path
+                d={rightBevel}
+                fill={isHov ? "hsla(0,0%,0%,0.2)" : "hsla(0,0%,0%,0.1)"}
+                className="pointer-events-none transition-all duration-300"
+              />
+              {/* Segment divider line — crisp edge */}
+              <path
+                d={(() => {
+                  const oS = getPoint(index * 45 - 22.5, outerR);
+                  const iS = getPoint(index * 45 - 22.5, innerR);
+                  return `M ${oS.x},${oS.y} L ${iS.x},${iS.y}`;
+                })()}
+                stroke={isHov ? "hsla(0,0%,100%,0.15)" : "hsla(0,0%,100%,0.06)"}
+                strokeWidth="1"
+                className="pointer-events-none transition-all duration-300"
+              />
+              <text
+                x={labelPos.x}
+                y={labelPos.y}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill={isHov ? "#fff" : "hsl(40 20% 85%)"}
+                fontSize="12"
+                fontFamily="Outfit, sans-serif"
+                fontWeight={isHov ? "600" : "400"}
+                className="pointer-events-none select-none transition-all duration-200"
+                style={{
+                  textShadow: isHov ? "0 2px 6px rgba(0,0,0,0.7)" : "0 1px 3px rgba(0,0,0,0.4)",
+                }}
+              >
+                {cat.name}
+              </text>
+            </g>
+          );
+        })}
 
-        {/* Center - Transmídia */}
+        {/* Center - Transmídia (3D dome) */}
         <circle
           cx={cx}
           cy={cy}
@@ -171,7 +260,7 @@ const OctagonNav = () => {
           className="cursor-pointer transition-all duration-500"
           style={{
             animation: centerHovered ? "breathe 2s ease-in-out infinite" : "none",
-            filter: centerHovered ? "drop-shadow(0 0 20px rgba(123,66,217,0.5))" : "none",
+            filter: centerHovered ? "drop-shadow(0 0 24px rgba(123,66,217,0.6))" : "drop-shadow(0 2px 4px rgba(0,0,0,0.3))",
           }}
           onMouseEnter={() => setCenterHovered(true)}
           onMouseLeave={() => setCenterHovered(false)}
@@ -180,6 +269,16 @@ const OctagonNav = () => {
           tabIndex={0}
           aria-label="Explorar Transmídia"
           onKeyDown={(e) => e.key === "Enter" && navigate("/transmidia")}
+        />
+        {/* Dome highlight */}
+        <ellipse
+          cx={cx - centerR * 0.15}
+          cy={cy - centerR * 0.2}
+          rx={centerR * 0.5}
+          ry={centerR * 0.35}
+          fill="hsla(0,0%,100%,0.08)"
+          className="pointer-events-none"
+          style={{ transition: "opacity 0.3s", opacity: centerHovered ? 0.15 : 0.06 }}
         />
         <text
           x={cx}
