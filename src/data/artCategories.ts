@@ -158,7 +158,15 @@ export interface TransmidiaObra {
   description: string;
   room: number;
   category: string;
+  image: string;
 }
+
+const obraImages: Record<string, string> = {
+  "1": obra01, "2": obra02, "3": obra03, "4": obra04,
+  "5": obra05, "6": obra06, "7": obra07, "8": obra08,
+  "9": obra09, "10": obra10, "11": obra11, "12": obra12,
+  "13": obra13, "14": obra14, "15": obra15, "16": obra16,
+};
 
 export const transmidiaObras: TransmidiaObra[] = [
   { id: "1", title: "Fragmentos do Silêncio", author: "Marina Veloso", year: 2023, technique: "Instalação multimídia", theme: "Memória", dimensions: "4m × 3m × 2.5m", description: "Uma instalação imersiva que utiliza projeções e som ambiente para criar um espaço de introspecção e memória coletiva.", room: 1, category: "cinema" },
