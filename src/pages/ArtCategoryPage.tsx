@@ -8,6 +8,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
 import { Badge } from "@/components/ui/badge";
+import { Gem } from "lucide-react";
 
 // Map category slugs to hue values for the milky way tint
 const CATEGORY_HUES: Record<string, number> = {
