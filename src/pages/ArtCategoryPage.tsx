@@ -23,6 +23,12 @@ const CATEGORY_HUES: Record<string, number> = {
 
 const tabs = ["Sobre", "Galeria", "Agenda", "Acervo", "Participar"];
 
+const CATEGORY_EVENTS: Record<string, { date: string; title: string; note?: string }[]> = {
+  pintura: [
+    { date: "06 Mar 2026", title: "Abertura da mostra", note: "Exibição única" },
+  ],
+};
+
 const ArtCategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [activeTab, setActiveTab] = useState("Sobre");
@@ -176,12 +182,18 @@ const ArtCategoryPage = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <h2 className="font-display text-2xl text-foreground mb-6">Agenda</h2>
             <div className="space-y-4">
-              {["15 Mar 2026 — Abertura da mostra", "22 Abr 2026 — Palestra com curadoria", "10 Mai 2026 — Encerramento"].map((evt) => (
-                <div key={evt} className="glass-panel rounded-lg p-4 flex items-center gap-4">
+              {(CATEGORY_EVENTS[category.slug] ?? []).map((evt) => (
+                <div key={evt.date + evt.title} className="glass-panel rounded-lg p-4 flex items-center gap-4">
                   <Calendar className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-foreground">{evt}</span>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-foreground">{evt.date} — {evt.title}</span>
+                    {evt.note && <span className="text-xs text-muted-foreground">{evt.note}</span>}
+                  </div>
                 </div>
               ))}
+              {(CATEGORY_EVENTS[category.slug] ?? []).length === 0 && (
+                <p className="text-sm text-muted-foreground">Nenhum evento agendado no momento.</p>
+              )}
             </div>
           </motion.div>
         )}
