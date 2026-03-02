@@ -148,26 +148,95 @@ const ArtCategoryPage = () => {
 
             {/* HP Collection — Escultura */}
             {category.slug === "escultura" && (
-              <div className="mt-12 rounded-xl border border-accent/30 bg-accent/5 p-6 space-y-4">
-                <div className="flex items-center gap-3 mb-2">
-                  <Gem className="w-5 h-5 text-primary" />
-                  <h3 className="font-display text-xl text-foreground">Coleção HP — Colecionador em Destaque</h3>
+              <div className="mt-12 space-y-10">
+                {/* Header */}
+                <div className="flex items-center gap-3">
+                  <Gem className="w-6 h-6 text-primary" />
+                  <h2 className="font-display text-2xl text-foreground tracking-wide uppercase">Coleção HP</h2>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  A Coleção HP faz parte do acervo pessoal de um professor de Relações Internacionais da UFRJ. As obras foram adquiridas de um marchand catalão que encerrava suas atividades no Rio de Janeiro para retornar à Europa.
-                </p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  No contexto do auge do dinamismo cultural e do boom imobiliário do Rio de Janeiro — impulsionado pelos megaeventos desde o início do século XXI — muitos estrangeiros e empresários bem-sucedidos se estabeleceram na cidade. Foi nesse cenário que o marchand catalão trouxe parte expressiva de suas obras de Barcelona, passando também a arrematar leilões no Brasil para compor o acervo de sua importante galeria, que funcionou até 2020.
-                </p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Com a pandemia, o marchand encerrou suas atividades comerciais no Rio. As peças mais valiosas aguardavam flexibilização logística para retornar a Barcelona — foi nessa janela rara que o professor adquiriu em lote fechado um conjunto artístico extraordinário, resultado da dupla curadoria entre seu conhecimento histórico e a seleção criteriosa do marchand.
-                </p>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  O acervo reúne <strong className="text-foreground">20 peças dos continentes americano, europeu, asiático e africano</strong>, com valor artístico, etnográfico e simbólico de diferentes tradições filosóficas, religiosas e civilizacionais. Peças que causam forte impacto visual e emocional — com o estilo das grandes casas Sotheby's e Christie's.
-                </p>
-                <p className="text-sm text-muted-foreground/70 italic leading-relaxed">
-                  "A experiência estética é sempre algo que marca a memória das pessoas. Diante de uma obra, cada espectador mobiliza sua própria trajetória cultural, fazendo da fruição artística uma vivência singular marcante."
-                </p>
+
+                {/* Apresentação */}
+                <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">Apresentação</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    A Coleção HP faz parte do acervo pessoal de um professor de Relações Internacionais da UFRJ. As obras foram adquiridas pelo professor de um marchand catalão que estava encerrando suas atividades no Rio de Janeiro e voltando para a Europa.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    No contexto do auge do dinamismo cultural e do boom imobiliário do Rio de Janeiro, em função dos megaeventos ocorridos na cidade desde o início do século XXI, muitos estrangeiros e empresários bem-sucedidos resolveram se estabelecer no Rio.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Foi nesse cenário que um importante marchand catalão resolveu trazer parte expressiva de suas obras de Barcelona para o Rio, passando também a arrematar leilões no Brasil, para compor o acervo de sua importante galeria de arte que funcionou até 2020.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Com a pandemia, o marchand resolveu encerrar suas atividades comerciais no Rio e levar de volta as suas principais peças para Barcelona. Em função do lockdown, não estava sendo possível fazer o traslado logístico dessas peças em contêineres de volta ao ateliê espanhol.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    O nascimento da Coleção HP somente foi possível porque o conjunto valioso de peças reunidas estava aguardando novas medidas de flexibilização de trânsito logístico internacional por causa da pandemia. As peças compradas pelo professor nessa ocasião são algumas das peças mais valiosas que o marchand havia reservado para serem colocadas nos contêineres que voltariam para Barcelona depois do fim da pandemia.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Trata-se, portanto, de uma rara oportunidade de aquisição em lote fechado de um conjunto artístico de algumas das manifestações artísticas mais importantes da história da arte. Um lote montado pela dupla curadoria resultado do encontro entre o conhecimento histórico e a sensibilidade estética do professor com o olhar experiente e a seleção criteriosa do marchand catalão.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Para além do valor simbólico dessas peças com narrativas culturais marcantes, trata-se também de uma estratégia financeira pessoal de busca por diversificação patrimonial. A possibilidade de alienação integral para um comprador qualificado faz parte da nova etapa de vida do professor.
+                  </p>
+                  <p className="text-sm text-muted-foreground/80 italic leading-relaxed border-l-2 border-primary/40 pl-4">
+                    "Não há dúvidas de que o novo proprietário vai se orgulhar do reforço que o seu acervo receberá a partir da incorporação dessas peças extraordinárias à sua já elegante coleção."
+                  </p>
+                </div>
+
+                {/* Observações */}
+                <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">Observações</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Perceba a grandeza da história por trás de cada uma das peças. As descrições sucintas e as fotos singelas não fazem jus à grandeza, à beleza e à marcante presença dessas obras.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    As peças da Coleção HP têm o estilo <strong className="text-foreground">Sotheby's</strong> e <strong className="text-foreground">Christie's</strong>, líderes em obras de arte com valor histórico-etnográfico, bem como em bens de luxo. Para as obras asiáticas, as melhores casas para avaliar seriam as gigantes <strong className="text-foreground">China Guardian</strong> e <strong className="text-foreground">Poly International Auction Company</strong>.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Em algumas fontes indicadas para aprofundar a pesquisa sobre a história das peças, é possível perceber o valor do patrimônio oferecido. Não é uma oportunidade que costuma aparecer com frequência.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Outro ponto a ser observado diz respeito ao estado de conservação das peças. É natural que peças com décadas e séculos de existência, que passaram por diferentes acervos, tenham algumas marcas do tempo — marcas que revelam a sua história, a sua trajetória e a sua autenticidade.
+                  </p>
+                  <div className="rounded-lg bg-secondary/50 p-5 space-y-3">
+                    <h4 className="font-display text-sm text-foreground uppercase tracking-wider">Kintsugi — A beleza das cicatrizes</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Os japoneses desenvolveram o conceito filosófico e estético do <em>kintsugi</em>, que se refere não apenas à técnica milenar de reparar as rachaduras das peças com uma solda de ouro, mas também à valorização das marcas deixadas pelas cicatrizes da vida. Em vez de buscar a perfeição idealizada e artificializada, o <em>kintsugi</em> celebra aquilo que foi vivido e transformado pelo tempo.
+                    </p>
+                    <p className="text-sm text-muted-foreground/80 italic leading-relaxed border-l-2 border-primary/40 pl-4">
+                      "Cada cicatriz dourada conta uma história. As marcas não são defeitos, são testemunhos. A fragilidade, quando assumida, revela força."
+                    </p>
+                  </div>
+                </div>
+
+                {/* Acervo */}
+                <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">O Acervo</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    O acervo da Coleção HP reúne <strong className="text-foreground">vinte peças dos continentes americano, europeu, asiático e africano</strong>. As peças têm valor artístico, etnográfico e simbólico de diferentes tradições filosóficas, religiosas e civilizacionais. Trata-se de um acervo que chama atenção de todos e permanece na memória daqueles que tiverem o privilégio de entrar em contato com as obras.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    A coleção foi feita por uma dupla curadoria estética: a do marchand catalão e a do professor da UFRJ. Não se trata da compra de peças isoladas, mas da aquisição de um sofisticado núcleo curatorial pronto para enriquecer imediatamente qualquer acervo.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    As obras selecionadas são representativas de um alto capital cultural e causam forte impacto visual e emocional. O poder simbólico do capital cultural revela-se de modo discreto e elegante, marcando profundamente o inconsciente dos ilustres convidados do anfitrião.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    A experiência estética é sempre algo que marca a memória das pessoas. A fruição de uma obra de arte é atravessada por repertórios e aprendizados adquiridos ao longo do tempo. Diante de uma obra, cada espectador mobiliza sua própria trajetória cultural, fazendo da fruição artística uma vivência singular marcante.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Para além do exercício individual de apreciação, há também uma experiência coletiva relacionada a se estar cercado por obras de arte. As pessoas sentem-se coletivamente inebriadas pelo magnetismo emanado pela força artística e pela carga simbólica das obras dispostas em um ambiente preparado para a contemplação estética e a sensibilização sinestésica.
+                  </p>
+                  <p className="text-sm text-muted-foreground/80 italic leading-relaxed border-l-2 border-primary/40 pl-4">
+                    "A verdade é que algumas obras mudam o ambiente; mas outras transformam o destino."
+                  </p>
+                  <div className="mt-4 rounded-lg bg-primary/10 border border-primary/20 p-4 text-center">
+                    <p className="text-sm text-muted-foreground">
+                      Caso haja interesse, é possível compartilhar um material com imagens e informações essenciais das obras da coleção, em caráter estritamente reservado.
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
           </motion.div>
