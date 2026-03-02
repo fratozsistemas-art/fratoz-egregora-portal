@@ -52,6 +52,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Narrativas visuais que expandem horizontes. Curtas, longas, documentários e filmes experimentais que desafiam a percepção e provocam diálogos essenciais.",
     curator: "Ana Beatriz Souza",
     status: "Convocatória aberta",
+    heroImage: heroCinema,
   },
   {
     id: "teatro",
@@ -64,6 +65,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Do palco à rua, o teatro como ato de presença e resistência. Dramaturgias contemporâneas que convidam à experiência coletiva.",
     curator: "Carlos Mendes",
     status: "Em temporada",
+    heroImage: heroTeatro,
   },
   {
     id: "musica",
@@ -76,6 +78,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Composições que transcendem gêneros. Da música erudita ao experimental, sons que criam pontes entre tempos e culturas.",
     curator: "Mariana Costa",
     status: "Programação ativa",
+    heroImage: heroMusica,
   },
   {
     id: "fotografia",
@@ -88,6 +91,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Olhares que revelam o invisível. Ensaios fotográficos que documentam, questionam e reinventam a realidade visual.",
     curator: "Pedro Almeida",
     status: "Exposição em cartaz",
+    heroImage: heroFotografia,
   },
   {
     id: "pintura",
@@ -100,6 +104,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Telas que pulsam com vida própria. Pinturas que desafiam o olhar e convidam à contemplação profunda.",
     curator: "Luísa Fernandes",
     status: "Acervo permanente",
+    heroImage: heroPintura,
   },
   {
     id: "danca",
@@ -112,6 +117,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Corpos em diálogo com o espaço. Coreografias que exploram a vulnerabilidade e a potência do movimento humano.",
     curator: "Rafael Torres",
     status: "Residência artística",
+    heroImage: heroDanca,
   },
   {
     id: "literatura",
@@ -124,6 +130,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Textos que desafiam o silêncio. Poesia, ficção e ensaio como formas de reinventar a linguagem e o mundo.",
     curator: "Fernanda Lima",
     status: "Publicações abertas",
+    heroImage: heroLiteratura,
   },
   {
     id: "escultura",
@@ -136,6 +143,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Formas que habitam o espaço. Esculturas e instalações que transformam materiais em narrativas tridimensionais.",
     curator: "Diego Nascimento",
     status: "Exposição itinerante",
+    heroImage: heroEscultura,
   },
 ];
 
