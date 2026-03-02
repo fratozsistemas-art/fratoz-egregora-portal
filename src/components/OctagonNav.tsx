@@ -414,19 +414,6 @@ const OctagonNav = () => {
         >
           TRANSMÍDIA
         </text>
-        <text
-          x={cx}
-          y={cy + 12}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="hsl(40 20% 60%)"
-          fontSize="9"
-          fontFamily="Outfit, sans-serif"
-          fontWeight="300"
-          className="pointer-events-none select-none"
-        >
-          núcleo central
-        </text>
         {/* Zodiac Constellations */}
         <ZodiacConstellations hoveredIndex={hoveredIndex} />
       </svg>
