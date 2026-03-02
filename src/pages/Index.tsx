@@ -3,10 +3,13 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import OctagonNav from "@/components/OctagonNav";
 import HighlightCards from "@/components/HighlightCards";
+import MilkyWayBackground from "@/components/MilkyWayBackground";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      <MilkyWayBackground />
+      <div className="relative z-10 flex flex-col min-h-screen">
       <SiteHeader />
 
       {/* Hero / Manifesto */}
