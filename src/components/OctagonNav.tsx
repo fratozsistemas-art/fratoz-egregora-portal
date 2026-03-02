@@ -159,55 +159,95 @@ const OctagonNav = () => {
         {/* Glow ring effects */}
         <OctagonGlowRing hoveredIndex={hoveredIndex} />
 
-        {/* Segments */}
-        {segments.map(({ cat, pathData, labelPos, labelAngle, index }) => (
-          <g
-            key={cat.id}
-            className="cursor-pointer"
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            onClick={() => navigate(`/${cat.slug}`)}
-            role="button"
-            tabIndex={0}
-            aria-label={`Explorar ${cat.name}`}
-            onKeyDown={(e) => e.key === "Enter" && navigate(`/${cat.slug}`)}
-            style={{
-              transform: hoveredIndex === index ? `scale(1.03)` : "scale(1)",
-              transformOrigin: `${cx}px ${cy}px`,
-              transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-            }}
-          >
-            <path
-              d={pathData}
-              fill={`url(#seg-grad-${index})`}
-              stroke="hsl(240 6% 12%)"
-              strokeWidth="1.5"
-              className="transition-all duration-300"
+        {/* Segments — 3D pyramid sections */}
+        {segments.map(({ cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle, index }) => {
+          const isHov = hoveredIndex === index;
+          const segColors = ["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"];
+          return (
+            <g
+              key={cat.id}
+              className="cursor-pointer"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={() => navigate(`/${cat.slug}`)}
+              role="button"
+              tabIndex={0}
+              aria-label={`Explorar ${cat.name}`}
+              onKeyDown={(e) => e.key === "Enter" && navigate(`/${cat.slug}`)}
               style={{
-                filter: hoveredIndex === index
-                  ? `brightness(1.5) drop-shadow(0 0 16px rgba(123,66,217,0.4)) drop-shadow(0 0 4px ${["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"][index]})`
-                  : "brightness(0.95)",
-                transition: "filter 0.4s ease",
-              }}
-            />
-            <text
-              x={labelPos.x}
-              y={labelPos.y}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fill={hoveredIndex === index ? "#fff" : "hsl(40 20% 85%)"}
-              fontSize="12"
-              fontFamily="Outfit, sans-serif"
-              fontWeight={hoveredIndex === index ? "600" : "400"}
-              className="pointer-events-none select-none transition-all duration-200"
-              style={{
-                textShadow: hoveredIndex === index ? "0 0 8px rgba(0,0,0,0.5)" : "none",
+                transform: isHov ? `scale(1.04)` : "scale(1)",
+                transformOrigin: `${cx}px ${cy}px`,
+                transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
               }}
             >
-              {cat.name}
-            </text>
-          </g>
-        ))}
+              {/* Main face */}
+              <path
+                d={pathData}
+                fill={`url(#seg-grad-${index})`}
+                stroke="hsl(240 6% 10%)"
+                strokeWidth="0.8"
+                className="transition-all duration-300"
+                style={{
+                  filter: isHov
+                    ? `brightness(1.4) drop-shadow(0 0 18px rgba(123,66,217,0.4)) drop-shadow(0 0 6px ${segColors[index]}88)`
+                    : "brightness(0.9)",
+                  transition: "filter 0.4s ease",
+                }}
+              />
+              {/* Top bevel — light edge (outer rim catches light) */}
+              <path
+                d={topBevel}
+                fill={isHov ? "hsla(0,0%,100%,0.18)" : "hsla(0,0%,100%,0.08)"}
+                className="pointer-events-none transition-all duration-300"
+              />
+              {/* Bottom bevel — shadow edge (inner rim in shadow) */}
+              <path
+                d={bottomBevel}
+                fill={isHov ? "hsla(0,0%,0%,0.25)" : "hsla(0,0%,0%,0.15)"}
+                className="pointer-events-none transition-all duration-300"
+              />
+              {/* Left bevel — highlight */}
+              <path
+                d={leftBevel}
+                fill={isHov ? "hsla(0,0%,100%,0.14)" : "hsla(0,0%,100%,0.05)"}
+                className="pointer-events-none transition-all duration-300"
+              />
+              {/* Right bevel — shadow */}
+              <path
+                d={rightBevel}
+                fill={isHov ? "hsla(0,0%,0%,0.2)" : "hsla(0,0%,0%,0.1)"}
+                className="pointer-events-none transition-all duration-300"
+              />
+              {/* Segment divider line — crisp edge */}
+              <path
+                d={(() => {
+                  const oS = getPoint(index * 45 - 22.5, outerR);
+                  const iS = getPoint(index * 45 - 22.5, innerR);
+                  return `M ${oS.x},${oS.y} L ${iS.x},${iS.y}`;
+                })()}
+                stroke={isHov ? "hsla(0,0%,100%,0.15)" : "hsla(0,0%,100%,0.06)"}
+                strokeWidth="1"
+                className="pointer-events-none transition-all duration-300"
+              />
+              <text
+                x={labelPos.x}
+                y={labelPos.y}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill={isHov ? "#fff" : "hsl(40 20% 85%)"}
+                fontSize="12"
+                fontFamily="Outfit, sans-serif"
+                fontWeight={isHov ? "600" : "400"}
+                className="pointer-events-none select-none transition-all duration-200"
+                style={{
+                  textShadow: isHov ? "0 2px 6px rgba(0,0,0,0.7)" : "0 1px 3px rgba(0,0,0,0.4)",
+                }}
+              >
+                {cat.name}
+              </text>
+            </g>
+          );
+        })}
 
         {/* Center - Transmídia */}
         <circle
