@@ -37,31 +37,64 @@ const OctagonNav = () => {
     return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
   };
 
+  // 3D pyramid: each segment has a main face, a light bevel edge, and a shadow edge
   const segments = artCategories.map((cat, i) => {
     const startAngle = i * 45 - 22.5;
     const endAngle = startAngle + 45;
+    const midAngle = startAngle + 22.5;
     const steps = 8;
+
+    // Main face path
     const outerPoints: string[] = [];
     const innerPoints: string[] = [];
-
     for (let s = 0; s <= steps; s++) {
       const a = startAngle + (endAngle - startAngle) * (s / steps);
-      const p = getPoint(a, outerR);
-      outerPoints.push(`${p.x},${p.y}`);
+      outerPoints.push((() => { const p = getPoint(a, outerR); return `${p.x},${p.y}`; })());
     }
     for (let s = steps; s >= 0; s--) {
       const a = startAngle + (endAngle - startAngle) * (s / steps);
-      const p = getPoint(a, innerR);
-      innerPoints.push(`${p.x},${p.y}`);
+      innerPoints.push((() => { const p = getPoint(a, innerR); return `${p.x},${p.y}`; })());
     }
-
     const pathData = `M ${outerPoints[0]} ${outerPoints.map((p) => `L ${p}`).join(" ")} ${innerPoints.map((p) => `L ${p}`).join(" ")} Z`;
 
-    const labelAngle = startAngle + 22.5;
-    const labelR = (outerR + innerR) / 2;
-    const labelPos = getPoint(labelAngle, labelR);
+    // Left edge (bevel highlight)
+    const oStart = getPoint(startAngle, outerR);
+    const iStart = getPoint(startAngle, innerR);
+    const oStartInset = getPoint(startAngle + 2, outerR - 6);
+    const iStartInset = getPoint(startAngle + 2, innerR + 4);
+    const leftBevel = `M ${oStart.x},${oStart.y} L ${oStartInset.x},${oStartInset.y} L ${iStartInset.x},${iStartInset.y} L ${iStart.x},${iStart.y} Z`;
 
-    return { cat, pathData, labelPos, labelAngle, index: i };
+    // Right edge (shadow)
+    const oEnd = getPoint(endAngle, outerR);
+    const iEnd = getPoint(endAngle, innerR);
+    const oEndInset = getPoint(endAngle - 2, outerR - 6);
+    const iEndInset = getPoint(endAngle - 2, innerR + 4);
+    const rightBevel = `M ${oEnd.x},${oEnd.y} L ${oEndInset.x},${oEndInset.y} L ${iEndInset.x},${iEndInset.y} L ${iEnd.x},${iEnd.y} Z`;
+
+    // Top edge (outer bevel - catches light)
+    const topBevelPoints: string[] = [];
+    const topBevelInner: string[] = [];
+    for (let s = 0; s <= steps; s++) {
+      const a = startAngle + (endAngle - startAngle) * (s / steps);
+      topBevelPoints.push((() => { const p = getPoint(a, outerR); return `${p.x},${p.y}`; })());
+      topBevelInner.push((() => { const p = getPoint(a, outerR - 8); return `${p.x},${p.y}`; })());
+    }
+    const topBevel = `M ${topBevelPoints[0]} ${topBevelPoints.map(p => `L ${p}`).join(" ")} ${[...topBevelInner].reverse().map(p => `L ${p}`).join(" ")} Z`;
+
+    // Bottom edge (inner bevel - in shadow)
+    const bottomBevelPoints: string[] = [];
+    const bottomBevelInner: string[] = [];
+    for (let s = 0; s <= steps; s++) {
+      const a = startAngle + (endAngle - startAngle) * (s / steps);
+      bottomBevelPoints.push((() => { const p = getPoint(a, innerR); return `${p.x},${p.y}`; })());
+      bottomBevelInner.push((() => { const p = getPoint(a, innerR + 6); return `${p.x},${p.y}`; })());
+    }
+    const bottomBevel = `M ${bottomBevelPoints[0]} ${bottomBevelPoints.map(p => `L ${p}`).join(" ")} ${[...bottomBevelInner].reverse().map(p => `L ${p}`).join(" ")} Z`;
+
+    const labelR = (outerR + innerR) / 2;
+    const labelPos = getPoint(midAngle, labelR);
+
+    return { cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle: midAngle, index: i, midAngle };
   });
 
   return (
