@@ -4,6 +4,7 @@ import { ArrowLeft, Grid3X3, Eye, Search, X, ZoomIn, ChevronRight, Play, Map } f
 import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import MilkyWayBackground from "@/components/MilkyWayBackground";
 import { transmidiaObras, type TransmidiaObra } from "@/data/artCategories";
 
 const themes = [...new Set(transmidiaObras.map((o) => o.theme))];
@@ -30,7 +31,9 @@ const Transmidia = () => {
   const relatedObras = selectedObra ? transmidiaObras.filter((o) => o.theme === selectedObra.theme && o.id !== selectedObra.id).slice(0, 3) : [];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      <MilkyWayBackground tintHue={275} tintStrength={0.4} />
+      <div className="relative z-10 flex flex-col min-h-screen">
       <SiteHeader />
 
       {/* Hero */}
@@ -276,6 +279,7 @@ const Transmidia = () => {
       </AnimatePresence>
 
       <SiteFooter />
+      </div>
     </div>
   );
 };
