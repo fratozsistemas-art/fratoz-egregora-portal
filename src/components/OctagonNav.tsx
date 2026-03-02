@@ -115,7 +115,7 @@ const OctagonNav = () => {
       </div>
 
       <svg
-        ref={svgRef}
+        
         viewBox="-60 -60 520 520"
         className="w-[380px] h-[380px] sm:w-[480px] sm:h-[480px] md:w-[580px] md:h-[580px] lg:w-[660px] lg:h-[660px] relative z-10"
         style={{ transformStyle: "preserve-3d", transform: "rotateX(2deg)" }}
