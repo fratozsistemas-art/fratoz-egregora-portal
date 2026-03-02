@@ -134,7 +134,10 @@ const OctagonNav = () => {
               strokeWidth="1.5"
               className="transition-all duration-300"
               style={{
-                filter: hoveredIndex === index ? "brightness(1.4) drop-shadow(0 0 12px rgba(123,66,217,0.3))" : "none",
+                filter: hoveredIndex === index
+                  ? `brightness(1.5) drop-shadow(0 0 16px rgba(123,66,217,0.4)) drop-shadow(0 0 4px ${["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"][index]})`
+                  : "brightness(0.95)",
+                transition: "filter 0.4s ease",
               }}
             />
             <text
