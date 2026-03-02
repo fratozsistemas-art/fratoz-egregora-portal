@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { artCategories } from "@/data/artCategories";
 import OctagonParticles from "./OctagonParticles";
 import OctagonGlowRing from "./OctagonGlowRing";
 import ZodiacConstellations from "./ZodiacConstellations";
+import OrganicTransition from "./OrganicTransition";
 
 const SEGMENT_COLORS = [
   "from-egregora-blue to-egregora-teal",
@@ -21,6 +22,38 @@ const OctagonNav = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [centerHovered, setCenterHovered] = useState(false);
   const navigate = useNavigate();
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  // Organic transition state
+  const [transition, setTransition] = useState<{
+    active: boolean;
+    path: string;
+    originX: number;
+    originY: number;
+    mouseX: number;
+    mouseY: number;
+  } | null>(null);
+
+  const triggerTransition = (path: string, e: React.MouseEvent) => {
+    // Get the center of the SVG element on screen
+    const svgEl = svgRef.current;
+    if (!svgEl) {
+      navigate(path);
+      return;
+    }
+    const rect = svgEl.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+
+    setTransition({
+      active: true,
+      path,
+      originX,
+      originY,
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+    });
+  };
 
   const hoveredCategory = hoveredIndex !== null ? artCategories[hoveredIndex] : null;
 
@@ -115,6 +148,7 @@ const OctagonNav = () => {
       </div>
 
       <svg
+        ref={svgRef}
         viewBox="-60 -60 520 520"
         className="w-[380px] h-[380px] sm:w-[480px] sm:h-[480px] md:w-[580px] md:h-[580px] lg:w-[660px] lg:h-[660px] relative z-10"
         style={{ transformStyle: "preserve-3d", transform: "rotateX(2deg)" }}
@@ -255,7 +289,7 @@ const OctagonNav = () => {
               className="cursor-pointer"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              onClick={() => navigate(`/${cat.slug}`)}
+              onClick={(e) => triggerTransition(`/${cat.slug}`, e)}
               role="button"
               tabIndex={0}
               aria-label={`Explorar ${cat.name}`}
@@ -350,7 +384,7 @@ const OctagonNav = () => {
           }}
           onMouseEnter={() => setCenterHovered(true)}
           onMouseLeave={() => setCenterHovered(false)}
-          onClick={() => navigate("/transmidia")}
+          onClick={(e) => triggerTransition("/transmidia", e)}
           role="button"
           tabIndex={0}
           aria-label="Explorar Transmídia"
@@ -424,6 +458,19 @@ const OctagonNav = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Organic page transition */}
+      {transition && (
+        <OrganicTransition
+          active={transition.active}
+          targetPath={transition.path}
+          originX={transition.originX}
+          originY={transition.originY}
+          mouseX={transition.mouseX}
+          mouseY={transition.mouseY}
+          onComplete={() => setTransition(null)}
+        />
+      )}
     </div>
   );
 };
