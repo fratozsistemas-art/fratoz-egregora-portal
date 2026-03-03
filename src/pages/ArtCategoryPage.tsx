@@ -1,9 +1,10 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Calendar, User, Tag, ArrowLeft, Star, Eye } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { artCategories } from "@/data/artCategories";
+import { HP_COLLECTION, type HPArtwork } from "@/data/hp-collection";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
@@ -30,10 +31,23 @@ const CATEGORY_EVENTS: Record<string, { date: string; title: string; note?: stri
   ],
 };
 
+const CONTINENT_COLORS: Record<string, string> = {
+  Europa: "border-blue-500/30 bg-blue-500/10 text-blue-300",
+  Américas: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
+  Ásia: "border-amber-500/30 bg-amber-500/10 text-amber-300",
+  África: "border-rose-500/30 bg-rose-500/10 text-rose-300",
+};
+
 const ArtCategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [activeTab, setActiveTab] = useState("Sobre");
+  const [selectedPiece, setSelectedPiece] = useState<HPArtwork | null>(null);
+  const [continentFilter, setContinentFilter] = useState<string | null>(null);
   const category = artCategories.find((c) => c.slug === slug);
+
+  const filteredHP = continentFilter
+    ? HP_COLLECTION.filter((p) => p.continent === continentFilter)
+    : HP_COLLECTION;
 
   if (!category) return <Navigate to="/" replace />;
 
@@ -350,15 +364,200 @@ const ArtCategoryPage = () => {
         )}
         {activeTab === "Acervo" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <h2 className="font-display text-2xl text-foreground mb-6">Acervo / Obras</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="glass-panel rounded-lg p-5">
-                  <h3 className="font-display text-lg text-foreground">Obra #{i}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">Artista convidado · 2024 · Técnica mista</p>
+            {category.slug === "escultura" ? (
+              <>
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+                  <div>
+                    <h2 className="font-display text-2xl text-foreground">Coleção HP — Catálogo</h2>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {filteredHP.length} peça{filteredHP.length !== 1 ? "s" : ""} · 4 continentes
+                    </p>
+                  </div>
+                  {/* Continent filters */}
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => setContinentFilter(null)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                        !continentFilter
+                          ? "border-primary bg-primary/20 text-primary"
+                          : "border-border text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      Todas
+                    </button>
+                    {(["Europa", "Américas", "Ásia", "África"] as const).map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => setContinentFilter(continentFilter === c ? null : c)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                          continentFilter === c
+                            ? CONTINENT_COLORS[c]
+                            : "border-border text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {c} ({HP_COLLECTION.filter((p) => p.continent === c).length})
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
+
+                {/* Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {filteredHP.map((piece, i) => (
+                    <motion.button
+                      key={piece.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.04 }}
+                      onClick={() => setSelectedPiece(piece)}
+                      className="text-left rounded-xl border border-border bg-secondary/30 hover:bg-secondary/60 hover:border-primary/30 transition-all group p-5 space-y-3"
+                    >
+                      {/* Continent badge */}
+                      <Badge variant="outline" className={`text-[10px] ${CONTINENT_COLORS[piece.continent]}`}>
+                        <Globe className="w-3 h-3 mr-1" />
+                        {piece.origin}
+                      </Badge>
+                      <h3 className="font-display text-base text-foreground group-hover:text-primary transition-colors leading-tight">
+                        {piece.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2">{piece.description_commercial}</p>
+                      <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground/70 pt-1 border-t border-border/50">
+                        <span>{piece.period}</span>
+                        <span>{piece.dimensions}</span>
+                      </div>
+                      {/* Theme pills */}
+                      <div className="flex gap-1.5 flex-wrap">
+                        {piece.themes.map((t) => (
+                          <span key={t} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <div className="mt-10 rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 text-center space-y-3">
+                  <Gem className="w-7 h-7 text-primary mx-auto" />
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                    Interessado na aquisição do acervo completo? Solicite o catálogo reservado com fichas técnicas detalhadas.
+                  </p>
+                  <button className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
+                    Solicitar Catálogo Reservado
+                  </button>
+                </div>
+
+                {/* Detail modal */}
+                <AnimatePresence>
+                  {selectedPiece && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
+                      onClick={() => setSelectedPiece(null)}
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 md:p-8 space-y-5"
+                      >
+                        <button
+                          onClick={() => setSelectedPiece(null)}
+                          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+
+                        <Badge variant="outline" className={`text-xs ${CONTINENT_COLORS[selectedPiece.continent]}`}>
+                          <Globe className="w-3 h-3 mr-1" /> {selectedPiece.origin}
+                        </Badge>
+
+                        <h2 className="font-display text-2xl text-foreground">{selectedPiece.title}</h2>
+
+                        {/* Metadata grid */}
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                          <div className="flex items-start gap-2">
+                            <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <div><span className="text-muted-foreground">Período</span><p className="text-foreground">{selectedPiece.period}</p></div>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <Ruler className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <div><span className="text-muted-foreground">Dimensões</span><p className="text-foreground">{selectedPiece.dimensions}</p></div>
+                          </div>
+                          <div className="flex items-start gap-2 col-span-2">
+                            <Layers className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                            <div><span className="text-muted-foreground">Materiais</span><p className="text-foreground">{selectedPiece.materials.join(", ")}</p></div>
+                          </div>
+                        </div>
+
+                        {/* Descriptions */}
+                        <div className="space-y-4 border-t border-border pt-4">
+                          <div>
+                            <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Descrição Comercial</h4>
+                            <p className="text-sm text-foreground leading-relaxed">{selectedPiece.description_commercial}</p>
+                          </div>
+                          <div>
+                            <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Contexto Cultural</h4>
+                            <p className="text-sm text-muted-foreground leading-relaxed">{selectedPiece.cultural_context}</p>
+                          </div>
+                        </div>
+
+                        {/* Provenance */}
+                        <div className="border-t border-border pt-4">
+                          <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Proveniência</h4>
+                          <p className="text-sm text-foreground">{selectedPiece.provenance}</p>
+                        </div>
+
+                        {selectedPiece.conservation_notes && (
+                          <div className="rounded-lg bg-secondary/50 p-4">
+                            <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Conservação</h4>
+                            <p className="text-sm text-muted-foreground">{selectedPiece.conservation_notes}</p>
+                          </div>
+                        )}
+
+                        {/* Themes */}
+                        <div className="flex gap-2 flex-wrap">
+                          {selectedPiece.themes.map((t) => (
+                            <span key={t} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">{t}</span>
+                          ))}
+                        </div>
+
+                        {/* Cross-link to transmedia */}
+                        <Link
+                          to="/transmidia?sala=4"
+                          onClick={() => setSelectedPiece(null)}
+                          className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4 hover:bg-primary/10 transition-colors group"
+                        >
+                          <Eye className="w-5 h-5 text-primary" />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-foreground">Ver na experiência transmídia</p>
+                            <p className="text-xs text-muted-foreground">Explore a narrativa cultural desta peça</p>
+                          </div>
+                          <ArrowLeft className="w-4 h-4 rotate-180 text-primary group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
+            ) : (
+              <>
+                <h2 className="font-display text-2xl text-foreground mb-6">Acervo / Obras</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="glass-panel rounded-lg p-5">
+                      <h3 className="font-display text-lg text-foreground">Obra #{i}</h3>
+                      <p className="text-sm text-muted-foreground mt-1">Artista convidado · 2024 · Técnica mista</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </motion.div>
         )}
         {activeTab === "Participar" && (
