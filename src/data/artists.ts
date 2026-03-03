@@ -1,6 +1,6 @@
 import torreDeBabel from "@/assets/obras/torre-de-babel.png";
-import franklinPlaceholder from "@/assets/obras/franklin-duarte-placeholder.jpg";
-import igorPlaceholder from "@/assets/obras/igor-deodoro-placeholder.jpg";
+import franklinPaisagemInterior from "@/assets/obras/franklin-duarte-paisagem-interior.jpg";
+import igorTerritorioMemoria from "@/assets/obras/igor-deodoro-territorio-memoria.jpg";
 
 export interface Artist {
   id: string;
