@@ -294,7 +294,7 @@ const SalaHPIntro = ({ roomObras }: { roomObras: TransmidiaObra[] }) => (
 
     {/* Cross-link banner to commercial page */}
     <Link
-      to="/categoria/escultura"
+      to="/escultura"
       className="flex items-center gap-4 rounded-xl border border-border bg-gradient-to-r from-secondary/50 to-accent/5 p-4 hover:from-secondary/70 hover:to-accent/10 transition-all group"
     >
       <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
