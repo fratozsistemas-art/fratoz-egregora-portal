@@ -290,25 +290,25 @@ const OctagonNav = () => {
               {/* Top bevel — light edge (outer rim catches light) */}
               <path
                 d={topBevel}
-                fill={isHov ? "hsla(0,0%,100%,0.18)" : "hsla(0,0%,100%,0.08)"}
+                fill={isActive ? "hsla(0,0%,100%,0.18)" : "hsla(0,0%,100%,0.08)"}
                 className="pointer-events-none transition-all duration-300"
               />
               {/* Bottom bevel — shadow edge (inner rim in shadow) */}
               <path
                 d={bottomBevel}
-                fill={isHov ? "hsla(0,0%,0%,0.25)" : "hsla(0,0%,0%,0.15)"}
+                fill={isActive ? "hsla(0,0%,0%,0.25)" : "hsla(0,0%,0%,0.15)"}
                 className="pointer-events-none transition-all duration-300"
               />
               {/* Left bevel — highlight */}
               <path
                 d={leftBevel}
-                fill={isHov ? "hsla(0,0%,100%,0.14)" : "hsla(0,0%,100%,0.05)"}
+                fill={isActive ? "hsla(0,0%,100%,0.14)" : "hsla(0,0%,100%,0.05)"}
                 className="pointer-events-none transition-all duration-300"
               />
               {/* Right bevel — shadow */}
               <path
                 d={rightBevel}
-                fill={isHov ? "hsla(0,0%,0%,0.2)" : "hsla(0,0%,0%,0.1)"}
+                fill={isActive ? "hsla(0,0%,0%,0.2)" : "hsla(0,0%,0%,0.1)"}
                 className="pointer-events-none transition-all duration-300"
               />
               {/* Segment divider line — crisp edge */}
@@ -318,7 +318,7 @@ const OctagonNav = () => {
                   const iS = getPoint(index * 45 - 22.5, innerR);
                   return `M ${oS.x},${oS.y} L ${iS.x},${iS.y}`;
                 })()}
-                stroke={isHov ? "hsla(0,0%,100%,0.15)" : "hsla(0,0%,100%,0.06)"}
+                stroke={isActive ? "hsla(0,0%,100%,0.15)" : "hsla(0,0%,100%,0.06)"}
                 strokeWidth="1"
                 className="pointer-events-none transition-all duration-300"
               />
@@ -327,7 +327,7 @@ const OctagonNav = () => {
                 y={labelPos.y}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fill={isHov ? "#fff" : "hsl(40 20% 85%)"}
+                fill={isActive ? "#fff" : "hsl(40 20% 85%)"}
                 fontSize="12"
                 fontFamily="Outfit, sans-serif"
                 fontWeight={isHov ? "600" : "400"}
