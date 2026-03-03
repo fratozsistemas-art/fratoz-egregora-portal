@@ -44,6 +44,7 @@ const ArtCategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [activeTab, setActiveTab] = useState("Sobre");
   const [selectedPiece, setSelectedPiece] = useState<HPArtwork | null>(null);
+  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
   const [continentFilter, setContinentFilter] = useState<string | null>(null);
   const category = artCategories.find((c) => c.slug === slug);
 
