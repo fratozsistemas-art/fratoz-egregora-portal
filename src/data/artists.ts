@@ -1,4 +1,6 @@
 import torreDeBabel from "@/assets/obras/torre-de-babel.png";
+import franklinPlaceholder from "@/assets/obras/franklin-duarte-placeholder.jpg";
+import igorPlaceholder from "@/assets/obras/igor-deodoro-placeholder.jpg";
 
 export interface Artist {
   id: string;
