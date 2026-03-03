@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { highlights } from "@/data/highlights";
 
 const HighlightCards = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="w-full max-w-5xl mx-auto px-4">
       <h2 className="font-display text-2xl md:text-3xl text-foreground text-center mb-10">
-        Destaques
+        {t("highlights.heading")}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {highlights.map((item, i) => (
@@ -34,7 +37,7 @@ const HighlightCards = () => {
 
       {/* CTA final */}
       <div className="flex flex-wrap justify-center gap-4 mt-14">
-        {["Participar", "Submeter obra", "Falar com a curadoria"].map((label) => (
+        {[t("highlights.cta_join"), t("highlights.cta_submit"), t("highlights.cta_curatorship")].map((label) => (
           <button
             key={label}
             className="px-6 py-3 rounded-lg border border-border text-foreground font-body text-sm hover:bg-secondary hover:border-primary/30 transition-all duration-300"

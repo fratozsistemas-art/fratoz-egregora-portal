@@ -2,13 +2,16 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import logoSrc from "@/assets/logo-egregora.jpg";
 import { artCategories } from "@/data/artCategories";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const SiteHeader = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useFocusTrap<HTMLDivElement>(open);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -19,21 +22,27 @@ const SiteHeader = () => {
             Fratoz <span className="gradient-egregora-text">Egrégora</span>
           </span>
         </Link>
-        <nav className="hidden md:flex items-center gap-6">
+
+        <nav className="hidden md:flex items-center gap-4">
           <Link to="/transmidia" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Transmídia
+            {t("nav.transmidia")}
           </Link>
           <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-            Sobre
+            {t("nav.about")}
           </Link>
+          <LanguageSwitcher />
         </nav>
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
-          aria-label="Menu"
-        >
-          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageSwitcher />
+          <button
+            onClick={() => setOpen(!open)}
+            className="p-2 text-foreground hover:text-primary transition-colors"
+            aria-label="Menu"
+          >
+            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </header>
 
       <AnimatePresence>
@@ -48,7 +57,7 @@ const SiteHeader = () => {
             onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
           >
             <div className="mb-6">
-              <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Linguagens</p>
+              <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">{t("nav.languages")}</p>
               <div className="grid grid-cols-2 gap-2">
                 {artCategories.map((cat) => (
                   <Link
@@ -70,7 +79,7 @@ const SiteHeader = () => {
                 onClick={() => setOpen(false)}
                 className="block px-4 py-3 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
               >
-                <span className="text-sm font-body gradient-egregora-text font-medium">Transmídia</span>
+                <span className="text-sm font-body gradient-egregora-text font-medium">{t("nav.transmidia")}</span>
                 <p className="text-xs text-muted-foreground mt-0.5">Museu digital — todas as linguagens</p>
               </Link>
               <Link
@@ -78,7 +87,7 @@ const SiteHeader = () => {
                 onClick={() => setOpen(false)}
                 className="block px-4 py-3 rounded-lg hover:bg-secondary transition-colors"
               >
-                <span className="text-sm text-foreground">Início</span>
+                <span className="text-sm text-foreground">{t("nav.home")}</span>
               </Link>
             </div>
           </motion.div>

@@ -1,16 +1,14 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe, BookOpen, Headphones, Video, ExternalLink, Camera } from "lucide-react";
+import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { artCategories } from "@/data/artCategories";
 import { HP_COLLECTION, type HPArtwork } from "@/data/hp-collection";
-import { getArtistsByCategory, type Artist } from "@/data/artists";
-import { LACOS_HONRA_GALLERY, type GalleryPhoto } from "@/data/lacosHonraGallery";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
-import ArtistModal from "@/components/ArtistModal";
 import { Badge } from "@/components/ui/badge";
 import { Gem } from "lucide-react";
 
@@ -26,14 +24,6 @@ const CATEGORY_HUES: Record<string, number> = {
   escultura: 180,   // teal
 };
 
-const tabs = ["Sobre", "Galeria", "Agenda", "Acervo", "Participar"];
-
-const CATEGORY_EVENTS: Record<string, { date: string; title: string; note?: string }[]> = {
-  pintura: [
-    { date: "06 Mar 2026", title: "Abertura da mostra", note: "Exibição única" },
-  ],
-};
-
 const CONTINENT_COLORS: Record<string, string> = {
   Europa: "border-blue-500/30 bg-blue-500/10 text-blue-300",
   Américas: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
@@ -41,12 +31,26 @@ const CONTINENT_COLORS: Record<string, string> = {
   África: "border-rose-500/30 bg-rose-500/10 text-rose-300",
 };
 
+const CATEGORY_EVENTS: Record<string, { date: string; title: string; note?: string }[]> = {
+  pintura: [
+    { date: "06 Mar 2026", title: "Abertura da mostra", note: "Exibição única" },
+  ],
+};
+
 const ArtCategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [activeTab, setActiveTab] = useState("Sobre");
+  const { t } = useTranslation();
+
+  const tabs = [
+    t("category.tabs.about"),
+    t("category.tabs.gallery"),
+    t("category.tabs.agenda"),
+    t("category.tabs.collection"),
+    t("category.tabs.participate"),
+  ];
+
+  const [activeTab, setActiveTab] = useState(tabs[0]);
   const [selectedPiece, setSelectedPiece] = useState<HPArtwork | null>(null);
-  const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
-  const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
   const [continentFilter, setContinentFilter] = useState<string | null>(null);
   const category = artCategories.find((c) => c.slug === slug);
 
@@ -68,7 +72,7 @@ const ArtCategoryPage = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         <div className="relative z-10 max-w-5xl mx-auto w-full px-6 pb-10">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Voltar
+            <ArrowLeft className="w-4 h-4" /> {t("category.back")}
           </Link>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -102,8 +106,8 @@ const ArtCategoryPage = () => {
       {/* Metadata bar */}
       <div className="border-y border-border">
         <div className="max-w-5xl mx-auto px-6 py-4 flex flex-wrap gap-6 text-sm text-muted-foreground">
-          <span className="flex items-center gap-2"><Tag className="w-4 h-4" /> Eixo: {category.name}</span>
-          <span className="flex items-center gap-2"><User className="w-4 h-4" /> Curadoria: {category.curator}</span>
+          <span className="flex items-center gap-2"><Tag className="w-4 h-4" /> {t("category.axis")}: {category.name}</span>
+          <span className="flex items-center gap-2"><User className="w-4 h-4" /> {t("category.curatorship")}: {category.curator}</span>
           <span className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {category.status}</span>
         </div>
       </div>
@@ -111,13 +115,13 @@ const ArtCategoryPage = () => {
       {/* CTA */}
       <div className="max-w-5xl mx-auto w-full px-6 py-6 flex flex-wrap gap-3">
         <button className="px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
-          Participar
+          {t("category.cta_join")}
         </button>
         <button className="px-5 py-2.5 rounded-lg border border-border text-foreground font-body text-sm hover:bg-secondary transition-colors">
-          Submeter obra
+          {t("category.cta_submit")}
         </button>
         <button className="px-5 py-2.5 rounded-lg border border-border text-foreground font-body text-sm hover:bg-secondary transition-colors">
-          Ver agenda
+          {t("category.cta_agenda")}
         </button>
       </div>
 
@@ -142,224 +146,10 @@ const ArtCategoryPage = () => {
 
       {/* Tab content */}
       <div className="max-w-5xl mx-auto w-full px-6 py-10 flex-1">
-        {activeTab === "Sobre" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-3xl">
-            {/* Pintura — Artist cards */}
-            {category.slug === "pintura" && (
-              <div className="mb-10 space-y-5">
-                <h2 className="font-display text-2xl text-foreground mb-2">Artistas em destaque</h2>
-                <div className="grid gap-5 sm:grid-cols-3">
-                  {getArtistsByCategory("pintura").map((artist, i) => (
-                    <motion.button
-                      key={artist.id}
-                      initial={{ opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 * (i + 1) }}
-                      onClick={() => setSelectedArtist(artist)}
-                      className="group relative rounded-xl border border-primary/20 overflow-hidden text-left cursor-pointer hover:border-primary/40 transition-colors"
-                    >
-                      <div
-                        className="absolute inset-0 opacity-20 group-hover:opacity-35 transition-opacity"
-                        style={{
-                          backgroundImage: artist.featuredWorkImage ? `url(${artist.featuredWorkImage})` : undefined,
-                          background: !artist.featuredWorkImage
-                            ? `linear-gradient(135deg, hsl(${30 + i * 10} 80% 50% / 0.3), hsl(${15 + i * 10} 70% 40% / 0.3))`
-                            : undefined,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                          filter: artist.featuredWorkImage ? "blur(2px) saturate(1.3)" : undefined,
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
-                      <div className="relative z-10 p-5 flex flex-col min-h-[180px] justify-end">
-                        {artist.role === "Artista em destaque" && (
-                          <div className="flex items-center gap-2 mb-2">
-                            <Star className="w-4 h-4 text-primary fill-primary" />
-                            <span className="text-xs text-primary font-medium uppercase tracking-wider">Destaque</span>
-                          </div>
-                        )}
-                        <h3 className="font-display text-lg text-foreground">{artist.name}</h3>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {artist.featuredWork ? `${artist.featuredWork} · ${artist.featuredWorkYear}` : artist.role}
-                        </p>
-                        <p className="text-xs text-muted-foreground/80 mt-2 leading-relaxed line-clamp-3">
-                          {artist.bio.slice(0, 140)}…
-                        </p>
-                      </div>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Fotografia — Laços de Honra rich section */}
-            {category.slug === "fotografia" && (
-              <div className="mb-10 space-y-6">
-                <h2 className="font-display text-2xl text-foreground mb-2">Obra em destaque</h2>
-
-                {/* Main featured card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-primary/20 overflow-hidden"
-                >
-                  <div className="relative bg-gradient-to-br from-primary/10 via-background to-accent/5 p-6 md:p-8">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Star className="w-5 h-5 text-primary fill-primary" />
-                      <span className="text-xs text-primary font-medium uppercase tracking-wider">Obra carro-chefe</span>
-                    </div>
-                    <h3 className="font-display text-2xl md:text-3xl text-foreground">Laços de Honra</h3>
-                    <p className="text-sm text-muted-foreground mt-1">Paula Mariane · 2022 · Livro fotográfico · Editora BIBLIEx</p>
-                    <p className="text-sm text-muted-foreground leading-relaxed mt-4 max-w-2xl">
-                      Primeiro livro fotográfico sobre a formação dos oficiais combatentes do Exército Brasileiro. Resultado de cinco anos de documentação independente (2016–2020), Paula Mariane registrou a rotina de quatro instituições de ensino da força terrestre: EsPCEx, AMAN, EsAO e ECEME — sendo a primeira pessoa a realizar uma série fotográfica de longa duração na Força Terrestre.
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed mt-3 max-w-2xl">
-                      A obra revela a dimensão humana por trás da formação militar — os sacrifícios, os laços de camaradagem, a disciplina e a transformação pessoal dos jovens que ingressam nas escolas do Exército.
-                    </p>
-                  </div>
-                </motion.div>
-
-                {/* Author bio card — clickable */}
-                <motion.button
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
-                  onClick={() => {
-                    const paulaArtist = getArtistsByCategory("fotografia").find(a => a.id === "paula-mariane");
-                    if (paulaArtist) setSelectedArtist(paulaArtist);
-                  }}
-                  className="w-full text-left rounded-xl border border-accent/20 bg-accent/5 p-6 hover:border-primary/30 transition-colors cursor-pointer"
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <Camera className="w-5 h-5 text-primary" />
-                    <h3 className="font-display text-lg text-foreground">Sobre a autora</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Paula Mariane é fotojornalista e escritora, natural de Votorantim (SP). Formada em Jornalismo pela PUC-Campinas com bolsa integral e especialista em Relações Internacionais. Palestrante do TEDx Campinas 2019. Teve duas fotos selecionadas entre as 50 melhores na categoria Retrato do Sony World Photography Awards 2016.
-                  </p>
-                  <p className="text-xs text-primary mt-3 font-medium">Ver perfil completo →</p>
-                </motion.button>
-
-                {/* Links grid */}
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25 }}
-                  className="space-y-3"
-                >
-                  <h3 className="font-display text-lg text-foreground">Explore</h3>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <a
-                      href="https://www.amazon.com.br/Laços-Honra-Paula-Mariane/dp/6557570420"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
-                    >
-                      <BookOpen className="w-5 h-5 text-primary shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">Adquirir na Amazon</p>
-                        <p className="text-xs text-muted-foreground">Livro fotográfico — Editora BIBLIEx</p>
-                      </div>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                    </a>
-                    <a
-                      href="https://lojavirtual.bibliex.eb.mil.br/product/20220109/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
-                    >
-                      <BookOpen className="w-5 h-5 text-primary shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">Loja BIBLIEx</p>
-                        <p className="text-xs text-muted-foreground">Biblioteca do Exército — loja oficial</p>
-                      </div>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                    </a>
-                    <a
-                      href="https://fotografia.folha.uol.com.br/galerias/1598748445693364-lacos-de-honra-o-outro-lado-do-exercito"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
-                    >
-                      <Eye className="w-5 h-5 text-primary shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">Galeria na Folha de S.Paulo</p>
-                        <p className="text-xs text-muted-foreground">Laços de Honra: o outro lado do Exército</p>
-                      </div>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                    </a>
-                    <a
-                      href="https://www.defesanet.com.br/terrestre/conheca-o-primeiro-livro-fotografico-sobre-a-formacao-dos-oficiais-combatentes-do-exercito-brasileiro/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
-                    >
-                      <Globe className="w-5 h-5 text-primary shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">Matéria DefesaNet</p>
-                        <p className="text-xs text-muted-foreground">Primeiro livro fotográfico sobre a formação militar</p>
-                      </div>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                    </a>
-                    <a
-                      href="https://encorebr.com/encore-e-lacos-de-honra/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
-                    >
-                      <Globe className="w-5 h-5 text-primary shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">Encore Brasil</p>
-                        <p className="text-xs text-muted-foreground">Encore e Laços de Honra — ensaio visual</p>
-                      </div>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                    </a>
-                    <a
-                      href="https://www.instagram.com/paulamarianephoto/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
-                    >
-                      <Camera className="w-5 h-5 text-primary shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">Instagram</p>
-                        <p className="text-xs text-muted-foreground">@paulamarianephoto</p>
-                      </div>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                    </a>
-                    <a
-                      href="https://open.spotify.com/episode/28fnjDcOFO7rEM67PpM9pa"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
-                    >
-                      <Headphones className="w-5 h-5 text-primary shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">Podcast no Spotify</p>
-                        <p className="text-xs text-muted-foreground">Entrevista sobre Laços de Honra</p>
-                      </div>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                    </a>
-                    <a
-                      href="https://www.youtube.com/watch?v=70iQA0GAbz0"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
-                    >
-                      <Video className="w-5 h-5 text-primary shrink-0" />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-foreground">Vídeo no YouTube</p>
-                        <p className="text-xs text-muted-foreground">Cobertura do projeto Laços de Honra</p>
-                      </div>
-                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-                    </a>
-                  </div>
-                </motion.div>
-              </div>
-            )}
-
-            {/* Featured work card — other categories */}
-            {category.slug !== "pintura" && category.slug !== "fotografia" && category.featuredWork && (
+        {activeTab === t("category.tabs.about") && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl">
+            {/* Featured work card */}
+            {category.featuredWork && (
               <div className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <Star className="w-5 h-5 text-primary fill-primary" />
@@ -375,7 +165,7 @@ const ArtCategoryPage = () => {
                 )}
               </div>
             )}
-            <h2 className="font-display text-2xl text-foreground mb-4">Sobre</h2>
+            <h2 className="font-display text-2xl text-foreground mb-4">{t("category.about_heading")}</h2>
             <p className="text-muted-foreground leading-relaxed">{category.heroDescription}</p>
             <p className="text-muted-foreground leading-relaxed mt-4">{category.description}</p>
 
@@ -387,27 +177,31 @@ const ArtCategoryPage = () => {
                   <div className="flex items-center gap-3">
                     <Gem className="w-6 h-6 text-primary" />
                     <div>
-                      <h2 className="font-display text-2xl text-foreground tracking-wide uppercase">Coleção HP — Oportunidade de Aquisição</h2>
+                      <h2 className="font-display text-2xl text-foreground tracking-wide uppercase">
+                        {t("category.hp_acquisition_title")}
+                      </h2>
                       <Badge variant="outline" className="mt-2 text-xs border-primary/40 text-primary">
-                        Para Colecionadores e Curadores
+                        {t("category.hp_acquisition_badge")}
                       </Badge>
                     </div>
                   </div>
-                  <p className="text-lg text-foreground font-medium">{HP_COLLECTION.length} peças históricas · 4 continentes · Dupla curadoria</p>
+                  <p className="text-lg text-foreground font-medium">
+                    {t("category.hp_acquisition_stats", { count: HP_COLLECTION.length })}
+                  </p>
                   <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
-                    Este é um acervo disponível para aquisição em lote fechado. Para colecionadores e curadores interessados em incorporar um núcleo curatorial sofisticado a acervos institucionais ou privados.
+                    {t("category.hp_acquisition_desc")}
                   </p>
 
                   {/* CTA buttons */}
                   <div className="flex flex-wrap gap-3 pt-2">
                     <button className="px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
-                      Explorar o Acervo Completo
+                      {t("category.hp_cta_explore")}
                     </button>
                     <button className="px-6 py-2.5 rounded-lg border border-border text-foreground font-body text-sm hover:bg-secondary transition-colors">
-                      Agendar Visita Presencial
+                      {t("category.hp_cta_visit")}
                     </button>
                     <button className="px-6 py-2.5 rounded-lg border border-border text-foreground font-body text-sm hover:bg-secondary transition-colors">
-                      Baixar Catálogo Detalhado
+                      {t("category.hp_cta_download")}
                     </button>
                   </div>
                 </div>
@@ -421,95 +215,91 @@ const ArtCategoryPage = () => {
                     <Eye className="w-5 h-5 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground">Experiência Cultural</p>
+                    <p className="text-sm font-medium text-foreground">{t("category.hp_crosslink_label")}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      Você também pode explorar a Coleção HP como experiência transmídia em nosso museu digital.
+                      {t("category.hp_crosslink_desc")}
                     </p>
                   </div>
                   <div className="flex items-center gap-1 text-sm text-primary font-medium">
-                    <span className="hidden sm:inline">Visitar Sala HP</span>
+                    <span className="hidden sm:inline">{t("category.hp_crosslink_btn")}</span>
                     <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </Link>
 
                 {/* Apresentação */}
                 <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
-                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">Apresentação</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    A Coleção HP faz parte do acervo pessoal de um professor de Relações Internacionais da UFRJ. As obras foram adquiridas pelo professor de um marchand catalão que estava encerrando suas atividades no Rio de Janeiro e voltando para a Europa.
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    No contexto do auge do dinamismo cultural e do boom imobiliário do Rio de Janeiro, em função dos megaeventos ocorridos na cidade desde o início do século XXI, muitos estrangeiros e empresários bem-sucedidos resolveram se estabelecer no Rio.
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Foi nesse cenário que um importante marchand catalão resolveu trazer parte expressiva de suas obras de Barcelona para o Rio, passando também a arrematar leilões no Brasil, para compor o acervo de sua importante galeria de arte que funcionou até 2020.
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Com a pandemia, o marchand resolveu encerrar suas atividades comerciais no Rio e levar de volta as suas principais peças para Barcelona. Em função do lockdown, não estava sendo possível fazer o traslado logístico dessas peças em contêineres de volta ao ateliê espanhol.
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    O nascimento da Coleção HP somente foi possível porque o conjunto valioso de peças reunidas estava aguardando novas medidas de flexibilização de trânsito logístico internacional por causa da pandemia. As peças compradas pelo professor nessa ocasião são algumas das peças mais valiosas que o marchand havia reservado para serem colocadas nos contêineres que voltariam para Barcelona depois do fim da pandemia.
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Trata-se, portanto, de uma rara oportunidade de aquisição em lote fechado de um conjunto artístico de algumas das manifestações artísticas mais importantes da história da arte. Um lote montado pela dupla curadoria resultado do encontro entre o conhecimento histórico e a sensibilidade estética do professor com o olhar experiente e a seleção criteriosa do marchand catalão.
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Para além do valor simbólico dessas peças com narrativas culturais marcantes, trata-se também de uma estratégia financeira pessoal de busca por diversificação patrimonial. A possibilidade de alienação integral para um comprador qualificado faz parte da nova etapa de vida do professor.
-                  </p>
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">
+                    {t("category.hp_presentation_title")}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t("category.hp_presentation_p1")}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t("category.hp_presentation_p2")}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t("category.hp_presentation_p3")}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t("category.hp_presentation_p4")}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t("category.hp_presentation_p5")}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t("category.hp_presentation_p6")}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t("category.hp_presentation_p7")}</p>
                   <p className="text-sm text-muted-foreground/80 italic leading-relaxed border-l-2 border-primary/40 pl-4">
-                    "Não há dúvidas de que o novo proprietário vai se orgulhar do reforço que o seu acervo receberá a partir da incorporação dessas peças extraordinárias à sua já elegante coleção."
+                    {t("category.hp_presentation_quote")}
                   </p>
                 </div>
 
                 {/* Avaliação de Mercado */}
                 <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 md:p-8 space-y-5">
-                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">Avaliação de Mercado</h3>
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">
+                    {t("category.hp_market_title")}
+                  </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    As peças da Coleção HP têm o estilo <strong className="text-foreground">Sotheby's</strong> e <strong className="text-foreground">Christie's</strong>, líderes em obras de arte com valor histórico-etnográfico, bem como em bens de luxo. Para as obras asiáticas, as melhores casas para avaliar seriam as gigantes <strong className="text-foreground">China Guardian</strong> e <strong className="text-foreground">Poly International Auction Company</strong>.
+                    {t("category.hp_market_p1")}
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Em algumas fontes indicadas para aprofundar a pesquisa sobre a história das peças, é possível perceber o valor do patrimônio oferecido. Não é uma oportunidade que costuma aparecer com frequência.
+                    {t("category.hp_market_p2")}
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Perceba a grandeza da história por trás de cada uma das peças. As descrições sucintas e as fotos singelas não fazem jus à grandeza, à beleza e à marcante presença dessas obras.
+                    {t("category.hp_market_p3")}
                   </p>
                 </div>
 
                 {/* Proveniência & Conservação */}
                 <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
-                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">Proveniência & Conservação</h3>
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">
+                    {t("category.hp_provenance_title")}
+                  </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Outro ponto a ser observado diz respeito ao estado de conservação das peças. É natural que peças com décadas e séculos de existência, que passaram por diferentes acervos, tenham algumas marcas do tempo — marcas que revelam a sua história, a sua trajetória e a sua autenticidade.
+                    {t("category.hp_provenance_p1")}
                   </p>
                   <div className="rounded-lg bg-secondary/50 p-5 space-y-3">
-                    <h4 className="font-display text-sm text-foreground uppercase tracking-wider">Kintsugi — A beleza das cicatrizes</h4>
+                    <h4 className="font-display text-sm text-foreground uppercase tracking-wider">
+                      {t("category.hp_kintsugi_title")}
+                    </h4>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      Os japoneses desenvolveram o conceito filosófico e estético do <em>kintsugi</em>, que se refere não apenas à técnica milenar de reparar as rachaduras das peças com uma solda de ouro, mas também à valorização das marcas deixadas pelas cicatrizes da vida. Em vez de buscar a perfeição idealizada e artificializada, o <em>kintsugi</em> celebra aquilo que foi vivido e transformado pelo tempo.
+                      {t("category.hp_kintsugi_p1")}
                     </p>
                     <p className="text-sm text-muted-foreground/80 italic leading-relaxed border-l-2 border-primary/40 pl-4">
-                      "Cada cicatriz dourada conta uma história. As marcas não são defeitos, são testemunhos. A fragilidade, quando assumida, revela força."
+                      {t("category.hp_kintsugi_quote")}
                     </p>
                   </div>
                 </div>
 
                 {/* O Acervo */}
                 <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
-                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">O Acervo</h3>
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">
+                    {t("category.hp_collection_section_title")}
+                  </h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    O acervo da Coleção HP reúne <strong className="text-foreground">{HP_COLLECTION.length} peças dos continentes americano, europeu, asiático e africano</strong>. As peças têm valor artístico, etnográfico e simbólico de diferentes tradições filosóficas, religiosas e civilizacionais. Trata-se de um acervo que chama atenção de todos e permanece na memória daqueles que tiverem o privilégio de entrar em contato com as obras.
+                    {t("category.hp_collection_section_p1", { count: HP_COLLECTION.length })}
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    A coleção foi feita por uma dupla curadoria estética: a do marchand catalão e a do professor da UFRJ. Não se trata da compra de peças isoladas, mas da aquisição de um sofisticado núcleo curatorial pronto para enriquecer imediatamente qualquer acervo.
+                    {t("category.hp_collection_section_p2")}
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    As obras selecionadas são representativas de um alto capital cultural e causam forte impacto visual e emocional. O poder simbólico do capital cultural revela-se de modo discreto e elegante, marcando profundamente o inconsciente dos ilustres convidados do anfitrião.
+                    {t("category.hp_collection_section_p3")}
                   </p>
                   <p className="text-sm text-muted-foreground/80 italic leading-relaxed border-l-2 border-primary/40 pl-4">
-                    "A verdade é que algumas obras mudam o ambiente; mas outras transformam o destino."
+                    {t("category.hp_collection_section_quote")}
                   </p>
                   <div className="mt-4 rounded-lg bg-primary/10 border border-primary/20 p-4 text-center">
                     <p className="text-sm text-muted-foreground">
-                      Caso haja interesse, é possível compartilhar um material com imagens e informações essenciais das obras da coleção, em caráter estritamente reservado.
+                      {t("category.hp_collection_section_note")}
                     </p>
                   </div>
                 </div>
@@ -517,142 +307,56 @@ const ArtCategoryPage = () => {
                 {/* CTA para Colecionadores */}
                 <div className="rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 md:p-8 text-center space-y-4">
                   <Gem className="w-8 h-8 text-primary mx-auto" />
-                  <h3 className="font-display text-xl text-foreground">Contato para Colecionadores</h3>
+                  <h3 className="font-display text-xl text-foreground">{t("category.hp_contact_title")}</h3>
                   <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-                    Interessado na aquisição do acervo? Entre em contato para receber o catálogo completo com imagens, fichas técnicas e condições em caráter reservado.
+                    {t("category.hp_contact_desc")}
                   </p>
                   <button className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
-                    Solicitar Catálogo Reservado
+                    {t("category.hp_contact_btn")}
                   </button>
-                  <p className="text-xs text-muted-foreground">Acesso restrito a compradores qualificados</p>
+                  <p className="text-xs text-muted-foreground">{t("category.hp_contact_note")}</p>
                 </div>
               </div>
             )}
           </motion.div>
         )}
-        {activeTab === "Galeria" && (
+        {activeTab === t("category.tabs.gallery") && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <h2 className="font-display text-2xl text-foreground mb-6">Galeria</h2>
-
-            {/* Fotografia — Laços de Honra gallery */}
-            {category.slug === "fotografia" && (
-              <>
-                <p className="text-sm text-muted-foreground mb-6 max-w-xl">
-                  Seleção do ensaio <strong className="text-foreground">Laços de Honra</strong> — cinco anos documentando a formação dos oficiais combatentes do Exército Brasileiro. Fotos: Paula Mariane (2016–2020).
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {LACOS_HONRA_GALLERY.map((photo, i) => (
-                    <motion.button
-                      key={photo.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.08 }}
-                      onClick={() => setSelectedPhoto(photo)}
-                      className={`group relative rounded-lg overflow-hidden cursor-pointer border border-border/50 hover:border-primary/40 transition-colors ${
-                        photo.orientation === "portrait" ? "row-span-2" : ""
-                      } ${photo.orientation === "landscape" ? "col-span-2 md:col-span-1" : ""}`}
-                    >
-                      <img
-                        src={photo.src}
-                        alt={photo.title}
-                        className="w-full h-full object-cover aspect-[3/2] group-hover:scale-105 transition-transform duration-500"
-                        style={photo.orientation === "portrait" ? { aspectRatio: "2/3" } : photo.orientation === "square" ? { aspectRatio: "1/1" } : undefined}
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                        <p className="text-xs font-medium text-foreground">{photo.title}</p>
-                        {photo.location && <p className="text-[10px] text-muted-foreground">{photo.location} · {photo.year}</p>}
-                      </div>
-                    </motion.button>
-                  ))}
-                </div>
-
-                {/* Photo lightbox */}
-                <AnimatePresence>
-                  {selectedPhoto && (
-                    <motion.div
-                      key="photo-overlay"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      onClick={() => setSelectedPhoto(null)}
-                      className="fixed inset-0 z-50 bg-background/90 backdrop-blur-md flex items-center justify-center p-4"
-                    >
-                      <motion.div
-                        key="photo-panel"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="relative max-w-3xl w-full"
-                      >
-                        <button
-                          onClick={() => setSelectedPhoto(null)}
-                          className="absolute -top-12 right-0 w-8 h-8 rounded-full bg-secondary border border-border flex items-center justify-center hover:bg-accent transition-colors z-10"
-                        >
-                          <X className="w-4 h-4 text-foreground" />
-                        </button>
-                        <img
-                          src={selectedPhoto.src}
-                          alt={selectedPhoto.title}
-                          className="w-full rounded-xl border border-border shadow-2xl"
-                        />
-                        <div className="mt-4 space-y-1">
-                          <h3 className="font-display text-lg text-foreground">{selectedPhoto.title}</h3>
-                          {selectedPhoto.caption && (
-                            <p className="text-sm text-muted-foreground leading-relaxed">{selectedPhoto.caption}</p>
-                          )}
-                          <p className="text-xs text-muted-foreground/70">
-                            {selectedPhoto.location && `${selectedPhoto.location} · `}{selectedPhoto.year} · Paula Mariane
-                          </p>
-                        </div>
-                      </motion.div>
-                    </motion.div>
+            <h2 className="font-display text-2xl text-foreground mb-6">{t("category.gallery_heading")}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {/* Featured work — spans 2 columns */}
+              {category.featuredWork && (
+                <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[3/4]">
+                  {category.featuredWorkImage && (
+                    <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-contain p-2" />
                   )}
-                </AnimatePresence>
-              </>
-            )}
-
-            {/* Default gallery for other categories */}
-            {category.slug !== "fotografia" && (
-              <>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {/* Featured work — spans 2 columns */}
-                  {category.featuredWork && (
-                    <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[3/4]">
-                      {category.featuredWorkImage && (
-                        <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-contain p-2" />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
-                      <div className="relative z-10 p-5">
-                        <Badge className="mb-2 bg-primary/90 text-primary-foreground border-0">
-                          <Star className="w-3 h-3 mr-1 fill-current" /> Destaque
-                        </Badge>
-                        <h3 className="font-display text-lg text-foreground">{category.featuredWork}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {category.featuredArtist}
-                          {category.featuredWorkYear && ` · ${category.featuredWorkYear}`}
-                          {category.featuredWorkTechnique && ` · ${category.featuredWorkTechnique}`}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+                  <div className="relative z-10 p-5">
+                    <Badge className="mb-2 bg-primary/90 text-primary-foreground border-0">
+                      <Star className="w-3 h-3 mr-1 fill-current" /> {t("category.featured_label")}
+                    </Badge>
+                    <h3 className="font-display text-lg text-foreground">{category.featuredWork}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {category.featuredArtist}
+                      {category.featuredWorkYear && ` · ${category.featuredWorkYear}`}
+                      {category.featuredWorkTechnique && ` · ${category.featuredWorkTechnique}`}
+                    </p>
+                  </div>
                 </div>
-                {/* Empty state when no further gallery images are available */}
-                <div className="mt-8 flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
-                  <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
-                  <p className="text-sm text-muted-foreground">
-                    Galeria em construção — obras em breve.
-                  </p>
-                </div>
-              </>
-            )}
+              )}
+            </div>
+            {/* Empty state */}
+            <div className="mt-8 flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
+              <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
+              <p className="text-sm text-muted-foreground">
+                {t("category.gallery_empty")}
+              </p>
+            </div>
           </motion.div>
         )}
-        {activeTab === "Agenda" && (
+        {activeTab === t("category.tabs.agenda") && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <h2 className="font-display text-2xl text-foreground mb-6">Agenda</h2>
+            <h2 className="font-display text-2xl text-foreground mb-6">{t("category.agenda_heading")}</h2>
             <div className="space-y-4">
               {(CATEGORY_EVENTS[category.slug] ?? []).map((evt) => (
                 <div key={evt.date + evt.title} className="glass-panel rounded-lg p-4 flex items-center gap-4">
@@ -664,270 +368,288 @@ const ArtCategoryPage = () => {
                 </div>
               ))}
               {(CATEGORY_EVENTS[category.slug] ?? []).length === 0 && (
-                <p className="text-sm text-muted-foreground">Nenhum evento agendado no momento.</p>
+                <p className="text-sm text-muted-foreground">{t("category.agenda_empty")}</p>
               )}
             </div>
           </motion.div>
         )}
-        {activeTab === "Acervo" && (
+        {activeTab === t("category.tabs.collection") && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {category.slug === "escultura" ? (
               <>
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
                   <div>
-                    <h2 className="font-display text-2xl text-foreground">Coleção HP — Catálogo</h2>
+                    <h2 className="font-display text-2xl text-foreground">{t("category.hp_catalog_title")}</h2>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {filteredHP.length} peça{filteredHP.length !== 1 ? "s" : ""} · 4 continentes
+                      {t("category.hp_catalog_count_other", { count: filteredHP.length })}
                     </p>
                   </div>
                   {/* Continent filters */}
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => setContinentFilter(null)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                      className={`px-3 py-1.5 rounded-md text-xs transition-colors ${
                         !continentFilter
-                          ? "border-primary bg-primary/20 text-primary"
-                          : "border-border text-muted-foreground hover:text-foreground"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-secondary-foreground hover:bg-muted"
                       }`}
                     >
-                      Todas
+                      {t("category.collection_filter_all")}
                     </button>
-                    {(["Europa", "Américas", "Ásia", "África"] as const).map((c) => (
+                    {["Europa", "Américas", "Ásia", "África"].map((cont) => (
                       <button
-                        key={c}
-                        onClick={() => setContinentFilter(continentFilter === c ? null : c)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                          continentFilter === c
-                            ? CONTINENT_COLORS[c]
-                            : "border-border text-muted-foreground hover:text-foreground"
+                        key={cont}
+                        onClick={() => setContinentFilter(cont)}
+                        className={`px-3 py-1.5 rounded-md text-xs border transition-colors ${
+                          continentFilter === cont
+                            ? CONTINENT_COLORS[cont]
+                            : "bg-secondary text-secondary-foreground hover:bg-muted border-transparent"
                         }`}
                       >
-                        {c} ({HP_COLLECTION.filter((p) => p.continent === c).length})
+                        {cont}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {/* HP artwork grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredHP.map((piece, i) => (
-                    <motion.button
+                    <motion.div
                       key={piece.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.04 }}
+                      transition={{ delay: i * 0.05 }}
                       onClick={() => setSelectedPiece(piece)}
-                      className="text-left rounded-xl border border-border bg-secondary/30 hover:bg-secondary/60 hover:border-primary/30 transition-all group p-5 space-y-3"
+                      className="glass-panel rounded-xl overflow-hidden cursor-pointer group hover:border-primary/40 transition-all duration-300"
                     >
-                      {/* Thumbnail */}
-                      <div className="aspect-[4/3] rounded-lg overflow-hidden bg-secondary/60 flex items-center justify-center">
+                      <div className="aspect-[4/3] bg-secondary relative overflow-hidden">
                         {piece.images.thumbnail ? (
                           <img
                             src={piece.images.thumbnail}
-                            alt={piece.title}
+                            alt={t("artwork.photo_alt", { title: piece.title, n: 1 })}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
                           />
                         ) : (
-                          <Gem className="w-7 h-7 text-primary/40" />
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Gem className="w-8 h-8 text-muted-foreground/40" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                          <Eye className="w-6 h-6 text-foreground" />
+                        </div>
+                        {piece.continent && (
+                          <div className={`absolute top-2 right-2 px-2 py-0.5 rounded-full text-xs border ${CONTINENT_COLORS[piece.continent] ?? "border-border bg-secondary text-foreground"}`}>
+                            {piece.continent}
+                          </div>
                         )}
                       </div>
-                      {/* Continent badge */}
-                      <Badge variant="outline" className={`text-[10px] ${CONTINENT_COLORS[piece.continent]}`}>
-                        <Globe className="w-3 h-3 mr-1" />
-                        {piece.origin}
-                      </Badge>
-                      <h3 className="font-display text-base text-foreground group-hover:text-primary transition-colors leading-tight">
-                        {piece.title}
-                      </h3>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{piece.description_commercial}</p>
-                      <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground/70 pt-1 border-t border-border/50">
-                        <span>{piece.period}</span>
-                        <span>{piece.dimensions}</span>
-                      </div>
-                      {/* Theme pills */}
-                      <div className="flex gap-1.5 flex-wrap">
-                        {piece.themes.map((t) => (
-                          <span key={t} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
-                            {t}
+                      <div className="p-4">
+                        <h3 className="font-display text-sm text-foreground leading-tight">{piece.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-1">{piece.origin} · {piece.period}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{piece.description_commercial}</p>
+                        {piece.themes[0] && (
+                          <span className="inline-block mt-2 text-xs text-primary/80 bg-primary/10 px-2 py-0.5 rounded-full">
+                            {piece.themes[0]}
                           </span>
-                        ))}
+                        )}
                       </div>
-                    </motion.button>
+                    </motion.div>
                   ))}
                 </div>
 
                 {/* CTA */}
-                <div className="mt-10 rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 text-center space-y-3">
-                  <Gem className="w-7 h-7 text-primary mx-auto" />
-                  <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                    Interessado na aquisição do acervo completo? Solicite o catálogo reservado com fichas técnicas detalhadas.
-                  </p>
-                  <button className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
-                    Solicitar Catálogo Reservado
+                <div className="mt-12 rounded-xl border border-primary/20 bg-primary/5 p-6 text-center space-y-3">
+                  <p className="text-sm text-muted-foreground">{t("category.collection_cta_text")}</p>
+                  <button className="px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
+                    {t("category.collection_cta_btn")}
                   </button>
                 </div>
-
-                {/* Detail modal */}
-                <AnimatePresence>
-                  {selectedPiece && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
-                      onClick={() => setSelectedPiece(null)}
-                    >
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 md:p-8 space-y-5"
-                      >
-                        <button
-                          onClick={() => setSelectedPiece(null)}
-                          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-
-                        <Badge variant="outline" className={`text-xs ${CONTINENT_COLORS[selectedPiece.continent]}`}>
-                          <Globe className="w-3 h-3 mr-1" /> {selectedPiece.origin}
-                        </Badge>
-
-                        <h2 className="font-display text-2xl text-foreground">{selectedPiece.title}</h2>
-
-                        {/* Photo gallery */}
-                        {selectedPiece.images.gallery.length > 0 && (
-                          <div className={`grid gap-2 ${selectedPiece.images.gallery.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
-                            {selectedPiece.images.gallery.slice(0, 4).map((img, gi) => (
-                              <div key={gi} className="aspect-[4/3] rounded-lg overflow-hidden bg-secondary/60">
-                                <img
-                                  src={img}
-                                  alt={`${selectedPiece.title} — foto ${gi + 1}`}
-                                  className="w-full h-full object-cover"
-                                  loading="lazy"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Metadata grid */}
-                        <div className="grid grid-cols-2 gap-3 text-sm">
-                          <div className="flex items-start gap-2">
-                            <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-                            <div><span className="text-muted-foreground">Período</span><p className="text-foreground">{selectedPiece.period}</p></div>
-                          </div>
-                          <div className="flex items-start gap-2">
-                            <Ruler className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-                            <div><span className="text-muted-foreground">Dimensões</span><p className="text-foreground">{selectedPiece.dimensions}</p></div>
-                          </div>
-                          <div className="flex items-start gap-2 col-span-2">
-                            <Layers className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-                            <div><span className="text-muted-foreground">Materiais</span><p className="text-foreground">{selectedPiece.materials.join(", ")}</p></div>
-                          </div>
-                        </div>
-
-                        {/* Descriptions */}
-                        <div className="space-y-4 border-t border-border pt-4">
-                          <div>
-                            <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Descrição Comercial</h4>
-                            <p className="text-sm text-foreground leading-relaxed">{selectedPiece.description_commercial}</p>
-                          </div>
-                          <div>
-                            <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Contexto Cultural</h4>
-                            <p className="text-sm text-muted-foreground leading-relaxed">{selectedPiece.cultural_context}</p>
-                          </div>
-                        </div>
-
-                        {/* Provenance */}
-                        <div className="border-t border-border pt-4">
-                          <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Proveniência</h4>
-                          <p className="text-sm text-foreground">{selectedPiece.provenance}</p>
-                        </div>
-
-                        {selectedPiece.conservation_notes && (
-                          <div className="rounded-lg bg-secondary/50 p-4">
-                            <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Conservação</h4>
-                            <p className="text-sm text-muted-foreground">{selectedPiece.conservation_notes}</p>
-                          </div>
-                        )}
-
-                        {selectedPiece.sources && selectedPiece.sources.length > 0 && (
-                          <div className="rounded-lg bg-secondary/50 p-4">
-                            <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Fontes</h4>
-                            <ul className="space-y-1">
-                              {selectedPiece.sources.map((src) => (
-                                <li key={src}>
-                                  <a
-                                    href={src}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-xs text-primary hover:underline break-all"
-                                  >
-                                    {src}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-
-                        {/* Themes */}
-                        <div className="flex gap-2 flex-wrap">
-                          {selectedPiece.themes.map((t) => (
-                            <span key={t} className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">{t}</span>
-                          ))}
-                        </div>
-
-                        {/* Cross-link to transmedia */}
-                        <Link
-                          to="/transmidia?sala=4"
-                          onClick={() => setSelectedPiece(null)}
-                          className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 p-4 hover:bg-primary/10 transition-colors group"
-                        >
-                          <Eye className="w-5 h-5 text-primary" />
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-foreground">Ver na experiência transmídia</p>
-                            <p className="text-xs text-muted-foreground">Explore a narrativa cultural desta peça</p>
-                          </div>
-                          <ArrowLeft className="w-4 h-4 rotate-180 text-primary group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </>
             ) : (
-              <>
-                <h2 className="font-display text-2xl text-foreground mb-6">Acervo / Obras</h2>
-                <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
-                  <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
-                  <p className="text-sm text-muted-foreground">
-                    Acervo em construção — obras em breve.
-                  </p>
-                </div>
-              </>
+              <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
+                <Gem className="w-8 h-8 text-muted-foreground/40 mb-3" />
+                <h3 className="font-display text-lg text-foreground mb-2">{t("category.collection_empty_heading")}</h3>
+                <p className="text-sm text-muted-foreground">{t("category.collection_empty_text")}</p>
+              </div>
             )}
           </motion.div>
         )}
-        {activeTab === "Participar" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl">
-            <h2 className="font-display text-2xl text-foreground mb-4">Participar</h2>
-            <p className="text-muted-foreground leading-relaxed mb-6">
-              Artistas, coletivos e projetos independentes podem submeter propostas para integrar o eixo de {category.name} da Egrégora.
+        {activeTab === t("category.tabs.participate") && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-xl">
+            <h2 className="font-display text-2xl text-foreground mb-4">{t("category.participate_heading")}</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              {t("category.participate_text", { name: category.name })}
             </p>
-            <button className="px-6 py-3 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
-              Submeter proposta
+            <button className="mt-6 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
+              {t("category.participate_btn")}
             </button>
           </motion.div>
         )}
       </div>
 
-      <ArtistModal artist={selectedArtist} onClose={() => setSelectedArtist(null)} />
+      {/* Piece detail modal */}
+      <AnimatePresence>
+        {selectedPiece && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-background/90 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setSelectedPiece(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-panel rounded-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between p-6 border-b border-border">
+                <h2 className="font-display text-2xl text-foreground">{selectedPiece.title}</h2>
+                <button onClick={() => setSelectedPiece(null)} className="p-2 rounded-lg hover:bg-secondary transition-colors">
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+                {/* Gallery thumbnails */}
+                <div className="p-4 space-y-3">
+                  <div className="aspect-square bg-secondary rounded-xl overflow-hidden">
+                    {selectedPiece.images.thumbnail ? (
+                      <img
+                        src={selectedPiece.images.thumbnail}
+                        alt={t("artwork.photo_alt", { title: selectedPiece.title, n: 1 })}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Gem className="w-10 h-10 text-muted-foreground/30" />
+                      </div>
+                    )}
+                  </div>
+                  {selectedPiece.images.gallery && selectedPiece.images.gallery.length > 1 && (
+                    <div className="grid grid-cols-4 gap-2">
+                      {selectedPiece.images.gallery.slice(0, 4).map((img, i) => (
+                        <div key={i} className="aspect-square rounded-lg overflow-hidden bg-secondary">
+                          <img
+                            src={img}
+                            alt={t("artwork.photo_alt", { title: selectedPiece.title, n: i + 1 })}
+                            className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Transmedia link */}
+                  <Link
+                    to={`/transmidia?sala=4`}
+                    className="flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 p-3 hover:bg-primary/10 transition-colors group"
+                  >
+                    <Globe className="w-4 h-4 text-primary" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-foreground">{t("category.transmedia_link")}</p>
+                      <p className="text-xs text-muted-foreground truncate">{t("category.transmedia_link_sub")}</p>
+                    </div>
+                    <ArrowLeft className="w-4 h-4 text-primary rotate-180 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+
+                {/* Info */}
+                <div className="p-6 space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{t("artwork.artist")}</span>
+                      <span className="text-foreground">{selectedPiece.artist}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{t("artwork.origin")}</span>
+                      <span className="text-foreground">{selectedPiece.origin}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{t("artwork.period")}</span>
+                      <span className="text-foreground">{selectedPiece.period}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{t("artwork.dimensions")}</span>
+                      <span className="text-foreground text-right">{selectedPiece.dimensions}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{t("artwork.materials")}</span>
+                      <span className="text-foreground text-right">{selectedPiece.materials.join(", ")}</span>
+                    </div>
+                    {selectedPiece.continent && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">{t("artwork.continent")}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded-full border ${CONTINENT_COLORS[selectedPiece.continent] ?? ""}`}>
+                          {selectedPiece.continent}
+                        </span>
+                      </div>
+                    )}
+                    {selectedPiece.themes[0] && (
+                      <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">{t("artwork.theme")}</span>
+                        <span className="text-foreground">{selectedPiece.themes[0]}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Narrative description */}
+                  <div className="border-t border-border pt-4">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {selectedPiece.description_narrative}
+                    </p>
+                  </div>
+
+                  {/* Cultural context */}
+                  <div className="rounded-lg bg-secondary/50 p-4 space-y-2">
+                    <h4 className="text-xs font-medium text-foreground uppercase tracking-wider">{t("artwork.cultural_context")}</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{selectedPiece.cultural_context}</p>
+                  </div>
+
+                  {/* Provenance */}
+                  <div className="space-y-1">
+                    <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("artwork.provenance")}</h4>
+                    <p className="text-xs text-muted-foreground">{selectedPiece.provenance}</p>
+                  </div>
+
+                  {/* Conservation */}
+                  {selectedPiece.conservation_notes && (
+                    <div className="space-y-1">
+                      <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("artwork.conservation")}</h4>
+                      <p className="text-xs text-muted-foreground">{selectedPiece.conservation_notes}</p>
+                    </div>
+                  )}
+
+                  {/* Sources */}
+                  {selectedPiece.sources && selectedPiece.sources.length > 0 && (
+                    <div className="space-y-1">
+                      <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("artwork.sources")}</h4>
+                      <ul className="space-y-0.5">
+                        {selectedPiece.sources.map((src) => (
+                          <li key={src}>
+                            <a
+                              href={src}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-primary hover:underline break-all"
+                            >
+                              {src}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <SiteFooter />
       </div>
     </div>
