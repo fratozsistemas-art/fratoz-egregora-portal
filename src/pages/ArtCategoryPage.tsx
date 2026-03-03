@@ -58,11 +58,8 @@ const ArtCategoryPage = () => {
       <SiteHeader />
 
       {/* Hero */}
-      <section className="relative w-full h-[60vh] min-h-[420px] flex items-end overflow-hidden">
-        {/* Blurred background fill */}
-        <img src={category.heroImage} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-30" loading="lazy" />
-        {/* Sharp artwork centered */}
-        <img src={category.heroImage} alt={category.name} className="absolute inset-0 w-full h-full object-contain object-center opacity-50" loading="lazy" />
+      <section className="relative w-full h-[50vh] min-h-[360px] flex items-end overflow-hidden">
+        <img src={category.heroImage} alt={category.name} className="absolute inset-0 w-full h-full object-cover scale-125 opacity-40" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         <div className="relative z-10 max-w-5xl mx-auto w-full px-6 pb-10">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
@@ -320,9 +317,9 @@ const ArtCategoryPage = () => {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {/* Featured work — spans 2 columns */}
               {category.featuredWork && (
-                <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[2/1]">
+                <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[3/4]">
                   {category.featuredWorkImage && (
-                    <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-contain p-2" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
                   <div className="relative z-10 p-5">
