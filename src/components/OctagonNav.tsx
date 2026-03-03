@@ -8,6 +8,7 @@ import ZodiacConstellations from "./ZodiacConstellations";
 
 const OctagonNav = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [centerHovered, setCenterHovered] = useState(false);
   const navigate = useNavigate();
 
@@ -124,7 +125,7 @@ const OctagonNav = () => {
             const y1 = 50 - Math.sin(rad) * 50;
             const x2 = 50 + Math.cos(rad) * 50;
             const y2 = 50 + Math.sin(rad) * 50;
-            const isHovered = hoveredIndex === index;
+            const isHovered = hoveredIndex === index || focusedIndex === index;
             return (
               <linearGradient key={index} id={`seg-grad-${index}`} x1={`${x1}%`} y1={`${y1}%`} x2={`${x2}%`} y2={`${y2}%`}>
                 <stop offset="0%" stopColor={colors[index]} stopOpacity={isHovered ? 1 : 0.6} />
@@ -238,20 +239,24 @@ const OctagonNav = () => {
         {/* Segments — 3D pyramid sections */}
         {segments.map(({ cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle, index }) => {
           const isHov = hoveredIndex === index;
+          const isFoc = focusedIndex === index;
+          const isActive = isHov || isFoc;
           const segColors = ["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"];
           return (
             <g
               key={cat.id}
-              className="cursor-pointer"
+              className="cursor-pointer outline-none"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
+              onFocus={(e) => { if (e.currentTarget === e.target) setFocusedIndex(index); }}
+              onBlur={() => setFocusedIndex(null)}
               onClick={() => navigate(`/${cat.slug}`)}
               role="button"
               tabIndex={0}
               aria-label={`Explorar ${cat.name}`}
               onKeyDown={(e) => e.key === "Enter" && navigate(`/${cat.slug}`)}
               style={{
-                transform: isHov ? `scale(1.04)` : "scale(1)",
+                transform: isActive ? `scale(1.04)` : "scale(1)",
                 transformOrigin: `${cx}px ${cy}px`,
                 transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
               }}
@@ -260,38 +265,50 @@ const OctagonNav = () => {
               <path
                 d={pathData}
                 fill={`url(#seg-grad-${index})`}
-                stroke="hsl(240 6% 10%)"
-                strokeWidth="0.8"
+                stroke={isFoc ? segColors[index] : "hsl(240 6% 10%)"}
+                strokeWidth={isFoc ? "2" : "0.8"}
                 className="transition-all duration-300"
                 style={{
-                  filter: isHov
+                  filter: isActive
                     ? `brightness(1.4) drop-shadow(0 0 18px rgba(123,66,217,0.4)) drop-shadow(0 0 6px ${segColors[index]}88)`
                     : "brightness(0.9)",
                   transition: "filter 0.4s ease",
                 }}
               />
+              {/* Focus ring — visible glow outline when navigating by keyboard */}
+              {isFoc && (
+                <path
+                  d={pathData}
+                  fill="none"
+                  stroke={segColors[index]}
+                  strokeWidth="3"
+                  strokeOpacity="0.6"
+                  className="pointer-events-none"
+                  style={{ filter: `drop-shadow(0 0 8px ${segColors[index]}) drop-shadow(0 0 16px ${segColors[index]}66)` }}
+                />
+              )}
               {/* Top bevel — light edge (outer rim catches light) */}
               <path
                 d={topBevel}
-                fill={isHov ? "hsla(0,0%,100%,0.18)" : "hsla(0,0%,100%,0.08)"}
+                fill={isActive ? "hsla(0,0%,100%,0.18)" : "hsla(0,0%,100%,0.08)"}
                 className="pointer-events-none transition-all duration-300"
               />
               {/* Bottom bevel — shadow edge (inner rim in shadow) */}
               <path
                 d={bottomBevel}
-                fill={isHov ? "hsla(0,0%,0%,0.25)" : "hsla(0,0%,0%,0.15)"}
+                fill={isActive ? "hsla(0,0%,0%,0.25)" : "hsla(0,0%,0%,0.15)"}
                 className="pointer-events-none transition-all duration-300"
               />
               {/* Left bevel — highlight */}
               <path
                 d={leftBevel}
-                fill={isHov ? "hsla(0,0%,100%,0.14)" : "hsla(0,0%,100%,0.05)"}
+                fill={isActive ? "hsla(0,0%,100%,0.14)" : "hsla(0,0%,100%,0.05)"}
                 className="pointer-events-none transition-all duration-300"
               />
               {/* Right bevel — shadow */}
               <path
                 d={rightBevel}
-                fill={isHov ? "hsla(0,0%,0%,0.2)" : "hsla(0,0%,0%,0.1)"}
+                fill={isActive ? "hsla(0,0%,0%,0.2)" : "hsla(0,0%,0%,0.1)"}
                 className="pointer-events-none transition-all duration-300"
               />
               {/* Segment divider line — crisp edge */}
@@ -301,7 +318,7 @@ const OctagonNav = () => {
                   const iS = getPoint(index * 45 - 22.5, innerR);
                   return `M ${oS.x},${oS.y} L ${iS.x},${iS.y}`;
                 })()}
-                stroke={isHov ? "hsla(0,0%,100%,0.15)" : "hsla(0,0%,100%,0.06)"}
+                stroke={isActive ? "hsla(0,0%,100%,0.15)" : "hsla(0,0%,100%,0.06)"}
                 strokeWidth="1"
                 className="pointer-events-none transition-all duration-300"
               />
@@ -310,13 +327,13 @@ const OctagonNav = () => {
                 y={labelPos.y}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fill={isHov ? "#fff" : "hsl(40 20% 85%)"}
+                fill={isActive ? "#fff" : "hsl(40 20% 85%)"}
                 fontSize="12"
                 fontFamily="Outfit, sans-serif"
-                fontWeight={isHov ? "600" : "400"}
+                fontWeight={isActive ? "600" : "400"}
                 className="pointer-events-none select-none transition-all duration-200"
                 style={{
-                  textShadow: isHov ? "0 2px 6px rgba(0,0,0,0.7)" : "0 1px 3px rgba(0,0,0,0.4)",
+                  textShadow: isActive ? "0 2px 6px rgba(0,0,0,0.7)" : "0 1px 3px rgba(0,0,0,0.4)",
                 }}
               >
                 {cat.name}
