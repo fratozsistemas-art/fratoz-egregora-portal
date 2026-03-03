@@ -23,8 +23,8 @@ const SiteFooter = () => {
         </div>
         <div>
           <h4 className="font-body text-sm font-semibold text-foreground mb-3 uppercase tracking-wider">Contato</h4>
-          <p className="text-sm text-muted-foreground">contato@fratozegregora.art</p>
-          <p className="text-sm text-muted-foreground mt-1">São Paulo, Brasil</p>
+          <p className="text-sm text-muted-foreground">info@fratozegregora.com</p>
+          <p className="text-sm text-muted-foreground mt-1">Brasília — DF, Brasil</p>
         </div>
       </div>
       <div className="max-w-5xl mx-auto mt-10 pt-6 border-t border-border text-center">
