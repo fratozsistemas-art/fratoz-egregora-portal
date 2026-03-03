@@ -149,16 +149,55 @@ const ArtCategoryPage = () => {
             {/* HP Collection — Escultura — COMMERCIAL FOCUS */}
             {category.slug === "escultura" && (
               <div className="mt-12 space-y-10">
-                {/* Header */}
-                <div className="flex items-center gap-3">
-                  <Gem className="w-6 h-6 text-primary" />
-                  <div>
-                    <h2 className="font-display text-2xl text-foreground tracking-wide uppercase">Coleção HP — Oportunidade de Aquisição</h2>
-                    <Badge variant="outline" className="mt-2 text-xs border-primary/40 text-primary">
-                      Para Colecionadores e Curadores
-                    </Badge>
+                {/* Header with stats */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Gem className="w-6 h-6 text-primary" />
+                    <div>
+                      <h2 className="font-display text-2xl text-foreground tracking-wide uppercase">Coleção HP — Oportunidade de Aquisição</h2>
+                      <Badge variant="outline" className="mt-2 text-xs border-primary/40 text-primary">
+                        Para Colecionadores e Curadores
+                      </Badge>
+                    </div>
+                  </div>
+                  <p className="text-lg text-foreground font-medium">20 peças históricas · 4 continentes · Dupla curadoria</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
+                    Este é um acervo disponível para aquisição em lote fechado. Para colecionadores e curadores interessados em incorporar um núcleo curatorial sofisticado a acervos institucionais ou privados.
+                  </p>
+
+                  {/* CTA buttons */}
+                  <div className="flex flex-wrap gap-3 pt-2">
+                    <button className="px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
+                      Explorar o Acervo Completo
+                    </button>
+                    <button className="px-6 py-2.5 rounded-lg border border-border text-foreground font-body text-sm hover:bg-secondary transition-colors">
+                      Agendar Visita Presencial
+                    </button>
+                    <button className="px-6 py-2.5 rounded-lg border border-border text-foreground font-body text-sm hover:bg-secondary transition-colors">
+                      Baixar Catálogo Detalhado
+                    </button>
                   </div>
                 </div>
+
+                {/* Cross-link banner to transmedia experience */}
+                <Link
+                  to="/transmidia?sala=4"
+                  className="flex items-center gap-4 rounded-xl border border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5 p-5 hover:from-primary/10 hover:to-accent/10 transition-all group"
+                >
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <Eye className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">Experiência Cultural</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      Você também pode explorar a Coleção HP como experiência transmídia em nosso museu digital.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1 text-sm text-primary font-medium">
+                    <span className="hidden sm:inline">Visitar Sala HP</span>
+                    <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
 
                 {/* Apresentação */}
                 <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
@@ -241,18 +280,6 @@ const ArtCategoryPage = () => {
                     </p>
                   </div>
                 </div>
-
-                {/* Cross-link to cultural experience */}
-                <Link
-                  to="/transmidia?sala=4"
-                  className="flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 p-5 hover:bg-primary/10 transition-colors group"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-foreground">Explorar a experiência cultural na Sala HP</p>
-                    <p className="text-xs text-muted-foreground mt-1">Diálogos Entre Civilizações — museu digital interativo</p>
-                  </div>
-                  <ArrowLeft className="w-5 h-5 text-primary rotate-180 group-hover:translate-x-1 transition-transform" />
-                </Link>
 
                 {/* CTA para Colecionadores */}
                 <div className="rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 md:p-8 text-center space-y-4">

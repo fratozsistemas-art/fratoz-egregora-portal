@@ -265,17 +265,18 @@ const SalaHPIntro = ({ roomObras }: { roomObras: TransmidiaObra[] }) => (
     <div className="rounded-xl border border-primary/20 bg-background/40 backdrop-blur-sm p-6 space-y-4">
       <div className="flex items-center gap-3">
         <Gem className="w-5 h-5 text-primary" />
-        <h3 className="font-display text-xl text-foreground">Diálogos Entre Civilizações</h3>
+        <h3 className="font-display text-xl text-foreground">Sala HP — Diálogos Entre Civilizações</h3>
       </div>
+      <p className="text-lg text-foreground font-medium">
+        Uma jornada por 5 séculos · 4 continentes · 8 tradições culturais
+      </p>
       <p className="text-sm text-muted-foreground leading-relaxed">
-        Uma jornada educativa através de vinte peças que representam quatro continentes e quatro dimensões fundamentais 
-        da experiência humana: <strong className="text-foreground">Poder</strong>, <strong className="text-foreground">Espiritualidade</strong>, <strong className="text-foreground">Proteção</strong> e <strong className="text-foreground">Beleza</strong>. 
-        Cada obra é um fragmento de uma conversa milenar entre civilizações que, apesar de separadas por oceanos e séculos, 
-        expressaram seus valores mais profundos através das mesmas linguagens simbólicas.
+        Nesta sala, a Coleção HP revela conexões inesperadas entre civilizações distantes. Do Modernismo brasileiro aos Bronzes do Benin, 
+        da porcelana Qing aos amuletos tibetanos — cada peça conversa com as outras através do tempo e do espaço.
       </p>
       <p className="text-sm text-muted-foreground leading-relaxed">
         Explore os agrupamentos temáticos abaixo e descubra como culturas da Europa, Américas, Ásia e África 
-        dialogam sobre os grandes temas da condição humana.
+        dialogam sobre os grandes temas da condição humana: <strong className="text-foreground">Poder</strong>, <strong className="text-foreground">Espiritualidade</strong>, <strong className="text-foreground">Proteção</strong> e <strong className="text-foreground">Beleza</strong>.
       </p>
       <div className="flex gap-4 pt-2 flex-wrap">
         {(["Europa", "Américas", "Ásia", "África"] as const).map((cont) => {
@@ -291,14 +292,19 @@ const SalaHPIntro = ({ roomObras }: { roomObras: TransmidiaObra[] }) => (
       </div>
     </div>
 
-    {/* Cross-link to commercial page */}
+    {/* Cross-link banner to commercial page */}
     <Link
       to="/categoria/escultura"
-      className="flex items-center justify-between rounded-lg border border-border bg-secondary/30 p-4 hover:bg-secondary/50 transition-colors group"
+      className="flex items-center gap-4 rounded-xl border border-border bg-gradient-to-r from-secondary/50 to-accent/5 p-4 hover:from-secondary/70 hover:to-accent/10 transition-all group"
     >
-      <div>
-        <p className="text-xs text-muted-foreground">Interessado na aquisição?</p>
-        <p className="text-sm font-medium text-foreground">Ver catálogo completo na página de Escultura →</p>
+      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+        <Gem className="w-5 h-5 text-primary" />
+      </div>
+      <div className="flex-1">
+        <p className="text-sm font-medium text-foreground">Coleção disponível para aquisição</p>
+        <p className="text-xs text-muted-foreground mt-0.5">
+          Para colecionadores — ver informações de aquisição em /escultura
+        </p>
       </div>
       <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
     </Link>
