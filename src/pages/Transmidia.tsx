@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { ArrowLeft, Grid3X3, Eye, Search, X, ZoomIn, ChevronRight, Play, Map, Gem, Globe, Sparkles, Shield, Crown, Heart } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
@@ -18,40 +19,38 @@ const ROOM_COLORS = [
   "from-egregora-green/20 to-egregora-teal/20",
   "from-amber-900/20 to-yellow-700/10",
 ];
-const ROOM_NAMES = ["Sala Memória", "Sala Transformação", "Sala Cosmos", "Sala HP — Diálogos Entre Civilizações"];
 
-const HP_THEME_META: Record<HpTheme, { icon: React.ElementType; color: string; description: string }> = {
-  "Poder": {
-    icon: Crown,
-    color: "text-amber-400",
-    description: "Objetos que simbolizam autoridade, governança e prestígio através das civilizações. Do cetro europeu ao selo imperial asiático, o poder se manifesta em formas distintas mas universais.",
-  },
-  "Espiritualidade": {
-    icon: Sparkles,
-    color: "text-violet-400",
-    description: "Peças que conectam o humano ao transcendente. Representações de devoção, ritual e busca pelo sagrado em diferentes tradições filosóficas e religiosas do mundo.",
-  },
-  "Proteção": {
-    icon: Shield,
-    color: "text-emerald-400",
-    description: "Artefatos criados para guardar, defender e preservar. De amuletos a armaduras cerimoniais, a arte da proteção revela os medos e esperanças de cada cultura.",
-  },
-  "Beleza": {
-    icon: Heart,
-    color: "text-rose-400",
-    description: "A busca universal pela harmonia estética. Peças que celebram a forma, a proporção e o ornamento como expressões do ideal de beleza de cada civilização.",
-  },
+const HP_THEME_ICONS: Record<HpTheme, React.ElementType> = {
+  "Poder": Crown,
+  "Espiritualidade": Sparkles,
+  "Proteção": Shield,
+  "Beleza": Heart,
+};
+
+const HP_THEME_COLORS: Record<HpTheme, string> = {
+  "Poder": "text-amber-400",
+  "Espiritualidade": "text-violet-400",
+  "Proteção": "text-emerald-400",
+  "Beleza": "text-rose-400",
 };
 
 const HP_THEMES: HpTheme[] = ["Poder", "Espiritualidade", "Proteção", "Beleza"];
 
 const Transmidia = () => {
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const [mode, setMode] = useState<"visita" | "colecao">("visita");
   const [selectedObra, setSelectedObra] = useState<TransmidiaObra | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterTheme, setFilterTheme] = useState<string | null>(null);
   const [activeRoom, setActiveRoom] = useState(1);
+
+  const ROOM_NAMES = [
+    t("transmidia.room_names.1"),
+    t("transmidia.room_names.2"),
+    t("transmidia.room_names.3"),
+    t("transmidia.room_names.4"),
+  ];
 
   // Handle deep-link ?sala=4
   useEffect(() => {
@@ -80,11 +79,11 @@ const Transmidia = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
         <div className="relative z-10">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Voltar à Home
+            <ArrowLeft className="w-4 h-4" /> {t("transmidia.back_home")}
           </Link>
-          <h1 className="font-display text-4xl md:text-6xl gradient-egregora-text mb-4">Transmídia</h1>
+          <h1 className="font-display text-4xl md:text-6xl gradient-egregora-text mb-4">{t("transmidia.page_title")}</h1>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            O núcleo central da Egrégora. Uma experiência de museu digital onde todas as linguagens se encontram.
+            {t("transmidia.page_desc")}
           </p>
 
           {/* Mode toggle */}
@@ -93,13 +92,13 @@ const Transmidia = () => {
               onClick={() => setMode("visita")}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-body transition-all ${mode === "visita" ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
             >
-              <Eye className="w-4 h-4" /> Modo Visita
+              <Eye className="w-4 h-4" /> {t("transmidia.mode_visit")}
             </button>
             <button
               onClick={() => setMode("colecao")}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-body transition-all ${mode === "colecao" ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
             >
-              <Grid3X3 className="w-4 h-4" /> Modo Coleção
+              <Grid3X3 className="w-4 h-4" /> {t("transmidia.mode_collection")}
             </button>
           </div>
         </div>
@@ -113,14 +112,14 @@ const Transmidia = () => {
               {/* Room map */}
               <div className="flex items-center justify-center gap-2 mb-8 flex-wrap">
                 <Map className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground mr-2">Planta:</span>
+                <span className="text-sm text-muted-foreground mr-2">{t("transmidia.floor_plan")}:</span>
                 {rooms.map((room) => (
                   <button
                     key={room}
                     onClick={() => setActiveRoom(room)}
                     className={`px-4 py-2 rounded-lg text-sm transition-all ${activeRoom === room ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
                   >
-                    {room === 4 ? "Sala HP" : ROOM_NAMES[room - 1]}
+                    {room === 4 ? t("transmidia.sala_hp_label") : ROOM_NAMES[room - 1]}
                   </button>
                 ))}
               </div>
@@ -128,18 +127,22 @@ const Transmidia = () => {
               {/* Gallery room */}
               <div className={`relative rounded-2xl border border-border bg-gradient-to-br ${ROOM_COLORS[activeRoom - 1]} p-8 min-h-[500px]`}>
                 <h2 className="font-display text-2xl text-foreground mb-2">{ROOM_NAMES[activeRoom - 1]}</h2>
-                <p className="text-sm text-muted-foreground mb-8">Sala {activeRoom} · {roomObras.length} obras</p>
+                <p className="text-sm text-muted-foreground mb-8">
+                  {t("transmidia.room_label", { n: activeRoom })} · {t("transmidia.works_count", { n: roomObras.length })}
+                </p>
 
                 {/* Sala HP — Cultural/Educational intro */}
-                {activeRoom === 4 && <SalaHPIntro roomObras={roomObras} />}
+                {activeRoom === 4 && (
+                  <SalaHPIntro roomObras={roomObras} t={t} />
+                )}
 
                 {/* Thematic grouping for Sala HP */}
                 {activeRoom === 4 ? (
-                  <SalaHPThematicGrid obras={roomObras} onSelectObra={setSelectedObra} />
+                  <SalaHPThematicGrid obras={roomObras} onSelectObra={setSelectedObra} t={t} />
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {roomObras.map((obra, i) => (
-                      <ObraCard key={obra.id} obra={obra} index={i} onClick={() => setSelectedObra(obra)} />
+                      <ObraCard key={obra.id} obra={obra} index={i} onClick={() => setSelectedObra(obra)} t={t} />
                     ))}
                   </div>
                 )}
@@ -153,7 +156,7 @@ const Transmidia = () => {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
                     type="text"
-                    placeholder="Buscar obra ou artista..."
+                    placeholder={t("transmidia.search_placeholder")}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-secondary border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -164,7 +167,7 @@ const Transmidia = () => {
                     onClick={() => setFilterTheme(null)}
                     className={`px-3 py-1.5 rounded-md text-xs transition-colors ${!filterTheme ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground hover:bg-muted"}`}
                   >
-                    Todos
+                    {t("transmidia.all_themes")}
                   </button>
                   {themes.map((theme) => (
                     <button
@@ -190,7 +193,11 @@ const Transmidia = () => {
                     className="glass-panel rounded-xl overflow-hidden cursor-pointer group hover:border-primary/40 transition-all duration-300"
                   >
                     <div className="aspect-square bg-secondary flex items-center justify-center">
-                      <span className="text-muted-foreground text-xs">Imagem</span>
+                      {obra.image ? (
+                        <img src={obra.image} alt={obra.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <span className="text-muted-foreground text-xs">{t("transmidia.img_placeholder")}</span>
+                      )}
                     </div>
                     <div className="p-3">
                       <h3 className="font-display text-sm text-foreground truncate">{obra.title}</h3>
@@ -201,7 +208,7 @@ const Transmidia = () => {
                 ))}
               </div>
               {filteredObras.length === 0 && (
-                <p className="text-center text-muted-foreground py-16">Nenhuma obra encontrada.</p>
+                <p className="text-center text-muted-foreground py-16">{t("transmidia.no_results")}</p>
               )}
             </motion.div>
           )}
@@ -216,6 +223,7 @@ const Transmidia = () => {
             relatedObras={relatedObras}
             onClose={() => setSelectedObra(null)}
             onSelectObra={setSelectedObra}
+            t={t}
           />
         )}
       </AnimatePresence>
@@ -228,7 +236,9 @@ const Transmidia = () => {
 
 /* ─── Sub-components ─── */
 
-const ObraCard = ({ obra, index, onClick }: { obra: TransmidiaObra; index: number; onClick: () => void }) => (
+type TFunc = (key: string, opts?: Record<string, unknown>) => string;
+
+const ObraCard = ({ obra, index, onClick, t }: { obra: TransmidiaObra; index: number; onClick: () => void; t: TFunc }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
@@ -242,7 +252,7 @@ const ObraCard = ({ obra, index, onClick }: { obra: TransmidiaObra; index: numbe
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center gap-2">
           <Gem className="w-6 h-6 text-muted-foreground/50" />
-          <span className="text-xs text-muted-foreground">Imagem reservada</span>
+          <span className="text-xs text-muted-foreground">{t("transmidia.img_reserved")}</span>
         </div>
       )}
       <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -252,7 +262,8 @@ const ObraCard = ({ obra, index, onClick }: { obra: TransmidiaObra; index: numbe
     <div className="p-4">
       <h3 className="font-display text-sm text-foreground">{obra.title}</h3>
       <p className="text-xs text-muted-foreground mt-1">
-        {obra.collection ? `Coleção ${obra.collection}` : obra.author} {obra.year > 0 && `· ${obra.year}`}
+        {obra.collection ? t("transmidia.collection_label", { name: obra.collection }) : obra.author}{" "}
+        {obra.year > 0 && `· ${obra.year}`}
       </p>
       {obra.continent && (
         <p className="text-xs text-primary/70 mt-0.5">{obra.continent}</p>
@@ -261,24 +272,22 @@ const ObraCard = ({ obra, index, onClick }: { obra: TransmidiaObra; index: numbe
   </motion.div>
 );
 
-const SalaHPIntro = ({ roomObras }: { roomObras: TransmidiaObra[] }) => (
+const SalaHPIntro = ({ roomObras, t }: { roomObras: TransmidiaObra[]; t: TFunc }) => (
   <div className="mb-10 space-y-6">
     {/* Main intro panel */}
     <div className="rounded-xl border border-primary/20 bg-background/40 backdrop-blur-sm p-6 space-y-4">
       <div className="flex items-center gap-3">
         <Gem className="w-5 h-5 text-primary" />
-        <h3 className="font-display text-xl text-foreground">Sala HP — Diálogos Entre Civilizações</h3>
+        <h3 className="font-display text-xl text-foreground">{t("transmidia.sala_intro_title")}</h3>
       </div>
       <p className="text-lg text-foreground font-medium">
-        Uma jornada por 5 séculos · 4 continentes · 8 tradições culturais
+        {t("transmidia.sala_intro_journey")}
       </p>
       <p className="text-sm text-muted-foreground leading-relaxed">
-        Nesta sala, a Coleção HP revela conexões inesperadas entre civilizações distantes. Do Modernismo brasileiro aos Bronzes do Benin, 
-        da porcelana Qing aos amuletos tibetanos — cada peça conversa com as outras através do tempo e do espaço.
+        {t("transmidia.sala_intro_p1")}
       </p>
       <p className="text-sm text-muted-foreground leading-relaxed">
-        Explore os agrupamentos temáticos abaixo e descubra como culturas da Europa, Américas, Ásia e África 
-        dialogam sobre os grandes temas da condição humana: <strong className="text-foreground">Poder</strong>, <strong className="text-foreground">Espiritualidade</strong>, <strong className="text-foreground">Proteção</strong> e <strong className="text-foreground">Beleza</strong>.
+        {t("transmidia.sala_intro_p2")}
       </p>
       <div className="flex gap-4 pt-2 flex-wrap">
         {(["Europa", "Américas", "Ásia", "África"] as const).map((cont) => {
@@ -303,9 +312,9 @@ const SalaHPIntro = ({ roomObras }: { roomObras: TransmidiaObra[] }) => (
         <Gem className="w-5 h-5 text-primary" />
       </div>
       <div className="flex-1">
-        <p className="text-sm font-medium text-foreground">Coleção disponível para aquisição</p>
+        <p className="text-sm font-medium text-foreground">{t("transmidia.sala_crosslink_label")}</p>
         <p className="text-xs text-muted-foreground mt-0.5">
-          Para colecionadores — ver informações de aquisição em /escultura
+          {t("transmidia.sala_crosslink_desc")}
         </p>
       </div>
       <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
@@ -313,29 +322,32 @@ const SalaHPIntro = ({ roomObras }: { roomObras: TransmidiaObra[] }) => (
   </div>
 );
 
-const SalaHPThematicGrid = ({ obras, onSelectObra }: { obras: TransmidiaObra[]; onSelectObra: (o: TransmidiaObra) => void }) => (
+const SalaHPThematicGrid = ({ obras, onSelectObra, t }: { obras: TransmidiaObra[]; onSelectObra: (o: TransmidiaObra) => void; t: TFunc }) => (
   <div className="space-y-10">
     {HP_THEMES.map((theme) => {
-      const meta = HP_THEME_META[theme];
-      const Icon = meta.icon;
+      const Icon = HP_THEME_ICONS[theme];
+      const color = HP_THEME_COLORS[theme];
       const themeObras = obras.filter((o) => o.hpTheme === theme);
       if (themeObras.length === 0) return null;
+
+      const themeLabel = t(`transmidia.hp_themes.${theme}`);
+      const themeDesc = t(`transmidia.hp_theme_descriptions.${theme}`);
 
       return (
         <div key={theme}>
           {/* Theme header with educational context */}
           <div className="flex items-start gap-3 mb-4">
-            <Icon className={`w-5 h-5 mt-0.5 ${meta.color}`} />
+            <Icon className={`w-5 h-5 mt-0.5 ${color}`} />
             <div>
-              <h3 className="font-display text-lg text-foreground">{theme}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mt-1">{meta.description}</p>
+              <h3 className="font-display text-lg text-foreground">{themeLabel}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed mt-1">{themeDesc}</p>
             </div>
           </div>
 
           {/* Obras grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {themeObras.map((obra, i) => (
-              <ObraCard key={obra.id} obra={obra} index={i} onClick={() => onSelectObra(obra)} />
+              <ObraCard key={obra.id} obra={obra} index={i} onClick={() => onSelectObra(obra)} t={t} />
             ))}
           </div>
         </div>
@@ -349,15 +361,27 @@ const ObraModal = ({
   relatedObras,
   onClose,
   onSelectObra,
+  t,
 }: {
   obra: TransmidiaObra;
   relatedObras: TransmidiaObra[];
   onClose: () => void;
   onSelectObra: (o: TransmidiaObra) => void;
+  t: TFunc;
 }) => {
   // Lookup enriched HP data if this is an HP piece
   const hpData = obra.collection === "HP" ? HP_COLLECTION.find((hp) => hp.id === obra.id) : null;
   const modalRef = useFocusTrap<HTMLDivElement>(true);
+
+  const ROOM_NAMES_LOCAL = [
+    t("transmidia.room_names.1"),
+    t("transmidia.room_names.2"),
+    t("transmidia.room_names.3"),
+    t("transmidia.room_names.4"),
+  ];
+
+  const hpTheme = obra.hpTheme;
+  const themeColor = hpTheme ? HP_THEME_COLORS[hpTheme] : "";
 
   return (
     <motion.div
@@ -389,7 +413,7 @@ const ObraModal = ({
             {obra.image ? (
               <img src={obra.image} alt={obra.title} className="w-full h-full object-cover" />
             ) : (
-              <span className="text-muted-foreground">Visualização da obra</span>
+              <span className="text-muted-foreground">{t("transmidia.img_preview")}</span>
             )}
           </div>
 
@@ -398,63 +422,63 @@ const ObraModal = ({
             <div className="space-y-2">
               {hpData?.artist && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Artista</span>
+                  <span className="text-muted-foreground">{t("artwork.artist")}</span>
                   <span className="text-foreground">{hpData.artist}</span>
                 </div>
               )}
               {!hpData?.artist && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Artista</span>
+                  <span className="text-muted-foreground">{t("artwork.artist")}</span>
                   <span className="text-foreground">{obra.author}</span>
                 </div>
               )}
               {hpData && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Origem</span>
+                  <span className="text-muted-foreground">{t("artwork.origin")}</span>
                   <span className="text-foreground">{hpData.origin}</span>
                 </div>
               )}
               {hpData && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Período</span>
+                  <span className="text-muted-foreground">{t("artwork.period")}</span>
                   <span className="text-foreground">{hpData.period}</span>
                 </div>
               )}
               {obra.year > 0 && !hpData && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Ano</span>
+                  <span className="text-muted-foreground">{t("artwork.year")}</span>
                   <span className="text-foreground">{obra.year}</span>
                 </div>
               )}
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{hpData ? "Materiais" : "Técnica"}</span>
+                <span className="text-muted-foreground">{hpData ? t("artwork.materials") : t("artwork.technique")}</span>
                 <span className="text-foreground text-right">{hpData ? hpData.materials.join(", ") : obra.technique}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Dimensões</span>
+                <span className="text-muted-foreground">{t("artwork.dimensions")}</span>
                 <span className="text-foreground">{obra.dimensions}</span>
               </div>
-              {obra.hpTheme && (
+              {hpTheme && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Eixo temático</span>
-                  <span className={`font-medium ${HP_THEME_META[obra.hpTheme].color}`}>{obra.hpTheme}</span>
+                  <span className="text-muted-foreground">{t("artwork.thematic_axis")}</span>
+                  <span className={`font-medium ${themeColor}`}>{t(`transmidia.hp_themes.${hpTheme}`)}</span>
                 </div>
               )}
               {obra.continent && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Continente</span>
+                  <span className="text-muted-foreground">{t("artwork.continent")}</span>
                   <span className="text-foreground">{obra.continent}</span>
                 </div>
               )}
               {!hpData && (
                 <>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Tema</span>
+                    <span className="text-muted-foreground">{t("artwork.theme")}</span>
                     <span className="text-foreground">{obra.theme}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Sala</span>
-                    <span className="text-foreground">{ROOM_NAMES[obra.room - 1]}</span>
+                    <span className="text-muted-foreground">{t("artwork.room")}</span>
+                    <span className="text-foreground">{ROOM_NAMES_LOCAL[obra.room - 1]}</span>
                   </div>
                 </>
               )}
@@ -470,7 +494,7 @@ const ObraModal = ({
             {/* Cultural context for HP pieces */}
             {hpData && (
               <div className="rounded-lg bg-secondary/50 p-4 space-y-2">
-                <h4 className="text-xs font-medium text-foreground uppercase tracking-wider">Contexto Cultural</h4>
+                <h4 className="text-xs font-medium text-foreground uppercase tracking-wider">{t("artwork.cultural_context")}</h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">{hpData.cultural_context}</p>
               </div>
             )}
@@ -478,7 +502,7 @@ const ObraModal = ({
             {/* Provenance for HP pieces */}
             {hpData && (
               <div className="space-y-1">
-                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Proveniência</h4>
+                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("artwork.provenance")}</h4>
                 <p className="text-xs text-muted-foreground">{hpData.provenance}</p>
               </div>
             )}
@@ -486,7 +510,7 @@ const ObraModal = ({
             {/* Conservation notes */}
             {hpData?.conservation_notes && (
               <div className="space-y-1">
-                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Conservação</h4>
+                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("artwork.conservation")}</h4>
                 <p className="text-xs text-muted-foreground">{hpData.conservation_notes}</p>
               </div>
             )}
@@ -494,7 +518,7 @@ const ObraModal = ({
             {/* Sources / references */}
             {hpData?.sources && hpData.sources.length > 0 && (
               <div className="space-y-1">
-                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Fontes</h4>
+                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{t("artwork.sources")}</h4>
                 <ul className="space-y-0.5">
                   {hpData.sources.map((src) => (
                     <li key={src}>
@@ -514,7 +538,7 @@ const ObraModal = ({
 
             {/* Audio guide */}
             <button className="flex items-center gap-2 text-sm text-primary hover:opacity-80 transition-opacity">
-              <Play className="w-4 h-4" /> Áudio-guia
+              <Play className="w-4 h-4" /> {t("artwork.audio_guide")}
             </button>
           </div>
         </div>
@@ -522,7 +546,7 @@ const ObraModal = ({
         {/* Transmedia connections for HP pieces */}
         {hpData && hpData.transmedia_connections.length > 0 && (
           <div className="p-6 border-t border-border">
-            <h3 className="font-display text-lg text-foreground mb-4">Diálogos na Coleção</h3>
+            <h3 className="font-display text-lg text-foreground mb-4">{t("transmidia.dialogs")}</h3>
             <div className="flex gap-4 overflow-x-auto">
               {hpData.transmedia_connections.map((connId) => {
                 const connObra = transmidiaObras.find((o) => o.id === connId);
@@ -555,7 +579,7 @@ const ObraModal = ({
         {/* Related for non-HP pieces */}
         {!hpData && relatedObras.length > 0 && (
           <div className="p-6 border-t border-border">
-            <h3 className="font-display text-lg text-foreground mb-4">Obras relacionadas</h3>
+            <h3 className="font-display text-lg text-foreground mb-4">{t("transmidia.related")}</h3>
             <div className="flex gap-4 overflow-x-auto">
               {relatedObras.map((r) => (
                 <div
@@ -567,7 +591,7 @@ const ObraModal = ({
                     {r.image ? (
                       <img src={r.image} alt={r.title} className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-muted-foreground text-xs">Img</span>
+                      <span className="text-muted-foreground text-xs">{t("transmidia.img_placeholder")}</span>
                     )}
                   </div>
                   <div className="p-2">
