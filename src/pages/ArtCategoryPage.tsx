@@ -5,9 +5,11 @@ import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Gl
 import { Link } from "react-router-dom";
 import { artCategories } from "@/data/artCategories";
 import { HP_COLLECTION, type HPArtwork } from "@/data/hp-collection";
+import { getArtistsByCategory, type Artist } from "@/data/artists";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
+import ArtistModal from "@/components/ArtistModal";
 import { Badge } from "@/components/ui/badge";
 import { Gem } from "lucide-react";
 
