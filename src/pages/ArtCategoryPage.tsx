@@ -146,13 +146,18 @@ const ArtCategoryPage = () => {
             <p className="text-muted-foreground leading-relaxed">{category.heroDescription}</p>
             <p className="text-muted-foreground leading-relaxed mt-4">{category.description}</p>
 
-            {/* HP Collection — Escultura */}
+            {/* HP Collection — Escultura — COMMERCIAL FOCUS */}
             {category.slug === "escultura" && (
               <div className="mt-12 space-y-10">
                 {/* Header */}
                 <div className="flex items-center gap-3">
                   <Gem className="w-6 h-6 text-primary" />
-                  <h2 className="font-display text-2xl text-foreground tracking-wide uppercase">Coleção HP</h2>
+                  <div>
+                    <h2 className="font-display text-2xl text-foreground tracking-wide uppercase">Coleção HP — Oportunidade de Aquisição</h2>
+                    <Badge variant="outline" className="mt-2 text-xs border-primary/40 text-primary">
+                      Para Colecionadores e Curadores
+                    </Badge>
+                  </div>
                 </div>
 
                 {/* Apresentação */}
@@ -184,18 +189,23 @@ const ArtCategoryPage = () => {
                   </p>
                 </div>
 
-                {/* Observações */}
-                <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
-                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">Observações</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Perceba a grandeza da história por trás de cada uma das peças. As descrições sucintas e as fotos singelas não fazem jus à grandeza, à beleza e à marcante presença dessas obras.
-                  </p>
+                {/* Avaliação de Mercado */}
+                <div className="rounded-xl border border-primary/30 bg-primary/5 p-6 md:p-8 space-y-5">
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">Avaliação de Mercado</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     As peças da Coleção HP têm o estilo <strong className="text-foreground">Sotheby's</strong> e <strong className="text-foreground">Christie's</strong>, líderes em obras de arte com valor histórico-etnográfico, bem como em bens de luxo. Para as obras asiáticas, as melhores casas para avaliar seriam as gigantes <strong className="text-foreground">China Guardian</strong> e <strong className="text-foreground">Poly International Auction Company</strong>.
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     Em algumas fontes indicadas para aprofundar a pesquisa sobre a história das peças, é possível perceber o valor do patrimônio oferecido. Não é uma oportunidade que costuma aparecer com frequência.
                   </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Perceba a grandeza da história por trás de cada uma das peças. As descrições sucintas e as fotos singelas não fazem jus à grandeza, à beleza e à marcante presença dessas obras.
+                  </p>
+                </div>
+
+                {/* Proveniência & Conservação */}
+                <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
+                  <h3 className="font-display text-lg text-foreground border-b border-border pb-3">Proveniência & Conservação</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     Outro ponto a ser observado diz respeito ao estado de conservação das peças. É natural que peças com décadas e séculos de existência, que passaram por diferentes acervos, tenham algumas marcas do tempo — marcas que revelam a sua história, a sua trajetória e a sua autenticidade.
                   </p>
@@ -210,7 +220,7 @@ const ArtCategoryPage = () => {
                   </div>
                 </div>
 
-                {/* Acervo */}
+                {/* O Acervo */}
                 <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
                   <h3 className="font-display text-lg text-foreground border-b border-border pb-3">O Acervo</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -222,12 +232,6 @@ const ArtCategoryPage = () => {
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     As obras selecionadas são representativas de um alto capital cultural e causam forte impacto visual e emocional. O poder simbólico do capital cultural revela-se de modo discreto e elegante, marcando profundamente o inconsciente dos ilustres convidados do anfitrião.
                   </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    A experiência estética é sempre algo que marca a memória das pessoas. A fruição de uma obra de arte é atravessada por repertórios e aprendizados adquiridos ao longo do tempo. Diante de uma obra, cada espectador mobiliza sua própria trajetória cultural, fazendo da fruição artística uma vivência singular marcante.
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Para além do exercício individual de apreciação, há também uma experiência coletiva relacionada a se estar cercado por obras de arte. As pessoas sentem-se coletivamente inebriadas pelo magnetismo emanado pela força artística e pela carga simbólica das obras dispostas em um ambiente preparado para a contemplação estética e a sensibilização sinestésica.
-                  </p>
                   <p className="text-sm text-muted-foreground/80 italic leading-relaxed border-l-2 border-primary/40 pl-4">
                     "A verdade é que algumas obras mudam o ambiente; mas outras transformam o destino."
                   </p>
@@ -236,6 +240,31 @@ const ArtCategoryPage = () => {
                       Caso haja interesse, é possível compartilhar um material com imagens e informações essenciais das obras da coleção, em caráter estritamente reservado.
                     </p>
                   </div>
+                </div>
+
+                {/* Cross-link to cultural experience */}
+                <Link
+                  to="/transmidia?sala=4"
+                  className="flex items-center justify-between rounded-xl border border-primary/20 bg-primary/5 p-5 hover:bg-primary/10 transition-colors group"
+                >
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Explorar a experiência cultural na Sala HP</p>
+                    <p className="text-xs text-muted-foreground mt-1">Diálogos Entre Civilizações — museu digital interativo</p>
+                  </div>
+                  <ArrowLeft className="w-5 h-5 text-primary rotate-180 group-hover:translate-x-1 transition-transform" />
+                </Link>
+
+                {/* CTA para Colecionadores */}
+                <div className="rounded-xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-accent/5 p-6 md:p-8 text-center space-y-4">
+                  <Gem className="w-8 h-8 text-primary mx-auto" />
+                  <h3 className="font-display text-xl text-foreground">Contato para Colecionadores</h3>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+                    Interessado na aquisição do acervo? Entre em contato para receber o catálogo completo com imagens, fichas técnicas e condições em caráter reservado.
+                  </p>
+                  <button className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-body text-sm hover:opacity-90 transition-opacity">
+                    Solicitar Catálogo Reservado
+                  </button>
+                  <p className="text-xs text-muted-foreground">Acesso restrito a compradores qualificados</p>
                 </div>
               </div>
             )}
