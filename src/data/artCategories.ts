@@ -193,7 +193,8 @@ export const artCategories: ArtCategory[] = [
   },
 ];
 
-export type HpTheme = "Poder" | "Espiritualidade" | "Proteção" | "Beleza";
+// Re-export HpTheme from shared source
+export type { HpTheme } from "./hp-collection";
 
 export interface TransmidiaObra {
   id: string;
@@ -209,7 +210,7 @@ export interface TransmidiaObra {
   image: string;
   collection?: string;
   continent?: string;
-  hpTheme?: HpTheme;
+  hpTheme?: import("./hp-collection").HpTheme;
 }
 
 const obraImages: Record<string, string> = {
@@ -219,7 +220,9 @@ const obraImages: Record<string, string> = {
   "13": obra13, "14": obra14, "15": obra15, "16": obra16,
 };
 
-export const transmidiaObras: TransmidiaObra[] = [
+import { hpToTransmidiaObras } from "./hp-collection";
+
+const baseObras: TransmidiaObra[] = [
   { id: "1", title: "Fragmentos do Silêncio", author: "Marina Veloso", year: 2023, technique: "Instalação multimídia", theme: "Memória", dimensions: "4m × 3m × 2.5m", description: "Uma instalação imersiva que utiliza projeções e som ambiente para criar um espaço de introspecção e memória coletiva.", room: 1, category: "cinema", image: obraImages["1"] },
   { id: "2", title: "Raízes Aéreas", author: "Tomás Junqueira", year: 2024, technique: "Escultura cinética", theme: "Natureza", dimensions: "2.8m × 1.5m", description: "Escultura suspensa que responde ao vento e ao movimento dos visitantes, evocando a relação entre raízes e voo.", room: 1, category: "escultura", image: obraImages["2"] },
   { id: "3", title: "Códigos do Corpo", author: "Lara Santos", year: 2023, technique: "Vídeo-performance", theme: "Identidade", dimensions: "Duração: 18min", description: "Performance filmada que explora as marcas, cicatrizes e gestos do corpo como linguagem autobiográfica.", room: 1, category: "danca", image: obraImages["3"] },
@@ -236,25 +239,10 @@ export const transmidiaObras: TransmidiaObra[] = [
   { id: "14", title: "Tecendo o Impossível", author: "Sandra Machado", year: 2023, technique: "Tapeçaria contemporânea", theme: "Sonho", dimensions: "400cm × 250cm", description: "Grande tapeçaria que mescla técnicas ancestrais com materiais industriais para narrar paisagens oníricas.", room: 3, category: "escultura", image: obraImages["14"] },
   { id: "15", title: "Versos em Chamas", author: "Ricardo Bastos", year: 2024, technique: "Poesia visual", theme: "Resistência", dimensions: "Série de 8 peças", description: "Poemas visuais que utilizam tipografia, fogo e fotografia para criar manifestos poéticos inflamáveis.", room: 1, category: "literatura", image: obraImages["15"] },
   { id: "16", title: "Corpo-Território", author: "Aline Duarte", year: 2023, technique: "Dança-filme", theme: "Território", dimensions: "Duração: 12min", description: "Curta que funde dança contemporânea com paisagem natural, explorando o corpo como extensão da terra.", room: 2, category: "danca", image: obraImages["16"] },
-  // Sala HP — Diálogos Entre Civilizações (20 peças de 4 continentes)
-  { id: "hp-01", title: "Peça HP #01", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Poder" },
-  { id: "hp-02", title: "Peça HP #02", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Poder" },
-  { id: "hp-03", title: "Peça HP #03", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Espiritualidade" },
-  { id: "hp-04", title: "Peça HP #04", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Espiritualidade" },
-  { id: "hp-05", title: "Peça HP #05", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Beleza" },
-  { id: "hp-06", title: "Peça HP #06", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Proteção" },
-  { id: "hp-07", title: "Peça HP #07", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Proteção" },
-  { id: "hp-08", title: "Peça HP #08", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Espiritualidade" },
-  { id: "hp-09", title: "Peça HP #09", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Poder" },
-  { id: "hp-10", title: "Peça HP #10", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Beleza" },
-  { id: "hp-11", title: "Peça HP #11", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Espiritualidade" },
-  { id: "hp-12", title: "Peça HP #12", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Espiritualidade" },
-  { id: "hp-13", title: "Peça HP #13", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Poder" },
-  { id: "hp-14", title: "Peça HP #14", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Proteção" },
-  { id: "hp-15", title: "Peça HP #15", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Beleza" },
-  { id: "hp-16", title: "Peça HP #16", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Proteção" },
-  { id: "hp-17", title: "Peça HP #17", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Espiritualidade" },
-  { id: "hp-18", title: "Peça HP #18", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Poder" },
-  { id: "hp-19", title: "Peça HP #19", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Beleza" },
-  { id: "hp-20", title: "Peça HP #20", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Beleza" },
+];
+
+// Merge base obras with HP collection (single source of truth)
+export const transmidiaObras: TransmidiaObra[] = [
+  ...baseObras,
+  ...hpToTransmidiaObras(),
 ];
