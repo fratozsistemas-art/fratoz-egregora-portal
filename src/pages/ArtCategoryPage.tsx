@@ -317,9 +317,9 @@ const ArtCategoryPage = () => {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {/* Featured work — spans 2 columns */}
               {category.featuredWork && (
-                <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[2/1]">
+                <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[3/4]">
                   {category.featuredWorkImage && (
-                    <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-cover" />
+                    <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-contain p-2" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
                   <div className="relative z-10 p-5">
