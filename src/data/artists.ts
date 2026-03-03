@@ -1,6 +1,6 @@
 import torreDeBabel from "@/assets/obras/torre-de-babel.png";
-import franklinPlaceholder from "@/assets/obras/franklin-duarte-placeholder.jpg";
-import igorPlaceholder from "@/assets/obras/igor-deodoro-placeholder.jpg";
+import franklinPaisagemInterior from "@/assets/obras/franklin-duarte-paisagem-interior.jpg";
+import igorTerritorioMemoria from "@/assets/obras/igor-deodoro-territorio-memoria.jpg";
 
 export interface Artist {
   id: string;
@@ -48,7 +48,7 @@ export const artists: Artist[] = [
     featuredWork: "Paisagem Interior",
     featuredWorkYear: 2023,
     featuredWorkTechnique: "Óleo sobre tela",
-    featuredWorkImage: franklinPlaceholder,
+    featuredWorkImage: franklinPaisagemInterior,
   },
   {
     id: "igor-deodoro",
@@ -64,7 +64,7 @@ export const artists: Artist[] = [
     featuredWork: "Território e Memória",
     featuredWorkYear: 2024,
     featuredWorkTechnique: "Técnica mista sobre tela",
-    featuredWorkImage: igorPlaceholder,
+    featuredWorkImage: igorTerritorioMemoria,
   },
   {
     id: "paula-mariane",
