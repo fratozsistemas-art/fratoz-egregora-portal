@@ -45,7 +45,10 @@ export const artists: Artist[] = [
       "Exploração de memórias e paisagens interiores",
       "Paleta rica e gestualidade marcante",
     ],
-  },
+    featuredWork: "Paisagem Interior",
+    featuredWorkYear: 2023,
+    featuredWorkTechnique: "Óleo sobre tela",
+    featuredWorkImage: franklinPlaceholder,
   {
     id: "igor-deodoro",
     name: "Igor Deodoro",
@@ -57,7 +60,10 @@ export const artists: Artist[] = [
       "Novas leituras sobre identidade e território",
       "Representante da nova geração de pintores brasileiros",
     ],
-  },
+    featuredWork: "Território e Memória",
+    featuredWorkYear: 2024,
+    featuredWorkTechnique: "Técnica mista sobre tela",
+    featuredWorkImage: igorPlaceholder,
   {
     id: "paula-mariane",
     name: "Paula Mariane",
