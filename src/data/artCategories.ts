@@ -27,10 +27,23 @@ import obra15 from "@/assets/obras/obra-15.jpg";
 import obra16 from "@/assets/obras/obra-16.jpg";
 
 export interface ArtCategory {
+  id: string;
   name: string;
   slug: string;
-  heroImage: string;
+  tagline: string;
   description: string;
+  color: string;
+  angle: number;
+  heroDescription: string;
+  curator: string;
+  status: string;
+  heroImage: string;
+  featuredArtist: string;
+  featuredWork: string;
+  featuredWorkYear?: number;
+  featuredWorkTechnique?: string;
+  featuredWorkDescription?: string;
+  featuredWorkImage?: string;
 }
 
 export const artCategories: ArtCategory[] = [
