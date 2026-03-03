@@ -58,8 +58,8 @@ const ArtCategoryPage = () => {
       <SiteHeader />
 
       {/* Hero */}
-      <section className="relative w-full h-[50vh] min-h-[360px] flex items-end overflow-hidden">
-        <img src={category.heroImage} alt={category.name} className="absolute inset-0 w-full h-full object-cover opacity-40" loading="lazy" />
+      <section className="relative w-full h-[60vh] min-h-[420px] flex items-end overflow-hidden">
+        <img src={category.heroImage} alt={category.name} className="absolute inset-0 w-full h-full object-contain object-center opacity-40" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         <div className="relative z-10 max-w-5xl mx-auto w-full px-6 pb-10">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
