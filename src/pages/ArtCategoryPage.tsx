@@ -147,81 +147,45 @@ const ArtCategoryPage = () => {
               <div className="mb-10 space-y-5">
                 <h2 className="font-display text-2xl text-foreground mb-2">Artistas em destaque</h2>
                 <div className="grid gap-5 sm:grid-cols-3">
-                  {/* Siron Franco */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="group relative rounded-xl border border-primary/20 overflow-hidden"
-                  >
-                    <div
-                      className="absolute inset-0 opacity-30 group-hover:opacity-40 transition-opacity"
-                      style={{
-                        backgroundImage: `url(${category.featuredWorkImage})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        filter: "blur(2px) saturate(1.3)",
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
-                    <div className="relative z-10 p-5 flex flex-col min-h-[180px] justify-end">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Star className="w-4 h-4 text-primary fill-primary" />
-                        <span className="text-xs text-primary font-medium uppercase tracking-wider">Destaque</span>
+                  {getArtistsByCategory("pintura").map((artist, i) => (
+                    <motion.button
+                      key={artist.id}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 * (i + 1) }}
+                      onClick={() => setSelectedArtist(artist)}
+                      className="group relative rounded-xl border border-primary/20 overflow-hidden text-left cursor-pointer hover:border-primary/40 transition-colors"
+                    >
+                      <div
+                        className="absolute inset-0 opacity-20 group-hover:opacity-35 transition-opacity"
+                        style={{
+                          backgroundImage: artist.featuredWorkImage ? `url(${artist.featuredWorkImage})` : undefined,
+                          background: !artist.featuredWorkImage
+                            ? `linear-gradient(135deg, hsl(${30 + i * 10} 80% 50% / 0.3), hsl(${15 + i * 10} 70% 40% / 0.3))`
+                            : undefined,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          filter: artist.featuredWorkImage ? "blur(2px) saturate(1.3)" : undefined,
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
+                      <div className="relative z-10 p-5 flex flex-col min-h-[180px] justify-end">
+                        {artist.role === "Artista em destaque" && (
+                          <div className="flex items-center gap-2 mb-2">
+                            <Star className="w-4 h-4 text-primary fill-primary" />
+                            <span className="text-xs text-primary font-medium uppercase tracking-wider">Destaque</span>
+                          </div>
+                        )}
+                        <h3 className="font-display text-lg text-foreground">{artist.name}</h3>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {artist.featuredWork ? `${artist.featuredWork} · ${artist.featuredWorkYear}` : artist.role}
+                        </p>
+                        <p className="text-xs text-muted-foreground/80 mt-2 leading-relaxed line-clamp-3">
+                          {artist.bio.slice(0, 140)}…
+                        </p>
                       </div>
-                      <h3 className="font-display text-lg text-foreground">Siron Franco</h3>
-                      <p className="text-xs text-muted-foreground mt-1">Torre de Babel · 2019</p>
-                      <p className="text-xs text-muted-foreground/80 mt-2 leading-relaxed line-clamp-3">
-                        Artista goiano de projeção internacional, reconhecido por obras que investigam a condição humana com intensidade visceral.
-                      </p>
-                    </div>
-                  </motion.div>
-
-                  {/* Franklin Duarte */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="group relative rounded-xl border border-accent/20 overflow-hidden"
-                  >
-                    <div
-                      className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity"
-                      style={{
-                        background: "linear-gradient(135deg, hsl(30 80% 50% / 0.3), hsl(15 70% 40% / 0.3))",
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/50" />
-                    <div className="relative z-10 p-5 flex flex-col min-h-[180px] justify-end">
-                      <h3 className="font-display text-lg text-foreground">Franklin Duarte</h3>
-                      <p className="text-xs text-muted-foreground mt-1">Artista convidado</p>
-                      <p className="text-xs text-muted-foreground/80 mt-2 leading-relaxed line-clamp-3">
-                        Pintor contemporâneo cuja obra transita entre o figurativo e o onírico, explorando memórias e paisagens interiores.
-                      </p>
-                    </div>
-                  </motion.div>
-
-                  {/* Igor Deodoro */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="group relative rounded-xl border border-accent/20 overflow-hidden"
-                  >
-                    <div
-                      className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity"
-                      style={{
-                        background: "linear-gradient(135deg, hsl(40 70% 55% / 0.3), hsl(25 60% 35% / 0.3))",
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/50" />
-                    <div className="relative z-10 p-5 flex flex-col min-h-[180px] justify-end">
-                      <h3 className="font-display text-lg text-foreground">Igor Deodoro</h3>
-                      <p className="text-xs text-muted-foreground mt-1">Artista convidado</p>
-                      <p className="text-xs text-muted-foreground/80 mt-2 leading-relaxed line-clamp-3">
-                        Artista emergente que combina técnica clássica com linguagem contemporânea, propondo novas leituras sobre identidade e território.
-                      </p>
-                    </div>
-                  </motion.div>
+                    </motion.button>
+                  ))}
                 </div>
               </div>
             )}
