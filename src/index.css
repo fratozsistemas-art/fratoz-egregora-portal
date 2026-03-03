@@ -89,12 +89,16 @@
 
   .gradient-egregora-text {
     background: linear-gradient(
-      135deg,
+      90deg,
       hsl(200 80% 65%),
       hsl(190 90% 55%),
       hsl(180 70% 50%),
-      hsl(210 85% 70%)
+      hsl(210 85% 70%),
+      hsl(195 100% 80%),
+      hsl(200 80% 65%)
     );
+    background-size: 200% 100%;
+    animation: cosmic-shimmer 4s ease-in-out infinite;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -107,6 +111,12 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@keyframes cosmic-shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Octagon pulse animation */
