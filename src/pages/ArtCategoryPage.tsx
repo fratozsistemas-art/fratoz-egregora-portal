@@ -839,6 +839,7 @@ const ArtCategoryPage = () => {
         )}
       </div>
 
+      <ArtistModal artist={selectedArtist} onClose={() => setSelectedArtist(null)} />
       <SiteFooter />
       </div>
     </div>
