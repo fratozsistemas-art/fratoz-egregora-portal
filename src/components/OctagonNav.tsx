@@ -239,20 +239,24 @@ const OctagonNav = () => {
         {/* Segments — 3D pyramid sections */}
         {segments.map(({ cat, pathData, leftBevel, rightBevel, topBevel, bottomBevel, labelPos, labelAngle, index }) => {
           const isHov = hoveredIndex === index;
+          const isFoc = focusedIndex === index;
+          const isActive = isHov || isFoc;
           const segColors = ["#1a9e6e","#2196c9","#7b42d9","#d94290","#d94242","#e88a1a","#e8c71a","#1a9e8e"];
           return (
             <g
               key={cat.id}
-              className="cursor-pointer"
+              className="cursor-pointer outline-none"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
+              onFocus={(e) => { if (e.currentTarget === e.target) setFocusedIndex(index); }}
+              onBlur={() => setFocusedIndex(null)}
               onClick={() => navigate(`/${cat.slug}`)}
               role="button"
               tabIndex={0}
               aria-label={`Explorar ${cat.name}`}
               onKeyDown={(e) => e.key === "Enter" && navigate(`/${cat.slug}`)}
               style={{
-                transform: isHov ? `scale(1.04)` : "scale(1)",
+                transform: isActive ? `scale(1.04)` : "scale(1)",
                 transformOrigin: `${cx}px ${cy}px`,
                 transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
               }}
@@ -261,16 +265,28 @@ const OctagonNav = () => {
               <path
                 d={pathData}
                 fill={`url(#seg-grad-${index})`}
-                stroke="hsl(240 6% 10%)"
-                strokeWidth="0.8"
+                stroke={isFoc ? segColors[index] : "hsl(240 6% 10%)"}
+                strokeWidth={isFoc ? "2" : "0.8"}
                 className="transition-all duration-300"
                 style={{
-                  filter: isHov
+                  filter: isActive
                     ? `brightness(1.4) drop-shadow(0 0 18px rgba(123,66,217,0.4)) drop-shadow(0 0 6px ${segColors[index]}88)`
                     : "brightness(0.9)",
                   transition: "filter 0.4s ease",
                 }}
               />
+              {/* Focus ring — visible glow outline when navigating by keyboard */}
+              {isFoc && (
+                <path
+                  d={pathData}
+                  fill="none"
+                  stroke={segColors[index]}
+                  strokeWidth="3"
+                  strokeOpacity="0.6"
+                  className="pointer-events-none"
+                  style={{ filter: `drop-shadow(0 0 8px ${segColors[index]}) drop-shadow(0 0 16px ${segColors[index]}66)` }}
+                />
+              )}
               {/* Top bevel — light edge (outer rim catches light) */}
               <path
                 d={topBevel}
