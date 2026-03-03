@@ -4,28 +4,30 @@ import guerreiros2 from "@/assets/hp-catalog/guerreiros-2.jpeg";
 import dante1 from "@/assets/hp-catalog/dante-1.jpeg";
 import dante2 from "@/assets/hp-catalog/dante-2.jpeg";
 import dante3 from "@/assets/hp-catalog/dante-3.jpeg";
+// Obá e Arogbo — 2 photos of the standing figures (PDF page 9)
 import obaArogbo1 from "@/assets/hp-catalog/oba-arogbo-1.jpeg";
 import obaArogbo2 from "@/assets/hp-catalog/oba-arogbo-2.jpeg";
-import obaArogbo3 from "@/assets/hp-catalog/oba-arogbo-3.jpeg";
+// Cavalo Benin — 6 photos: 3 horse close-ups (PDF page 8) + 3 rearing/full-body (PDF page 11)
 import cavaloBenin1 from "@/assets/hp-catalog/cavalo-benin-1.jpeg";
 import cavaloBenin2 from "@/assets/hp-catalog/cavalo-benin-2.jpeg";
+import cavaloBenin3 from "@/assets/hp-catalog/cavalo-benin-3.jpeg";
+import cavaloBenin4 from "@/assets/hp-catalog/cavalo-benin-4.jpeg";
+import cavaloBenin5 from "@/assets/hp-catalog/cavalo-benin-5.jpeg";
+import cavaloBenin6 from "@/assets/hp-catalog/cavalo-benin-6.jpeg";
 import vasoChines1 from "@/assets/hp-catalog/vaso-chines-1.jpeg";
-import vasoChines2 from "@/assets/hp-catalog/vaso-chines-2.jpeg";
-import vasoChines3 from "@/assets/hp-catalog/vaso-chines-3.jpeg";
 import venusAfricana1 from "@/assets/hp-catalog/venus-africana-1.jpeg";
 import mascaraTamil1 from "@/assets/hp-catalog/mascara-tamil-1.jpeg";
 import phuDogs1 from "@/assets/hp-catalog/phu-dogs-1.jpeg";
 import ovoTibet1 from "@/assets/hp-catalog/ovo-tibet-1.jpeg";
 import paneisMarmore1 from "@/assets/hp-catalog/paineis-marmore-1.jpeg";
+import paneisMarmore2 from "@/assets/hp-catalog/paineis-marmore-2.jpeg";
+import paneisMarmore3 from "@/assets/hp-catalog/paineis-marmore-3.jpeg";
+import paneisMarmore4 from "@/assets/hp-catalog/paineis-marmore-4.jpeg";
+import paneisMarmore5 from "@/assets/hp-catalog/paineis-marmore-5.jpeg";
 import gravurasGregas1 from "@/assets/hp-catalog/gravuras-gregas-1.jpeg";
 import gravurasGregas2 from "@/assets/hp-catalog/gravuras-gregas-2.jpeg";
 import gravurasGregas3 from "@/assets/hp-catalog/gravuras-gregas-3.jpeg";
 import gravurasGregas4 from "@/assets/hp-catalog/gravuras-gregas-4.jpeg";
-import gravurasGregas5 from "@/assets/hp-catalog/gravuras-gregas-5.jpeg";
-import gravurasGregas6 from "@/assets/hp-catalog/gravuras-gregas-6.jpeg";
-import gravurasGregas7 from "@/assets/hp-catalog/gravuras-gregas-7.jpeg";
-import gravurasGregas8 from "@/assets/hp-catalog/gravuras-gregas-8.jpeg";
-import gravurasGregas9 from "@/assets/hp-catalog/gravuras-gregas-9.jpeg";
 
 export type HpTheme = "Poder" | "Espiritualidade" | "Proteção" | "Beleza";
 
@@ -135,7 +137,7 @@ export const HP_COLLECTION: HPArtwork[] = [
     themes: ["Poder"],
     images: {
       thumbnail: obaArogbo1,
-      gallery: [obaArogbo1, obaArogbo2, obaArogbo3],
+      gallery: [obaArogbo1, obaArogbo2],
     },
     provenance:
       "Corte Real do Antigo Reino do Benin → Coleção europeia (pós-1897) → Acervo HP",
@@ -166,7 +168,7 @@ export const HP_COLLECTION: HPArtwork[] = [
     themes: ["Poder"],
     images: {
       thumbnail: cavaloBenin1,
-      gallery: [cavaloBenin1, cavaloBenin2],
+      gallery: [cavaloBenin1, cavaloBenin2, cavaloBenin3, cavaloBenin4, cavaloBenin5, cavaloBenin6],
     },
     provenance:
       "Corte Real do Antigo Reino do Benin → Coleção europeia (pós-1897) → Acervo HP",
@@ -197,7 +199,7 @@ export const HP_COLLECTION: HPArtwork[] = [
     themes: ["Poder"],
     images: {
       thumbnail: vasoChines1,
-      gallery: [vasoChines1, vasoChines2, vasoChines3],
+      gallery: [vasoChines1],
     },
     provenance:
       "Produção imperial chinesa (Nanking) → Coleção asiática → Acervo HP",
@@ -345,7 +347,7 @@ export const HP_COLLECTION: HPArtwork[] = [
     themes: ["Beleza"],
     images: {
       thumbnail: paneisMarmore1,
-      gallery: [paneisMarmore1],
+      gallery: [paneisMarmore1, paneisMarmore2, paneisMarmore3, paneisMarmore4, paneisMarmore5],
     },
     provenance:
       "Artesãos do Rajastão (Índia, séc. XX) → Coleção de arte oriental → Acervo HP",
@@ -381,11 +383,6 @@ export const HP_COLLECTION: HPArtwork[] = [
         gravurasGregas2,
         gravurasGregas3,
         gravurasGregas4,
-        gravurasGregas5,
-        gravurasGregas6,
-        gravurasGregas7,
-        gravurasGregas8,
-        gravurasGregas9,
       ],
     },
     provenance:
