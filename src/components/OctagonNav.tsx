@@ -330,10 +330,10 @@ const OctagonNav = () => {
                 fill={isActive ? "#fff" : "hsl(40 20% 85%)"}
                 fontSize="12"
                 fontFamily="Outfit, sans-serif"
-                fontWeight={isHov ? "600" : "400"}
+                fontWeight={isActive ? "600" : "400"}
                 className="pointer-events-none select-none transition-all duration-200"
                 style={{
-                  textShadow: isHov ? "0 2px 6px rgba(0,0,0,0.7)" : "0 1px 3px rgba(0,0,0,0.4)",
+                  textShadow: isActive ? "0 2px 6px rgba(0,0,0,0.7)" : "0 1px 3px rgba(0,0,0,0.4)",
                 }}
               >
                 {cat.name}
