@@ -7,6 +7,7 @@ import heroPintura from "@/assets/heroes/hero-pintura.jpg";
 import heroDanca from "@/assets/heroes/hero-danca.jpg";
 import heroLiteratura from "@/assets/heroes/hero-literatura.jpg";
 import heroEscultura from "@/assets/heroes/hero-escultura.jpg";
+import torreDeBabel from "@/assets/obras/torre-de-babel.png";
 
 export interface ArtCategory {
   id: string;
@@ -118,6 +119,7 @@ export const artCategories: ArtCategory[] = [
     featuredWorkYear: 1996,
     featuredWorkTechnique: "Pintura — técnica mista sobre tela",
     featuredWorkDescription: "Obra monumental do artista goiano Siron Franco, Torre de Babel é uma reflexão visceral sobre a incomunicabilidade humana e a fragmentação das linguagens. Referência central do eixo de Pintura da Egrégora.",
+    featuredWorkImage: torreDeBabel,
   },
   {
     id: "danca",
