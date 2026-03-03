@@ -27,173 +27,65 @@ import obra15 from "@/assets/obras/obra-15.jpg";
 import obra16 from "@/assets/obras/obra-16.jpg";
 
 export interface ArtCategory {
-  id: string;
   name: string;
   slug: string;
-  tagline: string;
-  description: string;
-  color: string;
-  angle: number;
-  heroDescription: string;
-  curator: string;
-  status: string;
   heroImage: string;
-  featuredArtist: string;
-  featuredWork: string;
-  featuredWorkYear?: number;
-  featuredWorkTechnique?: string;
-  featuredWorkDescription?: string;
-  featuredWorkImage?: string;
+  description: string;
 }
 
 export const artCategories: ArtCategory[] = [
   {
-    id: "cinema",
     name: "Cinema",
     slug: "cinema",
-    tagline: "A tela como portal do imaginário",
-    description: "Exploramos a sétima arte como linguagem universal de transformação e reflexão. Do curta experimental ao longa documental, o cinema da Egrégora transcende fronteiras narrativas.",
-    color: "var(--egregora-blue)",
-    angle: 0,
-    heroDescription: "Narrativas visuais que expandem horizontes. Curtas, longas, documentários e filmes experimentais que desafiam a percepção e provocam diálogos essenciais.",
-    curator: "Ana Beatriz Souza",
-    status: "Convocatória aberta",
     heroImage: heroCinema,
-    featuredArtist: "Artista a definir",
-    featuredWork: "Obra a definir",
-    featuredWorkYear: 2024,
-    featuredWorkTechnique: "Longa-metragem",
-    featuredWorkDescription: "Obra carro-chefe do eixo Cinema — em definição pela curadoria.",
+    description: "Explore o mundo do cinema.",
   },
   {
-    id: "teatro",
     name: "Teatro",
     slug: "teatro",
-    tagline: "O palco como espaço de encontro",
-    description: "O teatro na Egrégora é presença, corpo e voz. Exploramos montagens contemporâneas, performances e dramaturgias que dialogam com o agora.",
-    color: "var(--egregora-purple)",
-    angle: 45,
-    heroDescription: "Do palco à rua, o teatro como ato de presença e resistência. Dramaturgias contemporâneas que convidam à experiência coletiva.",
-    curator: "Carlos Mendes",
-    status: "Em temporada",
     heroImage: heroTeatro,
-    featuredArtist: "Artista a definir",
-    featuredWork: "Obra a definir",
-    featuredWorkYear: 2024,
-    featuredWorkTechnique: "Dramaturgia contemporânea",
-    featuredWorkDescription: "Obra carro-chefe do eixo Teatro — em definição pela curadoria.",
+    description: "Descubra a magia do teatro.",
   },
   {
-    id: "musica",
     name: "Música",
     slug: "musica",
-    tagline: "Frequências que conectam almas",
-    description: "A música é vibração, ritmo e identidade. Celebramos composições autorais, experimentais e híbridas que redefinem a escuta.",
-    color: "var(--egregora-magenta)",
-    angle: 90,
-    heroDescription: "Composições que transcendem gêneros. Da música erudita ao experimental, sons que criam pontes entre tempos e culturas.",
-    curator: "Mariana Costa",
-    status: "Programação ativa",
     heroImage: heroMusica,
-    featuredArtist: "Artista a definir",
-    featuredWork: "Obra a definir",
-    featuredWorkYear: 2024,
-    featuredWorkTechnique: "Composição autoral",
-    featuredWorkDescription: "Obra carro-chefe do eixo Música — em definição pela curadoria.",
+    description: "Deixe-se levar pelos sons da música.",
   },
   {
-    id: "fotografia",
     name: "Fotografia",
     slug: "fotografia",
-    tagline: "O instante como eternidade",
-    description: "A fotografia como arte de ver além do visível. Ensaios, séries e projetos autorais que capturam a essência do efêmero.",
-    color: "var(--egregora-red)",
-    angle: 135,
-    heroDescription: "Olhares que revelam o invisível. Ensaios fotográficos que documentam, questionam e reinventam a realidade visual.",
-    curator: "Pedro Almeida",
-    status: "Exposição em cartaz",
     heroImage: heroFotografia,
-    featuredArtist: "Paula Mariane",
-    featuredWork: "Laços de Honra",
-    featuredWorkYear: 2024,
-    featuredWorkTechnique: "Ensaio fotográfico",
-    featuredWorkDescription: "Ensaio autoral de Paula Mariane que investiga vínculos familiares e afetivos através de retratos intimistas, revelando a força invisível dos laços que nos sustentam.",
+    description: "Capture momentos através da fotografia.",
   },
   {
-    id: "pintura",
     name: "Pintura",
     slug: "pintura",
-    tagline: "Cores que narram o indizível",
-    description: "A pintura como gesto primordial da expressão humana. Do figurativo ao abstrato, cada tela é um universo em si.",
-    color: "var(--egregora-orange)",
-    angle: 180,
-    heroDescription: "Telas que pulsam com vida própria. Pinturas que desafiam o olhar e convidam à contemplação profunda.",
-    curator: "Luísa Fernandes",
-    status: "Acervo permanente",
     heroImage: heroPintura,
-    featuredArtist: "Siron Franco",
-    featuredWork: "Torre de Babel",
-    featuredWorkYear: 1996,
-    featuredWorkTechnique: "Pintura — técnica mista sobre tela",
-    featuredWorkDescription: "Obra monumental do artista goiano Siron Franco, Torre de Babel é uma reflexão visceral sobre a incomunicabilidade humana e a fragmentação das linguagens. Referência central do eixo de Pintura da Egrégora.",
+    description: "Admire a beleza da pintura.",
   },
   {
-    id: "danca",
     name: "Dança",
     slug: "danca",
-    tagline: "O corpo como linguagem viva",
-    description: "A dança na Egrégora é movimento, presença e ritual. Exploramos coreografias contemporâneas e performances que desafiam a gravidade.",
-    color: "var(--egregora-yellow)",
-    angle: 225,
-    heroDescription: "Corpos em diálogo com o espaço. Coreografias que exploram a vulnerabilidade e a potência do movimento humano.",
-    curator: "Rafael Torres",
-    status: "Residência artística",
     heroImage: heroDanca,
-    featuredArtist: "Artista a definir",
-    featuredWork: "Obra a definir",
-    featuredWorkYear: 2024,
-    featuredWorkTechnique: "Coreografia contemporânea",
-    featuredWorkDescription: "Obra carro-chefe do eixo Dança — em definição pela curadoria.",
+    description: "Sinta o ritmo da dança.",
   },
   {
-    id: "literatura",
     name: "Literatura",
     slug: "literatura",
-    tagline: "Palavras que constroem mundos",
-    description: "A literatura como território de liberdade. Poesia, prosa, ensaio e narrativas experimentais que expandem o pensamento.",
-    color: "var(--egregora-green)",
-    angle: 270,
-    heroDescription: "Textos que desafiam o silêncio. Poesia, ficção e ensaio como formas de reinventar a linguagem e o mundo.",
-    curator: "Fernanda Lima",
-    status: "Publicações abertas",
     heroImage: heroLiteratura,
-    featuredArtist: "Artista a definir",
-    featuredWork: "Obra a definir",
-    featuredWorkYear: 2024,
-    featuredWorkTechnique: "Poesia / Prosa",
-    featuredWorkDescription: "Obra carro-chefe do eixo Literatura — em definição pela curadoria.",
+    description: "Aventure-se no mundo da literatura.",
   },
   {
-    id: "escultura",
     name: "Escultura",
     slug: "escultura",
-    tagline: "A matéria como expressão do espírito",
-    description: "A escultura como diálogo entre forma e vazio. Instalações, objetos e intervenções que ocupam o espaço com presença e significado.",
-    color: "var(--egregora-teal)",
-    angle: 315,
-    heroDescription: "Formas que habitam o espaço. Esculturas e instalações que transformam materiais em narrativas tridimensionais.",
-    curator: "Diego Nascimento",
-    status: "Exposição itinerante",
     heroImage: heroEscultura,
-    featuredArtist: "Artista a definir",
-    featuredWork: "Obra a definir",
-    featuredWorkYear: 2024,
-    featuredWorkTechnique: "Escultura / Instalação",
-    featuredWorkDescription: "Obra carro-chefe do eixo Escultura — em definição pela curadoria.",
+    description: "Contemple a forma da escultura.",
   },
 ];
 
-export type HpTheme = "Poder" | "Espiritualidade" | "Proteção" | "Beleza";
+// Re-export HpTheme from shared source
+export type { HpTheme } from "./hp-collection";
 
 export interface TransmidiaObra {
   id: string;
@@ -209,7 +101,7 @@ export interface TransmidiaObra {
   image: string;
   collection?: string;
   continent?: string;
-  hpTheme?: HpTheme;
+  hpTheme?: import("./hp-collection").HpTheme;
 }
 
 const obraImages: Record<string, string> = {
@@ -219,7 +111,9 @@ const obraImages: Record<string, string> = {
   "13": obra13, "14": obra14, "15": obra15, "16": obra16,
 };
 
-export const transmidiaObras: TransmidiaObra[] = [
+import { hpToTransmidiaObras } from "./hp-collection";
+
+const baseObras: TransmidiaObra[] = [
   { id: "1", title: "Fragmentos do Silêncio", author: "Marina Veloso", year: 2023, technique: "Instalação multimídia", theme: "Memória", dimensions: "4m × 3m × 2.5m", description: "Uma instalação imersiva que utiliza projeções e som ambiente para criar um espaço de introspecção e memória coletiva.", room: 1, category: "cinema", image: obraImages["1"] },
   { id: "2", title: "Raízes Aéreas", author: "Tomás Junqueira", year: 2024, technique: "Escultura cinética", theme: "Natureza", dimensions: "2.8m × 1.5m", description: "Escultura suspensa que responde ao vento e ao movimento dos visitantes, evocando a relação entre raízes e voo.", room: 1, category: "escultura", image: obraImages["2"] },
   { id: "3", title: "Códigos do Corpo", author: "Lara Santos", year: 2023, technique: "Vídeo-performance", theme: "Identidade", dimensions: "Duração: 18min", description: "Performance filmada que explora as marcas, cicatrizes e gestos do corpo como linguagem autobiográfica.", room: 1, category: "danca", image: obraImages["3"] },
@@ -236,25 +130,10 @@ export const transmidiaObras: TransmidiaObra[] = [
   { id: "14", title: "Tecendo o Impossível", author: "Sandra Machado", year: 2023, technique: "Tapeçaria contemporânea", theme: "Sonho", dimensions: "400cm × 250cm", description: "Grande tapeçaria que mescla técnicas ancestrais com materiais industriais para narrar paisagens oníricas.", room: 3, category: "escultura", image: obraImages["14"] },
   { id: "15", title: "Versos em Chamas", author: "Ricardo Bastos", year: 2024, technique: "Poesia visual", theme: "Resistência", dimensions: "Série de 8 peças", description: "Poemas visuais que utilizam tipografia, fogo e fotografia para criar manifestos poéticos inflamáveis.", room: 1, category: "literatura", image: obraImages["15"] },
   { id: "16", title: "Corpo-Território", author: "Aline Duarte", year: 2023, technique: "Dança-filme", theme: "Território", dimensions: "Duração: 12min", description: "Curta que funde dança contemporânea com paisagem natural, explorando o corpo como extensão da terra.", room: 2, category: "danca", image: obraImages["16"] },
-  // Sala HP — Diálogos Entre Civilizações (20 peças de 4 continentes)
-  { id: "hp-01", title: "Peça HP #01", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Poder" },
-  { id: "hp-02", title: "Peça HP #02", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Poder" },
-  { id: "hp-03", title: "Peça HP #03", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Espiritualidade" },
-  { id: "hp-04", title: "Peça HP #04", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Espiritualidade" },
-  { id: "hp-05", title: "Peça HP #05", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Europa", hpTheme: "Beleza" },
-  { id: "hp-06", title: "Peça HP #06", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Proteção" },
-  { id: "hp-07", title: "Peça HP #07", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Proteção" },
-  { id: "hp-08", title: "Peça HP #08", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Espiritualidade" },
-  { id: "hp-09", title: "Peça HP #09", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Poder" },
-  { id: "hp-10", title: "Peça HP #10", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Américas", hpTheme: "Beleza" },
-  { id: "hp-11", title: "Peça HP #11", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Espiritualidade" },
-  { id: "hp-12", title: "Peça HP #12", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Espiritualidade" },
-  { id: "hp-13", title: "Peça HP #13", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Poder" },
-  { id: "hp-14", title: "Peça HP #14", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Proteção" },
-  { id: "hp-15", title: "Peça HP #15", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "Ásia", hpTheme: "Beleza" },
-  { id: "hp-16", title: "Peça HP #16", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Proteção" },
-  { id: "hp-17", title: "Peça HP #17", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Espiritualidade" },
-  { id: "hp-18", title: "Peça HP #18", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Poder" },
-  { id: "hp-19", title: "Peça HP #19", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Beleza" },
-  { id: "hp-20", title: "Peça HP #20", author: "Coleção HP", year: 0, technique: "A definir", theme: "Patrimônio", dimensions: "A definir", description: "Peça da Coleção HP — informações detalhadas em caráter reservado.", room: 4, category: "escultura", image: "", collection: "HP", continent: "África", hpTheme: "Beleza" },
+];
+
+// Merge base obras with HP collection (single source of truth)
+export const transmidiaObras: TransmidiaObra[] = [
+  ...baseObras,
+  ...hpToTransmidiaObras(),
 ];
