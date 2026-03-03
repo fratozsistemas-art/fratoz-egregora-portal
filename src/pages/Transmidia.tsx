@@ -5,7 +5,8 @@ import { Link, useSearchParams } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
-import { transmidiaObras, type TransmidiaObra, type HpTheme } from "@/data/artCategories";
+import { transmidiaObras, type TransmidiaObra } from "@/data/artCategories";
+import { HP_COLLECTION, type HpTheme } from "@/data/hp-collection";
 
 const themes = [...new Set(transmidiaObras.map((o) => o.theme))];
 const rooms = [1, 2, 3, 4];
@@ -352,121 +353,210 @@ const ObraModal = ({
   relatedObras: TransmidiaObra[];
   onClose: () => void;
   onSelectObra: (o: TransmidiaObra) => void;
-}) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    className="fixed inset-0 z-50 bg-background/90 backdrop-blur-sm flex items-center justify-center p-4"
-    onClick={onClose}
-  >
+}) => {
+  // Lookup enriched HP data if this is an HP piece
+  const hpData = obra.collection === "HP" ? HP_COLLECTION.find((hp) => hp.id === obra.id) : null;
+
+  return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      className="w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-panel rounded-2xl"
-      onClick={(e) => e.stopPropagation()}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 bg-background/90 backdrop-blur-sm flex items-center justify-center p-4"
+      onClick={onClose}
     >
-      <div className="flex items-center justify-between p-6 border-b border-border">
-        <h2 className="font-display text-2xl text-foreground">{obra.title}</h2>
-        <button onClick={onClose} className="p-2 rounded-lg hover:bg-secondary transition-colors">
-          <X className="w-5 h-5 text-muted-foreground" />
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-        {/* Image */}
-        <div className="aspect-square bg-secondary flex items-center justify-center">
-          {obra.image ? (
-            <img src={obra.image} alt={obra.title} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-muted-foreground">Visualização da obra</span>
-          )}
-        </div>
-
-        {/* Info */}
-        <div className="p-6 space-y-4">
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Artista</span>
-              <span className="text-foreground">{obra.author}</span>
-            </div>
-            {obra.year > 0 && (
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Ano</span>
-                <span className="text-foreground">{obra.year}</span>
-              </div>
-            )}
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Técnica</span>
-              <span className="text-foreground">{obra.technique}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Dimensões</span>
-              <span className="text-foreground">{obra.dimensions}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Tema</span>
-              <span className="text-foreground">{obra.theme}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Sala</span>
-              <span className="text-foreground">{ROOM_NAMES[obra.room - 1]}</span>
-            </div>
-            {obra.hpTheme && (
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Eixo temático</span>
-                <span className={`font-medium ${HP_THEME_META[obra.hpTheme].color}`}>{obra.hpTheme}</span>
-              </div>
-            )}
-            {obra.continent && (
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Continente</span>
-                <span className="text-foreground">{obra.continent}</span>
-              </div>
-            )}
-          </div>
-
-          <div className="border-t border-border pt-4">
-            <p className="text-sm text-muted-foreground leading-relaxed">{obra.description}</p>
-          </div>
-
-          {/* Audio guide */}
-          <button className="flex items-center gap-2 text-sm text-primary hover:opacity-80 transition-opacity">
-            <Play className="w-4 h-4" /> Áudio-guia
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-panel rounded-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between p-6 border-b border-border">
+          <h2 className="font-display text-2xl text-foreground">{obra.title}</h2>
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-secondary transition-colors">
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
-      </div>
 
-      {/* Related */}
-      {relatedObras.length > 0 && (
-        <div className="p-6 border-t border-border">
-          <h3 className="font-display text-lg text-foreground mb-4">Obras relacionadas</h3>
-          <div className="flex gap-4 overflow-x-auto">
-            {relatedObras.map((r) => (
-              <div
-                key={r.id}
-                onClick={() => onSelectObra(r)}
-                className="flex-shrink-0 w-40 glass-panel rounded-lg overflow-hidden cursor-pointer hover:border-primary/40 transition-colors"
-              >
-                <div className="aspect-square bg-secondary flex items-center justify-center">
-                  {r.image ? (
-                    <img src={r.image} alt={r.title} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-muted-foreground text-xs">Img</span>
-                  )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+          {/* Image */}
+          <div className="aspect-square bg-secondary flex items-center justify-center">
+            {obra.image ? (
+              <img src={obra.image} alt={obra.title} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-muted-foreground">Visualização da obra</span>
+            )}
+          </div>
+
+          {/* Info */}
+          <div className="p-6 space-y-4">
+            <div className="space-y-2">
+              {hpData?.artist && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Artista</span>
+                  <span className="text-foreground">{hpData.artist}</span>
                 </div>
-                <div className="p-2">
-                  <p className="text-xs text-foreground truncate">{r.title}</p>
-                  <p className="text-xs text-muted-foreground">{r.author}</p>
+              )}
+              {!hpData?.artist && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Artista</span>
+                  <span className="text-foreground">{obra.author}</span>
                 </div>
+              )}
+              {hpData && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Origem</span>
+                  <span className="text-foreground">{hpData.origin}</span>
+                </div>
+              )}
+              {hpData && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Período</span>
+                  <span className="text-foreground">{hpData.period}</span>
+                </div>
+              )}
+              {obra.year > 0 && !hpData && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Ano</span>
+                  <span className="text-foreground">{obra.year}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">{hpData ? "Materiais" : "Técnica"}</span>
+                <span className="text-foreground text-right">{hpData ? hpData.materials.join(", ") : obra.technique}</span>
               </div>
-            ))}
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Dimensões</span>
+                <span className="text-foreground">{obra.dimensions}</span>
+              </div>
+              {obra.hpTheme && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Eixo temático</span>
+                  <span className={`font-medium ${HP_THEME_META[obra.hpTheme].color}`}>{obra.hpTheme}</span>
+                </div>
+              )}
+              {obra.continent && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Continente</span>
+                  <span className="text-foreground">{obra.continent}</span>
+                </div>
+              )}
+              {!hpData && (
+                <>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Tema</span>
+                    <span className="text-foreground">{obra.theme}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Sala</span>
+                    <span className="text-foreground">{ROOM_NAMES[obra.room - 1]}</span>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Description — narrative version for HP */}
+            <div className="border-t border-border pt-4">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {hpData ? hpData.description_narrative : obra.description}
+              </p>
+            </div>
+
+            {/* Cultural context for HP pieces */}
+            {hpData && (
+              <div className="rounded-lg bg-secondary/50 p-4 space-y-2">
+                <h4 className="text-xs font-medium text-foreground uppercase tracking-wider">Contexto Cultural</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">{hpData.cultural_context}</p>
+              </div>
+            )}
+
+            {/* Provenance for HP pieces */}
+            {hpData && (
+              <div className="space-y-1">
+                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Proveniência</h4>
+                <p className="text-xs text-muted-foreground">{hpData.provenance}</p>
+              </div>
+            )}
+
+            {/* Conservation notes */}
+            {hpData?.conservation_notes && (
+              <div className="space-y-1">
+                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Conservação</h4>
+                <p className="text-xs text-muted-foreground">{hpData.conservation_notes}</p>
+              </div>
+            )}
+
+            {/* Audio guide */}
+            <button className="flex items-center gap-2 text-sm text-primary hover:opacity-80 transition-opacity">
+              <Play className="w-4 h-4" /> Áudio-guia
+            </button>
           </div>
         </div>
-      )}
+
+        {/* Transmedia connections for HP pieces */}
+        {hpData && hpData.transmedia_connections.length > 0 && (
+          <div className="p-6 border-t border-border">
+            <h3 className="font-display text-lg text-foreground mb-4">Diálogos na Coleção</h3>
+            <div className="flex gap-4 overflow-x-auto">
+              {hpData.transmedia_connections.map((connId) => {
+                const connObra = transmidiaObras.find((o) => o.id === connId);
+                const connHp = HP_COLLECTION.find((hp) => hp.id === connId);
+                if (!connObra) return null;
+                return (
+                  <div
+                    key={connId}
+                    onClick={() => onSelectObra(connObra)}
+                    className="flex-shrink-0 w-44 glass-panel rounded-lg overflow-hidden cursor-pointer hover:border-primary/40 transition-colors"
+                  >
+                    <div className="aspect-[4/3] bg-secondary flex items-center justify-center">
+                      {connObra.image ? (
+                        <img src={connObra.image} alt={connObra.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <Gem className="w-5 h-5 text-muted-foreground/50" />
+                      )}
+                    </div>
+                    <div className="p-2">
+                      <p className="text-xs text-foreground truncate">{connHp?.title ?? connObra.title}</p>
+                      <p className="text-xs text-muted-foreground truncate">{connHp?.origin ?? connObra.author}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Related for non-HP pieces */}
+        {!hpData && relatedObras.length > 0 && (
+          <div className="p-6 border-t border-border">
+            <h3 className="font-display text-lg text-foreground mb-4">Obras relacionadas</h3>
+            <div className="flex gap-4 overflow-x-auto">
+              {relatedObras.map((r) => (
+                <div
+                  key={r.id}
+                  onClick={() => onSelectObra(r)}
+                  className="flex-shrink-0 w-40 glass-panel rounded-lg overflow-hidden cursor-pointer hover:border-primary/40 transition-colors"
+                >
+                  <div className="aspect-square bg-secondary flex items-center justify-center">
+                    {r.image ? (
+                      <img src={r.image} alt={r.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-muted-foreground text-xs">Img</span>
+                    )}
+                  </div>
+                  <div className="p-2">
+                    <p className="text-xs text-foreground truncate">{r.title}</p>
+                    <p className="text-xs text-muted-foreground">{r.author}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </motion.div>
     </motion.div>
-  </motion.div>
-);
+  );
+};
 
 export default Transmidia;
