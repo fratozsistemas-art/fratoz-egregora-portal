@@ -48,7 +48,7 @@ export const artists: Artist[] = [
     featuredWork: "Paisagem Interior",
     featuredWorkYear: 2023,
     featuredWorkTechnique: "Óleo sobre tela",
-    featuredWorkImage: franklinPlaceholder,
+    featuredWorkImage: franklinPaisagemInterior,
   },
   {
     id: "igor-deodoro",
@@ -64,7 +64,7 @@ export const artists: Artist[] = [
     featuredWork: "Território e Memória",
     featuredWorkYear: 2024,
     featuredWorkTechnique: "Técnica mista sobre tela",
-    featuredWorkImage: igorPlaceholder,
+    featuredWorkImage: igorTerritorioMemoria,
   },
   {
     id: "paula-mariane",
