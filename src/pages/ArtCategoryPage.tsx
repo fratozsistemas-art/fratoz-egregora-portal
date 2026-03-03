@@ -1,7 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe } from "lucide-react";
+import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe, BookOpen, Headphones, Video, ExternalLink, Camera } from "lucide-react";
 import { Link } from "react-router-dom";
 import { artCategories } from "@/data/artCategories";
 import { HP_COLLECTION, type HPArtwork } from "@/data/hp-collection";
