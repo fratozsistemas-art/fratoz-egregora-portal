@@ -7,6 +7,7 @@ import heroPintura from "@/assets/heroes/hero-pintura.jpg";
 import heroDanca from "@/assets/heroes/hero-danca.jpg";
 import heroLiteratura from "@/assets/heroes/hero-literatura.jpg";
 import heroEscultura from "@/assets/heroes/hero-escultura.jpg";
+import torreDeBabel from "@/assets/obras/torre-de-babel.png";
 
 export interface ArtCategory {
   id: string;
