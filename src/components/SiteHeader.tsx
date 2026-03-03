@@ -4,9 +4,11 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import logoSrc from "@/assets/logo-egregora.jpg";
 import { artCategories } from "@/data/artCategories";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 
 const SiteHeader = () => {
   const [open, setOpen] = useState(false);
+  const menuRef = useFocusTrap<HTMLDivElement>(open);
 
   return (
     <>
@@ -37,11 +39,13 @@ const SiteHeader = () => {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={menuRef}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 bg-background/95 backdrop-blur-md pt-24 px-6 overflow-y-auto md:hidden"
+            onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
           >
             <div className="mb-6">
               <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Linguagens</p>
@@ -53,7 +57,7 @@ const SiteHeader = () => {
                     onClick={() => setOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors"
                   >
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: `var(--egregora-${cat.id === "cinema" ? "blue" : cat.id === "teatro" ? "purple" : cat.id === "musica" ? "magenta" : cat.id === "fotografia" ? "red" : cat.id === "pintura" ? "orange" : cat.id === "danca" ? "yellow" : cat.id === "literatura" ? "green" : "teal"})` }} />
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cat.color }} />
                     <span className="text-sm text-foreground">{cat.name}</span>
                   </Link>
                 ))}

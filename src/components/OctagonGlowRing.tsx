@@ -33,25 +33,23 @@ const OctagonGlowRing = ({ hoveredIndex }: { hoveredIndex: number | null }) => {
             ))}
           </linearGradient>
         </defs>
-        {Array.from({ length: 8 }, (_, i) => {
-          const angle = (i * 45 - 90) * (Math.PI / 180);
-          const px = cx + (r + 6) * Math.cos(angle);
-          const py = cy + (r + 6) * Math.sin(angle);
-          return `${px},${py}`;
-        }).join(" ") && (
-          <polygon
-            points={Array.from({ length: 8 }, (_, i) => {
-              const angle = (i * 45 - 90) * (Math.PI / 180);
-              const px = cx + (r + 6) * Math.cos(angle);
-              const py = cy + (r + 6) * Math.sin(angle);
-              return `${px},${py}`;
-            }).join(" ")}
-            fill="none"
-            stroke="url(#glow-ring-grad)"
-            strokeWidth="2"
-            opacity={0.6}
-          />
-        )}
+        {(() => {
+          const ringPoints = Array.from({ length: 8 }, (_, i) => {
+            const angle = (i * 45 - 90) * (Math.PI / 180);
+            const px = cx + (r + 6) * Math.cos(angle);
+            const py = cy + (r + 6) * Math.sin(angle);
+            return `${px},${py}`;
+          }).join(" ");
+          return (
+            <polygon
+              points={ringPoints}
+              fill="none"
+              stroke="url(#glow-ring-grad)"
+              strokeWidth="2"
+              opacity={0.6}
+            />
+          );
+        })()}
       </motion.g>
 
       {/* Pulsating glow behind hovered segment */}

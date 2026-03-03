@@ -59,7 +59,7 @@ const ArtCategoryPage = () => {
 
       {/* Hero */}
       <section className="relative w-full h-[50vh] min-h-[360px] flex items-end overflow-hidden">
-        <img src={category.heroImage} alt={category.name} className="absolute inset-0 w-full h-full object-cover opacity-40" />
+        <img src={category.heroImage} alt={category.name} className="absolute inset-0 w-full h-full object-cover opacity-40" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         <div className="relative z-10 max-w-5xl mx-auto w-full px-6 pb-10">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors">
@@ -335,11 +335,13 @@ const ArtCategoryPage = () => {
                   </div>
                 </div>
               )}
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="aspect-square rounded-lg bg-secondary flex items-center justify-center">
-                  <span className="text-muted-foreground text-sm">Obra {i}</span>
-                </div>
-              ))}
+            </div>
+            {/* Empty state when no further gallery images are available */}
+            <div className="mt-8 flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
+              <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
+              <p className="text-sm text-muted-foreground">
+                Galeria em construção — obras em breve.
+              </p>
             </div>
           </motion.div>
         )}
@@ -548,13 +550,11 @@ const ArtCategoryPage = () => {
             ) : (
               <>
                 <h2 className="font-display text-2xl text-foreground mb-6">Acervo / Obras</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="glass-panel rounded-lg p-5">
-                      <h3 className="font-display text-lg text-foreground">Obra #{i}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">Artista convidado · 2024 · Técnica mista</p>
-                    </div>
-                  ))}
+                <div className="flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
+                  <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
+                  <p className="text-sm text-muted-foreground">
+                    Acervo em construção — obras em breve.
+                  </p>
                 </div>
               </>
             )}

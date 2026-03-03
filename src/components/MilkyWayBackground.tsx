@@ -372,7 +372,7 @@ const MilkyWayBackground = ({ tintHue, tintStrength = 0.5 }: MilkyWayProps) => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [tintHue, tintStrength]);
 
   return (
     <canvas

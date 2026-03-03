@@ -16,6 +16,12 @@ const OctagonParticles = ({ active = false }: { active?: boolean }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animFrameRef = useRef<number>(0);
+  // Track active via ref so toggling it never restarts the animation loop
+  const activeRef = useRef(active);
+
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -52,8 +58,9 @@ const OctagonParticles = ({ active = false }: { active?: boolean }) => {
     const animate = () => {
       ctx.clearRect(0, 0, size, size);
 
-      // Spawn new particles
-      const targetCount = active ? 40 : 18;
+      // Spawn new particles — read from ref so active changes don't restart loop
+      const isActive = activeRef.current;
+      const targetCount = isActive ? 40 : 18;
       while (particlesRef.current.length < targetCount) {
         particlesRef.current.push(spawnParticle());
       }
@@ -65,7 +72,7 @@ const OctagonParticles = ({ active = false }: { active?: boolean }) => {
 
         const progress = p.life / p.maxLife;
         p.opacity = progress < 0.2 ? progress * 5 : progress > 0.8 ? (1 - progress) * 5 : 1;
-        p.opacity *= active ? 0.7 : 0.35;
+        p.opacity *= isActive ? 0.7 : 0.35;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -91,7 +98,7 @@ const OctagonParticles = ({ active = false }: { active?: boolean }) => {
 
     animate();
     return () => cancelAnimationFrame(animFrameRef.current);
-  }, [active]);
+  }, []);
 
   return (
     <canvas
