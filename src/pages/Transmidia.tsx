@@ -9,10 +9,15 @@ import { transmidiaObras, type TransmidiaObra } from "@/data/artCategories";
 
 const themes = [...new Set(transmidiaObras.map((o) => o.theme))];
 const techniques = [...new Set(transmidiaObras.map((o) => o.technique))];
-const rooms = [1, 2, 3];
+const rooms = [1, 2, 3, 4];
 
-const ROOM_COLORS = ["from-egregora-blue/20 to-egregora-purple/20", "from-egregora-magenta/20 to-egregora-orange/20", "from-egregora-green/20 to-egregora-teal/20"];
-const ROOM_NAMES = ["Sala Memória", "Sala Transformação", "Sala Cosmos"];
+const ROOM_COLORS = [
+  "from-egregora-blue/20 to-egregora-purple/20",
+  "from-egregora-magenta/20 to-egregora-orange/20",
+  "from-egregora-green/20 to-egregora-teal/20",
+  "from-amber-900/20 to-yellow-700/10",
+];
+const ROOM_NAMES = ["Sala Memória", "Sala Transformação", "Sala Cosmos", "Sala Médici"];
 
 const Transmidia = () => {
   const [mode, setMode] = useState<"visita" | "colecao">("visita");
