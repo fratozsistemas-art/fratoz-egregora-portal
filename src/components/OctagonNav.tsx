@@ -8,6 +8,7 @@ import ZodiacConstellations from "./ZodiacConstellations";
 
 const OctagonNav = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const [centerHovered, setCenterHovered] = useState(false);
   const navigate = useNavigate();
 
