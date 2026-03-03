@@ -1,7 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, User, Tag, ArrowLeft, Star } from "lucide-react";
+import { Calendar, User, Tag, ArrowLeft, Star, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import { artCategories } from "@/data/artCategories";
 import SiteHeader from "@/components/SiteHeader";
