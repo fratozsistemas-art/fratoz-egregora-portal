@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Grid3X3, Eye, Search, X, ZoomIn, ChevronRight, Play, Map } from "lucide-react";
+import { ArrowLeft, Grid3X3, Eye, Search, X, ZoomIn, ChevronRight, Play, Map, Gem, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -9,10 +9,15 @@ import { transmidiaObras, type TransmidiaObra } from "@/data/artCategories";
 
 const themes = [...new Set(transmidiaObras.map((o) => o.theme))];
 const techniques = [...new Set(transmidiaObras.map((o) => o.technique))];
-const rooms = [1, 2, 3];
+const rooms = [1, 2, 3, 4];
 
-const ROOM_COLORS = ["from-egregora-blue/20 to-egregora-purple/20", "from-egregora-magenta/20 to-egregora-orange/20", "from-egregora-green/20 to-egregora-teal/20"];
-const ROOM_NAMES = ["Sala Memória", "Sala Transformação", "Sala Cosmos"];
+const ROOM_COLORS = [
+  "from-egregora-blue/20 to-egregora-purple/20",
+  "from-egregora-magenta/20 to-egregora-orange/20",
+  "from-egregora-green/20 to-egregora-teal/20",
+  "from-amber-900/20 to-yellow-700/10",
+];
+const ROOM_NAMES = ["Sala Memória", "Sala Transformação", "Sala Cosmos", "Sala Médici"];
 
 const Transmidia = () => {
   const [mode, setMode] = useState<"visita" | "colecao">("visita");
@@ -92,6 +97,38 @@ const Transmidia = () => {
                 <h2 className="font-display text-2xl text-foreground mb-2">{ROOM_NAMES[activeRoom - 1]}</h2>
                 <p className="text-sm text-muted-foreground mb-8">Sala {activeRoom} · {roomObras.length} obras</p>
 
+                {/* Sala Médici — special collector layout */}
+                {activeRoom === 4 && (
+                  <div className="mb-10 rounded-xl border border-primary/20 bg-background/40 backdrop-blur-sm p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Gem className="w-5 h-5 text-primary" />
+                      <h3 className="font-display text-xl text-foreground">Coleção HP — Colecionador em Destaque</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Acervo pessoal de um professor de Relações Internacionais da UFRJ, adquirido de um importante marchand catalão 
+                      que encerrou suas atividades no Rio de Janeiro durante a pandemia. Um conjunto de 20 peças dos continentes americano, 
+                      europeu, asiático e africano, com valor artístico, etnográfico e simbólico de diferentes tradições filosóficas, 
+                      religiosas e civilizacionais.
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      Dupla curadoria estética: a do marchand catalão e a do professor da UFRJ. As peças têm o estilo Sotheby's e Christie's — 
+                      líderes em obras de arte com valor histórico-etnográfico. A verdade é que algumas obras mudam o ambiente; mas outras transformam o destino.
+                    </p>
+                    <div className="flex gap-4 pt-2">
+                      {["Europa", "Américas", "Ásia", "África"].map((cont) => {
+                        const count = roomObras.filter((o) => o.continent === cont).length;
+                        return (
+                          <div key={cont} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <Globe className="w-3.5 h-3.5 text-primary/70" />
+                            <span>{cont}</span>
+                            <span className="text-foreground font-medium">({count})</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {roomObras.map((obra, i) => (
                     <motion.div
@@ -103,14 +140,26 @@ const Transmidia = () => {
                       className="glass-panel rounded-xl overflow-hidden cursor-pointer group hover:border-primary/40 transition-all duration-300"
                     >
                       <div className="aspect-[4/3] bg-secondary relative overflow-hidden">
-                        <img src={obra.image} alt={obra.title} className="w-full h-full object-cover" />
+                        {obra.image ? (
+                          <img src={obra.image} alt={obra.title} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                            <Gem className="w-6 h-6 text-muted-foreground/50" />
+                            <span className="text-xs text-muted-foreground">Imagem reservada</span>
+                          </div>
+                        )}
                         <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
                           <ZoomIn className="w-6 h-6 text-foreground" />
                         </div>
                       </div>
                       <div className="p-4">
                         <h3 className="font-display text-sm text-foreground">{obra.title}</h3>
-                        <p className="text-xs text-muted-foreground mt-1">{obra.author} · {obra.year}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {obra.collection ? `Coleção ${obra.collection}` : obra.author} {obra.year > 0 && `· ${obra.year}`}
+                        </p>
+                        {obra.continent && (
+                          <p className="text-xs text-primary/70 mt-0.5">{obra.continent}</p>
+                        )}
                       </div>
                     </motion.div>
                   ))}
