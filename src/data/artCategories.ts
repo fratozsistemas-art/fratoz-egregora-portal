@@ -113,7 +113,7 @@ export const artCategories: ArtCategory[] = [
     heroDescription: "Telas que pulsam com vida própria. Pinturas que desafiam o olhar e convidam à contemplação profunda.",
     curator: "Luísa Fernandes",
     status: "Acervo permanente",
-    heroImage: heroPintura,
+    heroImage: torreDeBabel,
     featuredArtist: "Siron Franco",
     featuredWork: "Torre de Babel",
     featuredWorkYear: 1996,
