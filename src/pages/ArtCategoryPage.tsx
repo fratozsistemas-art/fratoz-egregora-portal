@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { artCategories } from "@/data/artCategories";
 import { HP_COLLECTION, type HPArtwork } from "@/data/hp-collection";
 import { getArtistsByCategory, type Artist } from "@/data/artists";
+import { LACOS_HONRA_GALLERY, type GalleryPhoto } from "@/data/lacosHonraGallery";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
@@ -45,6 +46,7 @@ const ArtCategoryPage = () => {
   const [activeTab, setActiveTab] = useState("Sobre");
   const [selectedPiece, setSelectedPiece] = useState<HPArtwork | null>(null);
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
   const [continentFilter, setContinentFilter] = useState<string | null>(null);
   const category = artCategories.find((c) => c.slug === slug);
 
@@ -531,35 +533,121 @@ const ArtCategoryPage = () => {
         {activeTab === "Galeria" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <h2 className="font-display text-2xl text-foreground mb-6">Galeria</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {/* Featured work — spans 2 columns */}
-              {category.featuredWork && (
-                <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[3/4]">
-                  {category.featuredWorkImage && (
-                    <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-contain p-2" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
-                  <div className="relative z-10 p-5">
-                    <Badge className="mb-2 bg-primary/90 text-primary-foreground border-0">
-                      <Star className="w-3 h-3 mr-1 fill-current" /> Destaque
-                    </Badge>
-                    <h3 className="font-display text-lg text-foreground">{category.featuredWork}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {category.featuredArtist}
-                      {category.featuredWorkYear && ` · ${category.featuredWorkYear}`}
-                      {category.featuredWorkTechnique && ` · ${category.featuredWorkTechnique}`}
-                    </p>
-                  </div>
+
+            {/* Fotografia — Laços de Honra gallery */}
+            {category.slug === "fotografia" && (
+              <>
+                <p className="text-sm text-muted-foreground mb-6 max-w-xl">
+                  Seleção do ensaio <strong className="text-foreground">Laços de Honra</strong> — cinco anos documentando a formação dos oficiais combatentes do Exército Brasileiro. Fotos: Paula Mariane (2016–2020).
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {LACOS_HONRA_GALLERY.map((photo, i) => (
+                    <motion.button
+                      key={photo.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.08 }}
+                      onClick={() => setSelectedPhoto(photo)}
+                      className={`group relative rounded-lg overflow-hidden cursor-pointer border border-border/50 hover:border-primary/40 transition-colors ${
+                        photo.orientation === "portrait" ? "row-span-2" : ""
+                      } ${photo.orientation === "landscape" ? "col-span-2 md:col-span-1" : ""}`}
+                    >
+                      <img
+                        src={photo.src}
+                        alt={photo.title}
+                        className="w-full h-full object-cover aspect-[3/2] group-hover:scale-105 transition-transform duration-500"
+                        style={photo.orientation === "portrait" ? { aspectRatio: "2/3" } : photo.orientation === "square" ? { aspectRatio: "1/1" } : undefined}
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute bottom-0 left-0 right-0 p-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                        <p className="text-xs font-medium text-foreground">{photo.title}</p>
+                        {photo.location && <p className="text-[10px] text-muted-foreground">{photo.location} · {photo.year}</p>}
+                      </div>
+                    </motion.button>
+                  ))}
                 </div>
-              )}
-            </div>
-            {/* Empty state when no further gallery images are available */}
-            <div className="mt-8 flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
-              <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
-              <p className="text-sm text-muted-foreground">
-                Galeria em construção — obras em breve.
-              </p>
-            </div>
+
+                {/* Photo lightbox */}
+                <AnimatePresence>
+                  {selectedPhoto && (
+                    <motion.div
+                      key="photo-overlay"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      onClick={() => setSelectedPhoto(null)}
+                      className="fixed inset-0 z-50 bg-background/90 backdrop-blur-md flex items-center justify-center p-4"
+                    >
+                      <motion.div
+                        key="photo-panel"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className="relative max-w-3xl w-full"
+                      >
+                        <button
+                          onClick={() => setSelectedPhoto(null)}
+                          className="absolute -top-12 right-0 w-8 h-8 rounded-full bg-secondary border border-border flex items-center justify-center hover:bg-accent transition-colors z-10"
+                        >
+                          <X className="w-4 h-4 text-foreground" />
+                        </button>
+                        <img
+                          src={selectedPhoto.src}
+                          alt={selectedPhoto.title}
+                          className="w-full rounded-xl border border-border shadow-2xl"
+                        />
+                        <div className="mt-4 space-y-1">
+                          <h3 className="font-display text-lg text-foreground">{selectedPhoto.title}</h3>
+                          {selectedPhoto.caption && (
+                            <p className="text-sm text-muted-foreground leading-relaxed">{selectedPhoto.caption}</p>
+                          )}
+                          <p className="text-xs text-muted-foreground/70">
+                            {selectedPhoto.location && `${selectedPhoto.location} · `}{selectedPhoto.year} · Paula Mariane
+                          </p>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </>
+            )}
+
+            {/* Default gallery for other categories */}
+            {category.slug !== "fotografia" && (
+              <>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {/* Featured work — spans 2 columns */}
+                  {category.featuredWork && (
+                    <div className="col-span-2 relative rounded-lg bg-secondary/80 border border-primary/20 overflow-hidden flex flex-col justify-end aspect-[3/4]">
+                      {category.featuredWorkImage && (
+                        <img src={category.featuredWorkImage} alt={category.featuredWork} className="absolute inset-0 w-full h-full object-contain p-2" />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+                      <div className="relative z-10 p-5">
+                        <Badge className="mb-2 bg-primary/90 text-primary-foreground border-0">
+                          <Star className="w-3 h-3 mr-1 fill-current" /> Destaque
+                        </Badge>
+                        <h3 className="font-display text-lg text-foreground">{category.featuredWork}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {category.featuredArtist}
+                          {category.featuredWorkYear && ` · ${category.featuredWorkYear}`}
+                          {category.featuredWorkTechnique && ` · ${category.featuredWorkTechnique}`}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {/* Empty state when no further gallery images are available */}
+                <div className="mt-8 flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
+                  <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
+                  <p className="text-sm text-muted-foreground">
+                    Galeria em construção — obras em breve.
+                  </p>
+                </div>
+              </>
+            )}
           </motion.div>
         )}
         {activeTab === "Agenda" && (
