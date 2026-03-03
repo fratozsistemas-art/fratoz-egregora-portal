@@ -20,7 +20,7 @@ const Index = () => {
           transition={{ duration: 0.7 }}
           className="font-display text-4xl md:text-5xl lg:text-6xl text-foreground mb-4 text-balance"
         >
-          Arte é <span className="gradient-egregora-text italic">egrégora</span>
+          Arte é <span className="gradient-egregora-text italic font-semibold text-5xl md:text-6xl lg:text-7xl">egrégora</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 15 }}
