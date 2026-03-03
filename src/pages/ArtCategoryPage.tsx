@@ -217,24 +217,26 @@ const ArtCategoryPage = () => {
                   </div>
                 </motion.div>
 
-                {/* Author bio card */}
-                <motion.div
+                {/* Author bio card — clickable */}
+                <motion.button
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
-                  className="rounded-xl border border-accent/20 bg-accent/5 p-6"
+                  onClick={() => {
+                    const paulaArtist = getArtistsByCategory("fotografia").find(a => a.id === "paula-mariane");
+                    if (paulaArtist) setSelectedArtist(paulaArtist);
+                  }}
+                  className="w-full text-left rounded-xl border border-accent/20 bg-accent/5 p-6 hover:border-primary/30 transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <Camera className="w-5 h-5 text-primary" />
                     <h3 className="font-display text-lg text-foreground">Sobre a autora</h3>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    Paula Mariane é fotojornalista e escritora, natural de Votorantim (SP). Formada em Jornalismo pela PUC-Campinas com bolsa integral e especialista em Relações Internacionais. Palestrante do TEDx Campinas 2019. Teve duas fotos selecionadas entre as 50 melhores na categoria Retrato do Sony World Photography Awards 2016, um dos maiores prêmios de fotografia do mundo. Representou o Brasil duas vezes em conferência mundial de paz na Suíça.
+                    Paula Mariane é fotojornalista e escritora, natural de Votorantim (SP). Formada em Jornalismo pela PUC-Campinas com bolsa integral e especialista em Relações Internacionais. Palestrante do TEDx Campinas 2019. Teve duas fotos selecionadas entre as 50 melhores na categoria Retrato do Sony World Photography Awards 2016.
                   </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed mt-3">
-                    "O pioneirismo tem um preço alto, mas uma vez que você chega lá, você sabe que abriu portas para mais pessoas. E isso não tem preço."
-                  </p>
-                </motion.div>
+                  <p className="text-xs text-primary mt-3 font-medium">Ver perfil completo →</p>
+                </motion.button>
 
                 {/* Links grid */}
                 <motion.div
