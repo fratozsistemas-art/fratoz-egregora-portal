@@ -125,7 +125,7 @@ const OctagonNav = () => {
             const y1 = 50 - Math.sin(rad) * 50;
             const x2 = 50 + Math.cos(rad) * 50;
             const y2 = 50 + Math.sin(rad) * 50;
-            const isHovered = hoveredIndex === index;
+            const isHovered = hoveredIndex === index || focusedIndex === index;
             return (
               <linearGradient key={index} id={`seg-grad-${index}`} x1={`${x1}%`} y1={`${y1}%`} x2={`${x2}%`} y2={`${y2}%`}>
                 <stop offset="0%" stopColor={colors[index]} stopOpacity={isHovered ? 1 : 0.6} />
