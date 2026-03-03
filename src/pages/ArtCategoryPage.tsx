@@ -174,7 +174,7 @@ const ArtCategoryPage = () => {
                       </Badge>
                     </div>
                   </div>
-                  <p className="text-lg text-foreground font-medium">20 peças históricas · 4 continentes · Dupla curadoria</p>
+                  <p className="text-lg text-foreground font-medium">{HP_COLLECTION.length} peças históricas · 4 continentes · Dupla curadoria</p>
                   <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
                     Este é um acervo disponível para aquisição em lote fechado. Para colecionadores e curadores interessados em incorporar um núcleo curatorial sofisticado a acervos institucionais ou privados.
                   </p>
@@ -277,7 +277,7 @@ const ArtCategoryPage = () => {
                 <div className="rounded-xl border border-accent/30 bg-accent/5 p-6 md:p-8 space-y-5">
                   <h3 className="font-display text-lg text-foreground border-b border-border pb-3">O Acervo</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    O acervo da Coleção HP reúne <strong className="text-foreground">vinte peças dos continentes americano, europeu, asiático e africano</strong>. As peças têm valor artístico, etnográfico e simbólico de diferentes tradições filosóficas, religiosas e civilizacionais. Trata-se de um acervo que chama atenção de todos e permanece na memória daqueles que tiverem o privilégio de entrar em contato com as obras.
+                    O acervo da Coleção HP reúne <strong className="text-foreground">{HP_COLLECTION.length} peças dos continentes americano, europeu, asiático e africano</strong>. As peças têm valor artístico, etnográfico e simbólico de diferentes tradições filosóficas, religiosas e civilizacionais. Trata-se de um acervo que chama atenção de todos e permanece na memória daqueles que tiverem o privilégio de entrar em contato com as obras.
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     A coleção foi feita por uma dupla curadoria estética: a do marchand catalão e a do professor da UFRJ. Não se trata da compra de peças isoladas, mas da aquisição de um sofisticado núcleo curatorial pronto para enriquecer imediatamente qualquer acervo.
@@ -415,6 +415,19 @@ const ArtCategoryPage = () => {
                       onClick={() => setSelectedPiece(piece)}
                       className="text-left rounded-xl border border-border bg-secondary/30 hover:bg-secondary/60 hover:border-primary/30 transition-all group p-5 space-y-3"
                     >
+                      {/* Thumbnail */}
+                      <div className="aspect-[4/3] rounded-lg overflow-hidden bg-secondary/60 flex items-center justify-center">
+                        {piece.images.thumbnail ? (
+                          <img
+                            src={piece.images.thumbnail}
+                            alt={piece.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <Gem className="w-7 h-7 text-primary/40" />
+                        )}
+                      </div>
                       {/* Continent badge */}
                       <Badge variant="outline" className={`text-[10px] ${CONTINENT_COLORS[piece.continent]}`}>
                         <Globe className="w-3 h-3 mr-1" />
@@ -481,6 +494,22 @@ const ArtCategoryPage = () => {
 
                         <h2 className="font-display text-2xl text-foreground">{selectedPiece.title}</h2>
 
+                        {/* Photo gallery */}
+                        {selectedPiece.images.gallery.length > 0 && (
+                          <div className={`grid gap-2 ${selectedPiece.images.gallery.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
+                            {selectedPiece.images.gallery.slice(0, 4).map((img, gi) => (
+                              <div key={gi} className="aspect-[4/3] rounded-lg overflow-hidden bg-secondary/60">
+                                <img
+                                  src={img}
+                                  alt={`${selectedPiece.title} — foto ${gi + 1}`}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+
                         {/* Metadata grid */}
                         <div className="grid grid-cols-2 gap-3 text-sm">
                           <div className="flex items-start gap-2">
@@ -519,6 +548,26 @@ const ArtCategoryPage = () => {
                           <div className="rounded-lg bg-secondary/50 p-4">
                             <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Conservação</h4>
                             <p className="text-sm text-muted-foreground">{selectedPiece.conservation_notes}</p>
+                          </div>
+                        )}
+
+                        {selectedPiece.sources && selectedPiece.sources.length > 0 && (
+                          <div className="rounded-lg bg-secondary/50 p-4">
+                            <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Fontes</h4>
+                            <ul className="space-y-1">
+                              {selectedPiece.sources.map((src) => (
+                                <li key={src}>
+                                  <a
+                                    href={src}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-primary hover:underline break-all"
+                                  >
+                                    {src}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                         )}
 

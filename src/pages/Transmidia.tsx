@@ -491,6 +491,27 @@ const ObraModal = ({
               </div>
             )}
 
+            {/* Sources / references */}
+            {hpData?.sources && hpData.sources.length > 0 && (
+              <div className="space-y-1">
+                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Fontes</h4>
+                <ul className="space-y-0.5">
+                  {hpData.sources.map((src) => (
+                    <li key={src}>
+                      <a
+                        href={src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-primary hover:underline break-all"
+                      >
+                        {src}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {/* Audio guide */}
             <button className="flex items-center gap-2 text-sm text-primary hover:opacity-80 transition-opacity">
               <Play className="w-4 h-4" /> Áudio-guia
