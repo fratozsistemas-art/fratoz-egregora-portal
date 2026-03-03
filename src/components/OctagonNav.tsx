@@ -6,17 +6,6 @@ import OctagonParticles from "./OctagonParticles";
 import OctagonGlowRing from "./OctagonGlowRing";
 import ZodiacConstellations from "./ZodiacConstellations";
 
-const SEGMENT_COLORS = [
-  "from-egregora-blue to-egregora-teal",
-  "from-egregora-purple to-egregora-blue",
-  "from-egregora-magenta to-egregora-purple",
-  "from-egregora-red to-egregora-magenta",
-  "from-egregora-orange to-egregora-red",
-  "from-egregora-yellow to-egregora-orange",
-  "from-egregora-green to-egregora-yellow",
-  "from-egregora-teal to-egregora-green",
-];
-
 const OctagonNav = () => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [centerHovered, setCenterHovered] = useState(false);

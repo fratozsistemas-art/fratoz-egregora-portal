@@ -356,7 +356,7 @@ export const HP_COLLECTION: HPArtwork[] = [
 ];
 
 // ── Helper: convert HP_COLLECTION to TransmidiaObra format ──
-import type { TransmidiaObra } from "./artCategories";
+import type { TransmidiaObra } from "./transmidiaObras";
 
 export function hpToTransmidiaObras(): TransmidiaObra[] {
   return HP_COLLECTION.map((hp) => ({

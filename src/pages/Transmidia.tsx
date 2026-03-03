@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useFocusTrap } from "@/hooks/use-focus-trap";
 import { ArrowLeft, Grid3X3, Eye, Search, X, ZoomIn, ChevronRight, Play, Map, Gem, Globe, Sparkles, Shield, Crown, Heart } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import MilkyWayBackground from "@/components/MilkyWayBackground";
-import { transmidiaObras, type TransmidiaObra } from "@/data/artCategories";
+import { transmidiaObras, type TransmidiaObra } from "@/data/transmidiaObras";
 import { HP_COLLECTION, type HpTheme } from "@/data/hp-collection";
 
 const themes = [...new Set(transmidiaObras.map((o) => o.theme))];
@@ -356,6 +357,7 @@ const ObraModal = ({
 }) => {
   // Lookup enriched HP data if this is an HP piece
   const hpData = obra.collection === "HP" ? HP_COLLECTION.find((hp) => hp.id === obra.id) : null;
+  const modalRef = useFocusTrap<HTMLDivElement>(true);
 
   return (
     <motion.div
@@ -364,8 +366,10 @@ const ObraModal = ({
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 bg-background/90 backdrop-blur-sm flex items-center justify-center p-4"
       onClick={onClose}
+      onKeyDown={(e) => e.key === "Escape" && onClose()}
     >
       <motion.div
+        ref={modalRef}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
