@@ -98,9 +98,9 @@ export const artCategories: ArtCategory[] = [
     heroImage: heroFotografia,
     featuredArtist: "Paula Mariane",
     featuredWork: "Laços de Honra",
-    featuredWorkYear: 2024,
-    featuredWorkTechnique: "Ensaio fotográfico",
-    featuredWorkDescription: "Ensaio autoral de Paula Mariane que investiga vínculos familiares e afetivos através de retratos intimistas, revelando a força invisível dos laços que nos sustentam.",
+    featuredWorkYear: 2022,
+    featuredWorkTechnique: "Livro fotográfico · Editora BIBLIEx",
+    featuredWorkDescription: "Primeiro livro fotográfico sobre a formação dos oficiais combatentes do Exército Brasileiro. Resultado de cinco anos de documentação independente (2016–2020) nas escolas militares EsPCEx, AMAN, EsAO e ECEME, a obra de Paula Mariane é um registro pioneiro que revela a dimensão humana por trás da formação militar.",
   },
   {
     id: "pintura",

@@ -1,7 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe } from "lucide-react";
+import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe, BookOpen, Headphones, Video, ExternalLink, Camera } from "lucide-react";
 import { Link } from "react-router-dom";
 import { artCategories } from "@/data/artCategories";
 import { HP_COLLECTION, type HPArtwork } from "@/data/hp-collection";
@@ -223,8 +223,172 @@ const ArtCategoryPage = () => {
               </div>
             )}
 
+            {/* Fotografia — Laços de Honra rich section */}
+            {category.slug === "fotografia" && (
+              <div className="mb-10 space-y-6">
+                <h2 className="font-display text-2xl text-foreground mb-2">Obra em destaque</h2>
+
+                {/* Main featured card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-primary/20 overflow-hidden"
+                >
+                  <div className="relative bg-gradient-to-br from-primary/10 via-background to-accent/5 p-6 md:p-8">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Star className="w-5 h-5 text-primary fill-primary" />
+                      <span className="text-xs text-primary font-medium uppercase tracking-wider">Obra carro-chefe</span>
+                    </div>
+                    <h3 className="font-display text-2xl md:text-3xl text-foreground">Laços de Honra</h3>
+                    <p className="text-sm text-muted-foreground mt-1">Paula Mariane · 2022 · Livro fotográfico · Editora BIBLIEx</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-4 max-w-2xl">
+                      Primeiro livro fotográfico sobre a formação dos oficiais combatentes do Exército Brasileiro. Resultado de cinco anos de documentação independente (2016–2020), Paula Mariane registrou a rotina de quatro instituições de ensino da força terrestre: EsPCEx, AMAN, EsAO e ECEME — sendo a primeira pessoa a realizar uma série fotográfica de longa duração na Força Terrestre.
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mt-3 max-w-2xl">
+                      A obra revela a dimensão humana por trás da formação militar — os sacrifícios, os laços de camaradagem, a disciplina e a transformação pessoal dos jovens que ingressam nas escolas do Exército.
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Author bio card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                  className="rounded-xl border border-accent/20 bg-accent/5 p-6"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <Camera className="w-5 h-5 text-primary" />
+                    <h3 className="font-display text-lg text-foreground">Sobre a autora</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Paula Mariane é fotojornalista e escritora, natural de Votorantim (SP). Formada em Jornalismo pela PUC-Campinas com bolsa integral e especialista em Relações Internacionais. Palestrante do TEDx Campinas 2019. Teve duas fotos selecionadas entre as 50 melhores na categoria Retrato do Sony World Photography Awards 2016, um dos maiores prêmios de fotografia do mundo. Representou o Brasil duas vezes em conferência mundial de paz na Suíça.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mt-3">
+                    "O pioneirismo tem um preço alto, mas uma vez que você chega lá, você sabe que abriu portas para mais pessoas. E isso não tem preço."
+                  </p>
+                </motion.div>
+
+                {/* Links grid */}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 }}
+                  className="space-y-3"
+                >
+                  <h3 className="font-display text-lg text-foreground">Explore</h3>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <a
+                      href="https://www.amazon.com.br/Laços-Honra-Paula-Mariane/dp/6557570420"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
+                    >
+                      <BookOpen className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">Adquirir na Amazon</p>
+                        <p className="text-xs text-muted-foreground">Livro fotográfico — Editora BIBLIEx</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </a>
+                    <a
+                      href="https://lojavirtual.bibliex.eb.mil.br/product/20220109/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
+                    >
+                      <BookOpen className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">Loja BIBLIEx</p>
+                        <p className="text-xs text-muted-foreground">Biblioteca do Exército — loja oficial</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </a>
+                    <a
+                      href="https://fotografia.folha.uol.com.br/galerias/1598748445693364-lacos-de-honra-o-outro-lado-do-exercito"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
+                    >
+                      <Eye className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">Galeria na Folha de S.Paulo</p>
+                        <p className="text-xs text-muted-foreground">Laços de Honra: o outro lado do Exército</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </a>
+                    <a
+                      href="https://www.defesanet.com.br/terrestre/conheca-o-primeiro-livro-fotografico-sobre-a-formacao-dos-oficiais-combatentes-do-exercito-brasileiro/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
+                    >
+                      <Globe className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">Matéria DefesaNet</p>
+                        <p className="text-xs text-muted-foreground">Primeiro livro fotográfico sobre a formação militar</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </a>
+                    <a
+                      href="https://encorebr.com/encore-e-lacos-de-honra/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
+                    >
+                      <Globe className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">Encore Brasil</p>
+                        <p className="text-xs text-muted-foreground">Encore e Laços de Honra — ensaio visual</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </a>
+                    <a
+                      href="https://www.instagram.com/paulamarianephoto/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
+                    >
+                      <Camera className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">Instagram</p>
+                        <p className="text-xs text-muted-foreground">@paulamarianephoto</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </a>
+                    <a
+                      href="https://open.spotify.com/episode/28fnjDcOFO7rEM67PpM9pa"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
+                    >
+                      <Headphones className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">Podcast no Spotify</p>
+                        <p className="text-xs text-muted-foreground">Entrevista sobre Laços de Honra</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </a>
+                    <a
+                      href="https://www.youtube.com/watch?v=70iQA0GAbz0"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 rounded-lg border border-border p-4 hover:bg-secondary/50 transition-colors group"
+                    >
+                      <Video className="w-5 h-5 text-primary shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-foreground">Vídeo no YouTube</p>
+                        <p className="text-xs text-muted-foreground">Cobertura do projeto Laços de Honra</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                    </a>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+
             {/* Featured work card — other categories */}
-            {category.slug !== "pintura" && category.featuredWork && (
+            {category.slug !== "pintura" && category.slug !== "fotografia" && category.featuredWork && (
               <div className="mb-8 rounded-xl border border-primary/20 bg-primary/5 p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <Star className="w-5 h-5 text-primary fill-primary" />
