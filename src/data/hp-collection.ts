@@ -134,8 +134,8 @@ export const HP_COLLECTION: HPArtwork[] = [
       "O Obá, o rei divinizado, símbolo supremo do poder e da justiça. O Arogbo, o camponês, representando a fertilidade da terra e a prosperidade coletiva. Juntas, essas figuras expressam o equilíbrio fundamental que sustentou uma das civilizações mais sofisticadas da África. Cada detalhe em bronze revela maestria técnica e profunda compreensão simbólica. São peças que afirmam a vitalidade de uma tradição artística cuja influência atravessou séculos e oceanos.",
     themes: ["Poder"],
     images: {
-      thumbnail: obaArogbo1,
-      gallery: [obaArogbo1, obaArogbo2, obaArogbo3],
+      thumbnail: cavaloBenin1,
+      gallery: [cavaloBenin1, cavaloBenin2],
     },
     provenance:
       "Corte Real do Antigo Reino do Benin → Coleção europeia (pós-1897) → Acervo HP",
@@ -165,8 +165,8 @@ export const HP_COLLECTION: HPArtwork[] = [
       "A Grande Muralha do Benin, cuja extensão rivalizava com a da Grande Muralha da China, protegia a capital do império. Construída em madeira e argila, a muralha revela a grandiosidade estratégica daquele povo. O cavalo tornou-se o símbolo universal do poder político e militar: de impérios antigos a nações modernas, quase não há país que não celebre seus grandes líderes com esculturas em bronze de figuras montadas em cavalos imponentes. Esse cavalo revela a grandiosidade dos reis guerreiros do Benin.",
     themes: ["Poder"],
     images: {
-      thumbnail: cavaloBenin1,
-      gallery: [cavaloBenin1, cavaloBenin2],
+      thumbnail: obaArogbo1,
+      gallery: [obaArogbo1, obaArogbo2, obaArogbo3],
     },
     provenance:
       "Corte Real do Antigo Reino do Benin → Coleção europeia (pós-1897) → Acervo HP",
