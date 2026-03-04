@@ -1,9 +1,11 @@
 import { useParams, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe } from "lucide-react";
+import { Calendar, User, Tag, ArrowLeft, Star, Eye, MapPin, Ruler, Layers, X, Globe, Camera } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { LACOS_HONRA_GALLERY } from "@/data/lacosHonraGallery";
+import PhotoLightbox from "@/components/PhotoLightbox";
 import { artCategories } from "@/data/artCategories";
 import { HP_COLLECTION, type HPArtwork } from "@/data/hp-collection";
 import SiteHeader from "@/components/SiteHeader";
@@ -52,6 +54,13 @@ const ArtCategoryPage = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [selectedPiece, setSelectedPiece] = useState<HPArtwork | null>(null);
   const [continentFilter, setContinentFilter] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openLightbox = useCallback((index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  }, []);
   const category = artCategories.find((c) => c.slug === slug);
 
   const filteredHP = continentFilter
@@ -345,13 +354,54 @@ const ArtCategoryPage = () => {
                 </div>
               )}
             </div>
-            {/* Empty state */}
-            <div className="mt-8 flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
-              <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
-              <p className="text-sm text-muted-foreground">
-                {t("category.gallery_empty")}
-              </p>
-            </div>
+
+            {/* Photography gallery — Laços de Honra */}
+            {category.slug === "fotografia" && LACOS_HONRA_GALLERY.length > 0 ? (
+              <>
+                <h3 className="font-display text-xl text-foreground mt-10 mb-1 flex items-center gap-2">
+                  <Camera className="w-5 h-5 text-primary" /> Laços de Honra
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">Ensaio fotográfico por Paula Mariane · Clique para ampliar</p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {LACOS_HONRA_GALLERY.map((photo, i) => (
+                    <motion.button
+                      key={photo.id}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => openLightbox(i)}
+                      className={`relative rounded-lg overflow-hidden bg-secondary/60 border border-border/40 hover:border-primary/40 transition-colors group ${
+                        photo.orientation === "portrait" ? "row-span-2" : ""
+                      }`}
+                    >
+                      <img
+                        src={photo.src}
+                        alt={photo.title}
+                        className="w-full h-full object-cover aspect-[4/3] group-hover:opacity-90 transition-opacity"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/80 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-xs font-body text-foreground">{photo.title}</span>
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+                <PhotoLightbox
+                  photos={LACOS_HONRA_GALLERY}
+                  currentIndex={lightboxIndex}
+                  open={lightboxOpen}
+                  onClose={() => setLightboxOpen(false)}
+                  onNavigate={setLightboxIndex}
+                  credit="Paula Mariane"
+                />
+              </>
+            ) : category.slug !== "fotografia" ? (
+              <div className="mt-8 flex flex-col items-center justify-center py-16 text-center rounded-xl border border-dashed border-border">
+                <Eye className="w-8 h-8 text-muted-foreground/40 mb-3" />
+                <p className="text-sm text-muted-foreground">
+                  {t("category.gallery_empty")}
+                </p>
+              </div>
+            ) : null}
           </motion.div>
         )}
         {activeTab === t("category.tabs.agenda") && (
